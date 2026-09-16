@@ -379,44 +379,79 @@ const daftarGuruPreview = [
       </div>
     </section>
 
-    <!-- 9. FOOTER RESMI SEKOLAH -->
+<!-- 9. FOOTER RESMI SEKOLAH (DENGAN GOOGLE MAPS) -->
     <footer class="bg-[#0b1120] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-slate-800">
         
-        <div class="md:col-span-5">
+        <!-- Kolom 1: Profil & Identitas Sekolah -->
+        <div class="md:col-span-4">
           <span class="text-base font-black text-white tracking-tight uppercase">SMA NEGERI CONTOH</span>
-          <p class="mt-3 text-slate-400 leading-relaxed max-w-sm">
-            Lembaga pendidikan menengah atas negeri yang berkomitmen pada keunggulan budi pekerti, literasi digital, dan prestasi sains.
+          <p class="mt-3 text-slate-400 leading-relaxed text-xs">
+            Lembaga pendidikan menengah atas yang berkomitmen pada keunggulan karakter, literasi digital, dan prestasi siswa.
           </p>
           <div class="mt-4 text-slate-400 space-y-1 text-[11px]">
-            <p>📍 Jl. Pendidikan No. 24, Kec. Alor Barat Laut</p>
-            <p>📞 (022) 7801234 | ✉️ smanalorkecil2013@gmail.com</p>
+            <p class="flex items-start gap-2">
+              <span class="text-amber-400 font-bold">📍</span> Jl. Pendidikan No. 24, Kec. Alor Barat Laut
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="text-amber-400 font-bold">📞</span> (022) 7801234
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="text-amber-400 font-bold">✉️</span> info@sekolah.sch.id
+            </p>
           </div>
         </div>
 
-        <div class="md:col-span-3">
-          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Tautan Cepat</h4>
-          <ul class="space-y-2">
+        <!-- Kolom 2: Tautan Cepat -->
+        <div class="md:col-span-2">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Navigasi</h4>
+          <ul class="space-y-2 text-[11px]">
             <li><a href="/" class="hover:text-amber-400 transition">Beranda</a></li>
-            <li><a href="/berita" class="hover:text-amber-400 transition">Rilis Berita Sekolah</a></li>
-            <li><a href="/galeri" class="hover:text-amber-400 transition">Galeri Kegiatan</a></li>
+            <li><a href="/berita" class="hover:text-amber-400 transition">Berita</a></li>
+            <li><a href="/galeri" class="hover:text-amber-400 transition">Galeri Foto</a></li>
             <li><a href="/guru" class="hover:text-amber-400 transition">Direktori Guru</a></li>
-            <li><a href="/admin" class="hover:text-amber-400 transition">Panel Decap CMS</a></li>
+            <li><a href="/admin" class="hover:text-amber-400 transition">Panel Admin</a></li>
           </ul>
         </div>
 
-        <div class="md:col-span-4">
-          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Layanan Akademik</h4>
-          <ul class="space-y-2">
-            <li><a href="#" class="hover:text-amber-400 transition">Kurikulum Merdeka</a></li>
-            <li><a href="#" class="hover:text-amber-400 transition">Organisasi Siswa (OSIS)</a></li>
-            <li><a href="#" class="hover:text-amber-400 transition">Ekstrakurikuler & Prestasi</a></li>
-            <li><a href="#" class="hover:text-amber-400 transition">Layanan Pengaduan Sekolah</a></li>
+        <!-- Kolom 3: Layanan Akademik -->
+        <div class="md:col-span-2">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Layanan</h4>
+          <ul class="space-y-2 text-[11px]">
+            <li><a href="#ppdb" class="hover:text-amber-400 transition">PPDB / SPMB</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Kurikulum</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Ekstrakurikuler</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Pengaduan</a></li>
           </ul>
+        </div>
+
+        <!-- Kolom 4: Google Maps Interaktif -->
+        <div class="md:col-span-4 flex flex-col">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Lokasi Sekolah
+          </h4>
+          
+          <!-- Frame Peta -->
+          <div class="w-full h-44 rounded-2xl overflow-hidden border border-slate-700 shadow-md bg-slate-800 relative">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3868.3384109076214!2d124.415491798552!3d-8.266079781392948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2daa86aa2c0b5abd%3A0xba0af6cb578793f2!2sSMA%20Negeri%20Alor%20Kecil!5e1!3m2!1sid!2sid!4v1789536792939!5m2!1sid!2sid" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi Sekolah"
+              class="w-full h-full filter contrast-105"
+            ></iframe>
+          </div>
+          <span class="text-[10px] text-slate-500 mt-2">Ketuk peta untuk membuka rute di aplikasi Google Maps.</span>
         </div>
 
       </div>
 
+      <!-- Hak Cipta -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px]">
         <p>&copy; {new Date().getFullYear()} SMA Negeri Contoh. Seluruh Hak Cipta Dilindungi.</p>
         <p class="text-slate-500">Dikembangkan dengan Astro, Tailwind & Cloudflare</p>
