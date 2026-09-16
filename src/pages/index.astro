@@ -1,10 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
+import '../styles/global.css'; // <-- Tambahkan baris ini!
 
 // Mengambil data berita yang sudah diurutkan dari yang terbaru
 const beritaList = (await getCollection('berita'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6); // Tampilkan 6 berita terbaru di beranda
+  .slice(0, 6);
 ---
 
 <html lang="id">
