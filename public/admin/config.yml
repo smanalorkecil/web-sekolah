@@ -1,0 +1,33 @@
+backend:
+  name: test-repo # atau github saat sudah production
+
+# Konfigurasi integrasi Cloudinary
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: qi797bcl # ganti dengan Cloud Name dari dasbor Cloudinary
+    api_key: "334214273144456" # ganti dengan API Key (beri tanda kutip dua)
+
+collections:
+  - name: "berita"
+    label: "Berita & Pengumuman"
+    folder: "src/content/berita"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Judul Berita", name: "title", widget: "string" }
+      - { label: "Tanggal", name: "date", widget: "datetime" }
+      - {
+          label: "Kategori",
+          name: "category",
+          widget: "select",
+          options: ["Akademik", "Kesiswaan", "Prestasi", "Pengumuman"],
+        }
+      - {
+          label: "Foto Utama",
+          name: "thumbnail",
+          widget: "image",
+          required: false,
+        }
+      - { label: "Ringkasan Singkat", name: "description", widget: "text" }
+      - { label: "Isi Berita", name: "body", widget: "markdown" }
