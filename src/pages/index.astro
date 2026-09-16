@@ -51,6 +51,14 @@ const programUnggulan = [
   { ikon: "💻", nama: "Digitalisasi Pembelajaran", desc: "Integrasi sistem pembelajaran digital terpadu dan pembekalan literasi komputer." }
 ];
 
+// Cuplikan Direktori Guru di Beranda
+const daftarGuruPreview = [
+  { nama: "Drs. H. Ahmad Fauzi, M.Pd", mapel: "Matematika", nip: "19720415 199802 1 002" },
+  { nama: "Siti Rahmawati, S.Pd, M.Si", mapel: "Bahasa Indonesia", nip: "19810320 200501 2 007" },
+  { nama: "Budi Santoso, S.Kom", mapel: "Informatika / TIK", nip: "19880812 201101 1 005" },
+  { nama: "Nurul Hidayah, S.Pd", mapel: "Bahasa Inggris", nip: "19920516 201903 2 011" }
+];
+
 // Data Ekstrakurikuler
 const ekskulList = [
   { nama: "Pramuka", ikon: "⛺" },
@@ -96,11 +104,10 @@ const ekskulList = [
       </div>
     </div>
 
-    <!-- 2. NAVBAR UTAMA HIJAU & PUTIH -->
+    <!-- 2. NAVBAR UTAMA -->
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-slate-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
-        <!-- Logo & Nama Sekolah -->
         <a href="/" class="flex items-center gap-3">
           <img 
             src="/logo.png" 
@@ -108,7 +115,6 @@ const ekskulList = [
             class="w-12 h-12 object-contain drop-shadow-sm"
             onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='flex';"
           />
-          <!-- Logo Fallback jika logo.png belum dimasukkan -->
           <div id="alt-logo" class="w-12 h-12 rounded-xl bg-emerald-700 text-amber-300 font-black hidden items-center justify-center text-xl shadow-inner">
             AK
           </div>
@@ -118,15 +124,14 @@ const ekskulList = [
           </div>
         </a>
 
-        <!-- Menu Navigasi Lengkap -->
         <nav class="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700 uppercase tracking-wide">
           <a href="/" class="text-emerald-700 border-b-2 border-emerald-600 pb-1">Beranda</a>
           <a href="#sambutan" class="hover:text-emerald-700 transition">Profil</a>
           <a href="#program" class="hover:text-emerald-700 transition">Akademik</a>
+          <a href="#guru" class="hover:text-emerald-700 transition">Guru & Tendik</a>
           <a href="#ekskul" class="hover:text-emerald-700 transition">Kesiswaan</a>
           <a href="/berita" class="hover:text-emerald-700 transition">Berita</a>
           <a href="/galeri" class="hover:text-emerald-700 transition">Galeri</a>
-          <a href="/guru" class="hover:text-emerald-700 transition">Guru & Tendik</a>
           <a href="#ppdb" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl transition shadow-sm">
             SPMB 2026
           </a>
@@ -134,10 +139,8 @@ const ekskulList = [
       </div>
     </header>
 
-    <!-- 3. SLIDER HERO BANNER MODERN -->
+    <!-- 3. SLIDER HERO BANNER -->
     <section class="relative bg-slate-950 h-[520px] sm:h-[600px] lg:h-[660px] overflow-hidden">
-      
-      <!-- Container Slide -->
       <div id="hero-slider" class="relative w-full h-full">
         {bannerSlides.map((slide, index) => (
           <div 
@@ -149,10 +152,8 @@ const ekskulList = [
               class="w-full h-full object-cover object-center"
             />
             
-            <!-- Dark Emerald Gradient Overlay -->
             <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-emerald-950/95 via-slate-950/75 to-slate-950/30"></div>
 
-            <!-- Teks Konten Depan Gambar -->
             <div class="absolute inset-0 flex items-center">
               <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div class="max-w-2xl text-left">
@@ -187,7 +188,6 @@ const ekskulList = [
         ))}
       </div>
 
-      <!-- Tombol Navigasi Slider -->
       <button id="btnPrevSlide" aria-label="Slide sebelumnya" class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-emerald-950/60 hover:bg-emerald-600 text-white backdrop-blur-md border border-white/10 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
@@ -195,7 +195,6 @@ const ekskulList = [
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
       </button>
 
-      <!-- Titik Indikator -->
       <div class="absolute bottom-8 left-0 right-0 z-30 flex justify-center items-center gap-2.5">
         {bannerSlides.map((_, index) => (
           <button 
@@ -207,11 +206,9 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 4. SECTION SAMBUTAN KEPALA SEKOLAH -->
+    <!-- 4. SAMBUTAN KEPALA SEKOLAH -->
     <section id="sambutan" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        
-        <!-- Foto Kepala Sekolah -->
         <div class="lg:col-span-4 flex justify-center">
           <div class="relative w-60 h-72 sm:w-64 sm:h-80 rounded-2xl overflow-hidden shadow-xl border-4 border-emerald-50 bg-emerald-900">
             <img 
@@ -225,7 +222,6 @@ const ekskulList = [
           </div>
         </div>
 
-        <!-- Kutipan & Sambutan -->
         <div class="lg:col-span-8">
           <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Sambutan Resmi</span>
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mt-2 leading-tight">
@@ -245,14 +241,12 @@ const ekskulList = [
             </a>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- 5. SECTION BERITA & AGENDA (SEPERTI GAMBAR REFERENSI) -->
+    <!-- 5. BERITA & AGENDA -->
     <section id="berita" class="bg-white py-20 border-y border-slate-200/80">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-10 pb-4 border-b border-slate-100">
           <div>
             <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Publikasi Sekolah</span>
@@ -264,8 +258,6 @@ const ekskulList = [
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          <!-- Kolom Kiri: Grid 4 Berita Terbaru (2x2) -->
           <div class="lg:col-span-8">
             {beritaUtama.length === 0 ? (
               <div class="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
@@ -305,7 +297,6 @@ const ekskulList = [
             )}
           </div>
 
-          <!-- Kolom Kanan: Agenda Kegiatan dengan Tanggal Badge -->
           <div class="lg:col-span-4">
             <div class="bg-emerald-50/70 border border-emerald-100 rounded-2xl p-6">
               <h3 class="font-black text-slate-900 text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
@@ -316,7 +307,6 @@ const ekskulList = [
               <div class="space-y-4">
                 {daftarAgenda.map((agenda) => (
                   <div class="bg-white p-4 rounded-xl border border-emerald-100 shadow-xs flex items-center gap-4">
-                    <!-- Badge Tanggal Hijau Sesuai Desain -->
                     <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex flex-col items-center justify-center flex-shrink-0 shadow-sm">
                       <span class="text-base font-black leading-none">{agenda.tgl}</span>
                       <span class="text-[9px] font-bold uppercase tracking-wider">{agenda.bln}</span>
@@ -334,7 +324,6 @@ const ekskulList = [
               </a>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -360,7 +349,7 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 7. PITA STATISTIK HIJAU TUA (FULL-WIDTH FOREST GREEN) -->
+    <!-- 7. PITA STATISTIK HIJAU TUA -->
     <section class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-14">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-emerald-800">
@@ -384,8 +373,37 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 8. EKSTRAKURIKULER & PENGEMBANGAN DIRI -->
-    <section id="ekskul" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- 8. DIREKTORI GURU & TENDIK (DITAMPILKAN KEMBALI) -->
+    <section id="guru" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="flex justify-between items-end mb-8">
+        <div>
+          <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Tenaga Pendidik</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Direktori Guru & Staf</h2>
+        </div>
+        <a href="/guru" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 uppercase tracking-wider flex items-center gap-1">
+          Lihat Semua Guru &rarr;
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {daftarGuruPreview.map((guru) => (
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs text-center flex flex-col items-center hover:-translate-y-1 hover:border-emerald-500 hover:shadow-md transition duration-300">
+            <div class="w-20 h-20 rounded-2xl bg-emerald-900 text-amber-300 flex items-center justify-center font-black text-2xl mb-4 shadow-sm">
+              {guru.nama.charAt(0)}
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-2">{guru.nama}</h3>
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full mt-2">{guru.mapel}</span>
+            <p class="text-[11px] text-slate-400 mt-3">{guru.nip}</p>
+            <a href="/guru" class="mt-4 w-full py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 transition">
+              Lihat Profil
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 9. EKSTRAKURIKULER & PENGEMBANGAN DIRI -->
+    <section id="ekskul" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-200/80">
       <div class="text-center max-w-2xl mx-auto mb-12">
         <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Kreativitas & Minat</span>
         <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Ekstrakurikuler</h2>
@@ -402,7 +420,7 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 9. PREVIEW GALERI KEGIATAN -->
+    <!-- 10. PREVIEW GALERI KEGIATAN -->
     <section class="bg-white py-20 border-t border-slate-200/80">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi</span>
@@ -429,7 +447,7 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 10. CTA BANNER SPMB (HIJAU TUA & EMAS) -->
+    <!-- 11. CTA BANNER SPMB -->
     <section id="ppdb" class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
         <span class="inline-block px-3.5 py-1 bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider rounded-md mb-3">
@@ -453,11 +471,10 @@ const ekskulList = [
       </div>
     </section>
 
-    <!-- 11. FOOTER HIJAU TUA + GOOGLE MAPS -->
+    <!-- 12. FOOTER RESMI + GOOGLE MAPS -->
     <footer class="bg-[#022c22] text-emerald-200/80 text-xs pt-16 pb-12 border-t border-emerald-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-emerald-900/60">
         
-        <!-- Identitas Sekolah -->
         <div class="md:col-span-4">
           <div class="flex items-center gap-3 mb-3">
             <img src="/logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.style.display='none'" />
@@ -472,7 +489,6 @@ const ekskulList = [
           </div>
         </div>
 
-        <!-- Tautan Cepat -->
         <div class="md:col-span-2">
           <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Navigasi</h4>
           <ul class="space-y-2 text-[11px]">
@@ -484,7 +500,6 @@ const ekskulList = [
           </ul>
         </div>
 
-        <!-- Layanan -->
         <div class="md:col-span-2">
           <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Layanan</h4>
           <ul class="space-y-2 text-[11px]">
@@ -495,7 +510,6 @@ const ekskulList = [
           </ul>
         </div>
 
-        <!-- Peta Google Maps Lokasi Sekolah -->
         <div class="md:col-span-4 flex flex-col">
           <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -525,7 +539,7 @@ const ekskulList = [
       </div>
     </footer>
 
-    <!-- 12. SCRIPT INTERAKTIF BANNER SLIDER -->
+    <!-- 13. SCRIPT INTERAKTIF BANNER SLIDER -->
     <script>
       let currentIndex = 0;
       const slides = document.querySelectorAll<HTMLElement>('.slide-banner');
