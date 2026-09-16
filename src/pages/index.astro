@@ -2,37 +2,19 @@
 import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
-// Ambil berita terbaru (maksimal 6)
-const beritaList = (await getCollection('berita'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
+// Ambil berita dari CMS
+const semuaBerita = (await getCollection('berita'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-// Data slide banner (bisa diganti foto asli sekolah nanti)
-const slides = [
-  {
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1600&auto=format&fit=crop",
-    tag: "Tahun Ajaran Baru",
-    title: "Membangun Generasi Cerdas, Mandiri, dan Berkarakter",
-    desc: "Menyediakan ekosistem belajar yang adaptif terhadap teknologi digital dan berakar pada nilai integritas.",
-    link: "/berita",
-    btnText: "Jelajahi Berita"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1600&auto=format&fit=crop",
-    tag: "Prestasi Siswa",
-    title: "Mengukir Prestasi di Tingkat Wilayah dan Nasional",
-    desc: "Wadah pengembangan potensi akademik, sains, seni, dan kepemimpinan pemuda.",
-    link: "/galeri",
-    btnText: "Lihat Dokumentasi"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1600&auto=format&fit=crop",
-    tag: "Fasilitas & Layanan",
-    title: "Transformasi Digital dalam Layanan Sekolah",
-    desc: "Akses informasi pengumuman resmi dan arsip administrasi secara transparan dan terpadu.",
-    link: "/admin",
-    btnText: "Portal Pengelola"
-  }
+const beritaUtama = semuaBerita.slice(0, 3);
+const pengumumanList = semuaBerita.slice(3, 7);
+
+// Data Dummy Guru untuk Preview Direktori
+const daftarGuruPreview = [
+  { nama: "Drs. H. Ahmad Fauzi, M.Pd", mapel: "Matematika", nip: "19720415 199802 1 002" },
+  { nama: "Siti Rahmawati, S.Pd, M.Si", mapel: "Bahasa Indonesia", nip: "19810320 200501 2 007" },
+  { nama: "Budi Santoso, S.Kom", mapel: "Informatika / TIK", nip: "19880812 201101 1 005" },
+  { nama: "Nurul Hidayah, S.Pd", mapel: "Bahasa Inggris", nip: "19920516 201903 2 011" },
 ];
 ---
 
@@ -40,246 +22,406 @@ const slides = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portal Resmi Sekolah</title>
+    <title>SMA Negeri Contoh - Unggul, Berkarakter, Berdaya Saing</title>
   </head>
-  <body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
+  <body class="bg-[#f8fafc] text-slate-800 antialiased font-sans">
 
-    <!-- Header / Navbar Modern -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50">
+    <!-- 1. TOP BAR INFORMASI RESMI -->
+    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800 hidden md:block">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-6">
+          <span class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z"/></svg>
+            (022) 7801234
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            info@sekolah.sch.id
+          </span>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400">
+          <span>Senin - Jumat: 07:00 - 15:30 WIB</span>
+          <a href="/admin" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+            Portal Staf / Admin &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. NAVBAR UTAMA -->
+    <header class="bg-white sticky top-0 z-50 shadow-sm border-b border-slate-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <a href="/" class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/20">
-            S
+          <div class="w-12 h-12 rounded-xl bg-slate-900 text-amber-400 font-black flex items-center justify-center text-xl shadow-inner border border-slate-700">
+            24
           </div>
           <div>
-            <span class="block font-black text-lg sm:text-xl text-slate-900 tracking-tight leading-none">SMA NEGERI CONTOH</span>
-            <span class="text-xs text-slate-500 font-medium tracking-wide">Unggul, Berakhlak, Berdaya Saing</span>
+            <span class="block font-black text-lg text-slate-900 leading-none tracking-tight">SMA NEGERI CONTOH</span>
+            <span class="text-[11px] font-semibold text-slate-500 tracking-wider uppercase">Provinsi Jawa Barat</span>
           </div>
         </a>
 
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <a href="/" class="text-blue-600">Beranda</a>
-          <a href="/berita" class="hover:text-blue-600 transition-colors">Berita</a>
-          <a href="/galeri" class="hover:text-blue-600 transition-colors">Galeri</a>
-          <a href="/admin" class="bg-slate-900 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-all shadow-sm">
-            Panel Staf
+        <!-- Menu Navigasi -->
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-bold text-slate-700 uppercase tracking-wide">
+          <a href="/" class="text-amber-600 border-b-2 border-amber-500 pb-1">Beranda</a>
+          <a href="#sambutan" class="hover:text-amber-600 transition">Profil</a>
+          <a href="/berita" class="hover:text-amber-600 transition">Berita</a>
+          <a href="/galeri" class="hover:text-amber-600 transition">Galeri</a>
+          <a href="/guru" class="hover:text-amber-600 transition">Direktori Guru</a>
+          <a href="#ppdb" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-2.5 rounded-full transition shadow-sm">
+            SPMB / PPDB
           </a>
         </nav>
       </div>
     </header>
 
-    <!-- Banner Slider Modern -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-      <div class="relative h-[480px] sm:h-[540px] md:h-[580px] rounded-3xl overflow-hidden shadow-2xl shadow-slate-300/50 bg-slate-950">
-        
-        <!-- Wadah Item Slide -->
-        <div id="slider-container" class="relative w-full h-full">
-          {slides.map((slide, index) => (
-            <div 
-              class={`slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
-            >
-              <!-- Gambar Banner -->
-              <img 
-                src={slide.image} 
-                alt={slide.title} 
-                class="w-full h-full object-cover object-center"
-              />
-              
-              <!-- Gradient Overlay agar teks terbaca tajam -->
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-900/50 to-black/20"></div>
+    <!-- 3. HERO SECTION DENGAN FOTO KEPALA SEKOLAH -->
+    <section class="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden pt-12 pb-24 lg:pb-32">
+      <!-- Background aksen melingkar -->
+      <div class="absolute -right-20 -top-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Teks Kiri -->
+          <div class="lg:col-span-7 text-center lg:text-left">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-wider rounded-md mb-4">
+              ★ Kurikulum Merdeka Belajar
+            </span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight uppercase">
+              MERDEKA <span class="text-amber-400">!!</span>
+            </h1>
+            <p class="mt-4 text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed">
+              Mewujudkan generasi pembelajar yang berakhlak mulia, unggul dalam sains dan teknologi, serta berdaya saing global.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
+              <a href="#berita" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3.5 rounded-xl transition shadow-lg shadow-amber-500/20 text-sm uppercase tracking-wide">
+                Informasi Terbaru
+              </a>
+              <a href="#sambutan" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold px-6 py-3.5 rounded-xl transition text-sm uppercase tracking-wide">
+                Profil Sekolah
+              </a>
+            </div>
+          </div>
 
-              <!-- Teks Konten Slide -->
-              <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-12 md:p-16 max-w-3xl z-20">
-                <span class="inline-block w-fit px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider rounded-full mb-3">
-                  {slide.tag}
-                </span>
-                <h1 class="text-2xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-4 drop-shadow-sm">
-                  {slide.title}
-                </h1>
-                <p class="text-sm sm:text-base text-slate-200 font-normal leading-relaxed mb-6 line-clamp-2 sm:line-clamp-3">
-                  {slide.desc}
-                </p>
-                <div>
-                  <a 
-                    href={slide.link} 
-                    class="inline-flex items-center gap-2 bg-white hover:bg-blue-50 text-slate-900 font-bold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-xl text-sm"
-                  >
-                    {slide.btnText}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                  </a>
+          <!-- Foto Kepala Sekolah Kanan -->
+          <div class="lg:col-span-5 flex justify-center lg:justify-end relative">
+            <div class="relative w-72 sm:w-80 lg:w-96">
+              <div class="w-full h-[380px] lg:h-[440px] rounded-2xl overflow-hidden bg-slate-800 border-2 border-slate-700 shadow-2xl relative">
+                <!-- Foto Tokoh / Kepala Sekolah -->
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop" 
+                  alt="Kepala Sekolah" 
+                  class="w-full h-full object-cover object-top"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4 text-center">
+                  <p class="font-black text-white text-base">Dra. Hj. Siti Aminah, M.Pd</p>
+                  <p class="text-xs text-amber-400 font-semibold">Kepala SMA Negeri Contoh</p>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <!-- Tombol Navigasi Kiri & Kanan -->
-        <button id="prevBtn" aria-label="Slide sebelumnya" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2.5 rounded-full bg-white/20 hover:bg-white text-white hover:text-slate-900 backdrop-blur-md transition-all">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <button id="nextBtn" aria-label="Slide berikutnya" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2.5 rounded-full bg-white/20 hover:bg-white text-white hover:text-slate-900 backdrop-blur-md transition-all">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-        </button>
-
-        <!-- Titik Indikator Slider -->
-        <div class="absolute bottom-6 right-6 sm:right-12 z-30 flex items-center gap-2">
-          {slides.map((_, index) => (
-            <button 
-              class={`dot-btn w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white w-8' : 'bg-white/40'}`} 
-              data-index={index}
-              aria-label={`Buka slide ${index + 1}`}
-            ></button>
-          ))}
         </div>
       </div>
     </section>
 
-    <!-- Kartu Statistik & Keunggulan -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-          <span class="block text-3xl sm:text-4xl font-black text-blue-600">A</span>
-          <span class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mt-1 block">Akreditasi BAN-SM</span>
+    <!-- 4. FLOATING STATS BAR (CARD MELAYANG NAVY) -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 relative z-20">
+      <div class="bg-[#111827] border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-800 text-center">
+          <div class="pt-3 sm:pt-0">
+            <span class="block text-3xl sm:text-4xl font-black text-amber-400">1.364</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 block">Peserta Didik</span>
+          </div>
+          <div class="pt-3 sm:pt-0 sm:pl-6">
+            <span class="block text-3xl sm:text-4xl font-black text-emerald-400">83+</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 block">Guru & Tendik</span>
+          </div>
+          <div class="pt-3 sm:pt-0 sm:pl-6">
+            <span class="block text-3xl sm:text-4xl font-black text-amber-400">A (Unggul)</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 block">Akreditasi BAN-SM</span>
+          </div>
+          <div class="pt-3 sm:pt-0 sm:pl-6">
+            <span class="block text-3xl sm:text-4xl font-black text-blue-400">140+</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 block">Prestasi Terukir</span>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-          <span class="block text-3xl sm:text-4xl font-black text-indigo-600">36+</span>
-          <span class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mt-1 block">Pendidik & Tenaga Ahli</span>
+      </div>
+    </div>
+
+    <!-- 5. SECTION SAMBUTAN KEPALA SEKOLAH & VISI MISI -->
+    <section id="sambutan" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center mb-12">
+        <span class="text-xs font-black text-amber-600 uppercase tracking-widest">Tentang Kami</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">SMA NEGERI CONTOH</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <!-- Box Gelap Sambutan Kepala Sekolah -->
+        <div class="lg:col-span-7 bg-[#111827] text-white rounded-2xl p-8 sm:p-10 border border-slate-800 flex flex-col justify-between shadow-lg">
+          <div>
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-400 flex-shrink-0">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Foto Kepala Sekolah" class="w-full h-full object-cover"/>
+              </div>
+              <div>
+                <h3 class="font-black text-lg text-white">Dra. Hj. Siti Aminah, M.Pd</h3>
+                <p class="text-xs text-amber-400 font-semibold">Kepala Sekolah</p>
+              </div>
+            </div>
+            <blockquote class="text-slate-300 text-sm sm:text-base leading-relaxed italic">
+              "Puji dan syukur kami panjatkan ke hadirat Tuhan Yang Maha Esa atas terwujudnya website resmi sekolah ini sebagai sarana komunikasi, keterbukaan informasi, dan dokumentasi kemajuan mutu pendidikan di lingkungan SMA Negeri Contoh."
+            </blockquote>
+          </div>
+          <div class="mt-8 pt-6 border-t border-slate-800 flex justify-between items-center">
+            <span class="text-xs text-slate-400">Masa Bakti 2024 - Sekarang</span>
+            <a href="#" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wide transition">
+              Sambutan Lengkap &rarr;
+            </a>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-          <span class="block text-3xl sm:text-4xl font-black text-emerald-600">500+</span>
-          <span class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mt-1 block">Siswa Aktif</span>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-          <span class="block text-3xl sm:text-4xl font-black text-amber-500">100%</span>
-          <span class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mt-1 block">Kelulusan</span>
+
+        <!-- Box Putih: Visi & Misi -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">🎯</span>
+              <h3 class="font-bold text-slate-900 text-base">Sepatah Kata & Visi</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              "Terwujudnya lulusan yang berakhlak mulia, cerdas, terampil, mandiri, dan berwawasan lingkungan global."
+            </p>
+            <a href="#" class="inline-block mt-3 text-xs font-bold text-amber-600 hover:underline">Lihat Selengkapnya &rarr;</a>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">🚀</span>
+              <h3 class="font-bold text-slate-900 text-base">Misi Utama Sekolah</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Mengembangkan potensi peserta didik secara holistik melalui proses pembelajaran aktif, inovatif, dan pemanfaatan teknologi digital.
+            </p>
+            <a href="#" class="inline-block mt-3 text-xs font-bold text-blue-600 hover:underline">Lihat Selengkapnya &rarr;</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Bagian Berita & Dokumentasi Terbaru -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+    <!-- 6. SECTION BERITA & PENGUMUMAN (2 KOLOM) -->
+    <section id="berita" class="bg-white py-20 border-t border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-10 pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-black text-amber-600 uppercase tracking-widest">Kabar Terkini</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Berita & Pengumuman Terbaru</h2>
+          </div>
+          <a href="/berita" class="text-xs font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider flex items-center gap-1 mt-2 sm:mt-0">
+            Lihat Semua Berita &rarr;
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Kolom Kiri: Grid Artikel Berita Utama -->
+          <div class="lg:col-span-8">
+            {beritaUtama.length === 0 ? (
+              <div class="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                <p class="text-slate-500 text-sm">Belum ada artikel publikasi. Buka <a href="/admin" class="text-amber-600 underline font-bold">Panel Admin</a> untuk menulis berita.</p>
+              </div>
+            ) : (
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {beritaUtama.map((item) => (
+                  <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
+                    <div class="h-44 overflow-hidden bg-slate-100">
+                      {item.data.thumbnail ? (
+                        <img src={item.data.thumbnail} alt={item.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                      ) : (
+                        <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs font-semibold">Foto Dokumentasi</div>
+                      )}
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                      <div class="flex justify-between items-center text-[11px] text-slate-400 mb-2">
+                        <span class="font-bold text-amber-600 uppercase tracking-wider">{item.data.category}</span>
+                        <span>{item.data.date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      </div>
+                      <h3 class="font-bold text-base text-slate-900 line-clamp-2 group-hover:text-amber-600 transition">
+                        <a href={`/berita/${item.id}`}>{item.data.title}</a>
+                      </h3>
+                      <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
+                        {item.data.description}
+                      </p>
+                      <a href={`/berita/${item.id}`} class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-amber-600 hover:text-amber-700 inline-block">
+                        Baca Selengkapnya &rarr;
+                      </a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <!-- Kolom Kanan: Pengumuman & Agenda Vertikal -->
+          <div class="lg:col-span-4 flex flex-col gap-4">
+            <div class="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-6">
+              <h3 class="font-black text-slate-900 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                Agenda & Pengumuman Penting
+              </h3>
+
+              <div class="space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-amber-200/60 shadow-xs">
+                  <span class="text-[10px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded">PENGUMUMAN</span>
+                  <h4 class="font-bold text-xs text-slate-900 mt-2 hover:text-amber-600 cursor-pointer">
+                    Pelaksanaan Penilaian Sumatif Akhir Semester (PSAS) Ganjil
+                  </h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Mulai: 28 November 2026</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-amber-200/60 shadow-xs">
+                  <span class="text-[10px] font-black text-blue-700 bg-blue-100 px-2 py-0.5 rounded">AGENDA</span>
+                  <h4 class="font-bold text-xs text-slate-900 mt-2 hover:text-amber-600 cursor-pointer">
+                    Rapat Pleno Komite & Sosialisasi Program Sekolah
+                  </h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Sabtu, Ruang Aula Utama</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-amber-200/60 shadow-xs">
+                  <span class="text-[10px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">PRESTASI</span>
+                  <h4 class="font-bold text-xs text-slate-900 mt-2 hover:text-amber-600 cursor-pointer">
+                    Juara 1 Lomba Cerdas Cermat Sains Tingkat Wilayah
+                  </h4>
+                  <p class="text-[11px] text-slate-400 mt-1">Selamat kepada Kontingen Sekolah</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. SECTION DIREKTORI GURU & TENDIK -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="flex justify-between items-end mb-8">
         <div>
-          <span class="text-blue-600 font-bold text-xs uppercase tracking-wider">Publikasi Resmi</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Kabar & Agenda Sekolah</h2>
+          <span class="text-xs font-black text-amber-600 uppercase tracking-widest">Tenaga Ahli</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Direktori Guru & Pendidik</h2>
         </div>
-        <a href="/berita" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2 sm:mt-0">
-          Lihat Semua Berita &rarr;
+        <a href="/guru" class="text-xs font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider">
+          Lihat Semua Guru &rarr;
         </a>
       </div>
 
-      {beritaList.length === 0 ? (
-        <div class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300">
-          <p class="text-slate-500 font-medium">Belum ada artikel publikasi yang diterbitkan.</p>
-          <a href="/admin" class="inline-block mt-4 text-xs font-bold text-white bg-blue-600 px-4 py-2.5 rounded-xl hover:bg-blue-700 transition">
-            Tulis Berita Pertama di Panel Admin
-          </a>
-        </div>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {beritaList.map((item) => (
-            <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition group flex flex-col">
-              {item.data.thumbnail ? (
-                <div class="h-48 overflow-hidden bg-slate-100">
-                  <img src={item.data.thumbnail} alt={item.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                </div>
-              ) : (
-                <div class="h-48 bg-gradient-to-tr from-slate-100 to-slate-200 flex items-center justify-center text-slate-400 font-semibold text-xs">
-                  Dokumentasi Foto
-                </div>
-              )}
-              <div class="p-6 flex flex-col flex-grow">
-                <span class="w-fit text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md mb-3">
-                  {item.data.category}
-                </span>
-                <h3 class="font-bold text-lg text-slate-900 line-clamp-2 group-hover:text-blue-600 transition">
-                  <a href={`/berita/${item.id}`}>{item.data.title}</a>
-                </h3>
-                <p class="text-xs text-slate-400 mt-2">
-                  {item.data.date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                </p>
-                <p class="text-sm text-slate-600 mt-3 line-clamp-2 leading-relaxed flex-grow">
-                  {item.data.description}
-                </p>
-                <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-xs font-semibold text-blue-600">
-                  <span>Baca Selengkapnya</span>
-                  <span>&rarr;</span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-    </main>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {daftarGuruPreview.map((guru) => (
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm text-center flex flex-col items-center hover:-translate-y-1 transition duration-300">
+            <div class="w-20 h-20 rounded-2xl bg-slate-900 text-amber-400 flex items-center justify-center font-black text-2xl mb-4 shadow-sm">
+              {guru.nama.charAt(0)}
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-2">{guru.nama}</h3>
+            <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full mt-2">{guru.mapel}</span>
+            <p class="text-[11px] text-slate-400 mt-3">{guru.nip}</p>
+            <a href="/guru" class="mt-4 w-full py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition">
+              Profil Lengkap
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
 
-    <!-- Footer Sekolah -->
-    <footer class="bg-slate-900 text-slate-400 text-sm py-12 border-t border-slate-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <p>&copy; {new Date().getFullYear()} SMA Negeri Contoh. Seluruh Hak Cipta Dilindungi.</p>
-        <div class="flex gap-6 text-xs">
-          <a href="/admin" class="hover:text-white transition">Masuk Staf</a>
-          <a href="/galeri" class="hover:text-white transition">Galeri Foto</a>
+    <!-- 8. BANNER SPMB / PPDB (CARD NAVY EMAS) -->
+    <section id="ppdb" class="bg-[#0f172a] text-white py-20 relative overflow-hidden">
+      <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+        <p class="italic text-amber-400 text-xs sm:text-sm font-serif mb-4">
+          "Pendidikan adalah tiket ke masa depan, hari esok dimiliki oleh orang-orang yang mempersiapkan hari ini."
+        </p>
+        <span class="inline-block px-3 py-1 bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider rounded-md mb-3">
+          Tahun Ajaran 2026/2027
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+          Seleksi Penerimaan Murid Baru (SPMB)
+        </h2>
+        <p class="mt-3 text-slate-400 text-sm max-w-xl mx-auto">
+          Bergabunglah bersama keluarga besar SMA Negeri Contoh. Raih masa depan gemilang dengan pendidikan berstandar tinggi.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 max-w-2xl mx-auto text-left">
+          <!-- Card 1 -->
+          <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-white text-base">Informasi & Syarat Pendaftaran</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Jalur Zonasi, Prestasi, Afirmasi, dan Perpindahan Tugas Orang Tua.
+              </p>
+            </div>
+            <a href="#" class="mt-6 inline-block text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wide transition">
+              Petunjuk Teknis PPDB
+            </a>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-white text-base">Daftar Ulang & Verifikasi</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                Cek hasil kelulusan seleksi berkas dan panduan daftar ulang online.
+              </p>
+            </div>
+            <a href="#" class="mt-6 inline-block text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wide transition border border-slate-700">
+              Cek Status Kelulusan
+            </a>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- 9. FOOTER RESMI SEKOLAH -->
+    <footer class="bg-[#0b1120] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        
+        <div class="md:col-span-5">
+          <span class="text-base font-black text-white tracking-tight uppercase">SMA NEGERI CONTOH</span>
+          <p class="mt-3 text-slate-400 leading-relaxed max-w-sm">
+            Lembaga pendidikan menengah atas negeri yang berkomitmen pada keunggulan budi pekerti, literasi digital, dan prestasi sains.
+          </p>
+          <div class="mt-4 text-slate-400 space-y-1 text-[11px]">
+            <p>📍 Jl. Pendidikan No. 24, Kec. Alor Barat Laut</p>
+            <p>📞 (022) 7801234 | ✉️ smanalorkecil2013@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="md:col-span-3">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Tautan Cepat</h4>
+          <ul class="space-y-2">
+            <li><a href="/" class="hover:text-amber-400 transition">Beranda</a></li>
+            <li><a href="/berita" class="hover:text-amber-400 transition">Rilis Berita Sekolah</a></li>
+            <li><a href="/galeri" class="hover:text-amber-400 transition">Galeri Kegiatan</a></li>
+            <li><a href="/guru" class="hover:text-amber-400 transition">Direktori Guru</a></li>
+            <li><a href="/admin" class="hover:text-amber-400 transition">Panel Decap CMS</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-4">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Layanan Akademik</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-amber-400 transition">Kurikulum Merdeka</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Organisasi Siswa (OSIS)</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Ekstrakurikuler & Prestasi</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Layanan Pengaduan Sekolah</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px]">
+        <p>&copy; {new Date().getFullYear()} SMA Negeri Contoh. Seluruh Hak Cipta Dilindungi.</p>
+        <p class="text-slate-500">Dikembangkan dengan Astro, Tailwind & Cloudflare</p>
       </div>
     </footer>
 
-    <!-- Script Slider Interaktif (Autoplay + Transisi Halus) -->
-    <script>
-      let currentIndex = 0;
-      const slides = document.querySelectorAll<HTMLElement>('.slide-item');
-      const dots = document.querySelectorAll<HTMLElement>('.dot-btn');
-      const totalSlides = slides.length;
-      let slideInterval: any;
-
-      function updateSlide(nextIndex: number) {
-        // Reset slide saat ini
-        slides[currentIndex].classList.remove('opacity-100', 'z-10');
-        slides[currentIndex].classList.add('opacity-0', 'z-0', 'pointer-events-none');
-        dots[currentIndex].classList.remove('bg-white', 'w-8');
-        dots[currentIndex].classList.add('bg-white/40');
-
-        // Pindah index
-        currentIndex = (nextIndex + totalSlides) % totalSlides;
-
-        // Tampilkan slide berikutnya
-        slides[currentIndex].classList.remove('opacity-0', 'z-0', 'pointer-events-none');
-        slides[currentIndex].classList.add('opacity-100', 'z-10');
-        dots[currentIndex].classList.remove('bg-white/40');
-        dots[currentIndex].classList.add('bg-white', 'w-8');
-      }
-
-      function startAutoPlay() {
-        slideInterval = setInterval(() => {
-          updateSlide(currentIndex + 1);
-        }, 5000); // Berganti otomatis setiap 5 detik
-      }
-
-      function resetAutoPlay() {
-        clearInterval(slideInterval);
-        startAutoPlay();
-      }
-
-      document.getElementById('nextBtn')?.addEventListener('click', () => {
-        updateSlide(currentIndex + 1);
-        resetAutoPlay();
-      });
-
-      document.getElementById('prevBtn')?.addEventListener('click', () => {
-        updateSlide(currentIndex - 1);
-        resetAutoPlay();
-      });
-
-      dots.forEach((dot) => {
-        dot.addEventListener('click', (e) => {
-          const target = e.currentTarget as HTMLElement;
-          const idx = parseInt(target.getAttribute('data-index') || '0', 10);
-          updateSlide(idx);
-          resetAutoPlay();
-        });
-      });
-
-      // Jalankan slider saat halaman dibuka
-      startAutoPlay();
-    </script>
   </body>
 </html>
