@@ -17,3 +17,63 @@ const tanggalRilis = post.data?.date
   ? new Date(post.data.date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   : '-';
 ---
+
+<Layout title={`${post.data.title} - SMA Negeri Alor Kecil`} description={post.data.description}>
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Tombol Kembali -->
+    <a href="/berita" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition mb-8">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Kembali ke Daftar Berita
+    </a>
+
+    <!-- Header Artikel -->
+    <header class="mb-8">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+          {post.data.category || 'Berita'}
+        </span>
+        <span class="text-xs text-slate-400 font-medium">• {tanggalRilis}</span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
+        {post.data.title}
+      </h1>
+      <p class="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed border-l-4 border-emerald-600 pl-4 py-0.5">
+        {post.data.description}
+      </p>
+    </header>
+
+    <!-- Gambar Sampul Utama (Aman jika URL gambar gagal load) -->
+    {post.data.thumbnail && (
+      <div class="rounded-3xl overflow-hidden shadow-md mb-10 max-h-[460px] bg-emerald-50">
+        <img 
+          src={post.data.thumbnail} 
+          alt={post.data.title} 
+          class="w-full h-full object-cover" 
+          onerror="this.style.display='none'"
+        />
+      </div>
+    )}
+
+    <!-- Isi Lengkap Berita (Markdown) -->
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs prose prose-emerald prose-img:rounded-2xl prose-img:mx-auto max-w-none text-slate-700 text-sm sm:text-base leading-relaxed">
+      <Content />
+    </article>
+
+    <!-- Bagian Bawah Artikel -->
+    <div class="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+      <span>Diterbitkan oleh Humas SMAN Alor Kecil</span>
+      <a href="#top" class="font-bold text-emerald-700 hover:underline">&uarr; Kembali ke Atas</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  article :global(img[width]) {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
