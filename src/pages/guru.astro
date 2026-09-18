@@ -2,262 +2,231 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Direktori Civitas Akademika - SMAN Alor Kecil">
-  <html lang="id" class="scroll-smooth">
-    <head>
-      <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Direktori Civitas Akademika - SMA Negeri Alor Kecil</title>
-  </head>
-  <body class="bg-[#f8fafc] text-slate-800 antialiased font-sans">
+<Layout title="Direktori Civitas Akademika - SMA Negeri Alor Kecil">
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Judul Halaman -->
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Pangkalan Data Sekolah</span>
+      <h1 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Direktori Civitas Akademika</h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2">
+        Data resmi tenaga pendidik, tenaga kependidikan (TU), dan peserta didik yang terhubung langsung dengan basis data sekolah.
+      </p>
+    </div>
 
-    <!-- Header Sederhana -->
-    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-700 hover:text-emerald-800 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          Kembali ke Beranda
-        </a>
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-emerald-700 text-amber-300 flex items-center justify-center font-black text-xs">AK</div>
-          <span class="text-xs font-bold text-slate-700 hidden sm:inline">SMAN Alor Kecil</span>
-        </div>
+    <!-- Tombol Switcher Tab (Guru, Tendik, Siswa) -->
+    <div class="flex justify-center mb-8">
+      <div class="bg-slate-200/80 p-1.5 rounded-2xl flex gap-1 sm:gap-2 text-xs font-bold shadow-inner">
+        <button id="tabGuru" class="tab-btn active-tab px-4 sm:px-6 py-2.5 rounded-xl transition" data-target="Guru">
+          👨‍🏫 Tenaga Pendidik (Guru)
+        </button>
+        <button id="tabTU" class="tab-btn px-4 sm:px-6 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition" data-target="TU">
+          🏢 Tenaga Kependidikan (TU)
+        </button>
+        <button id="tabSiswa" class="tab-btn px-4 sm:px-6 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition" data-target="Siswa">
+          🎓 Siswa
+        </button>
       </div>
-    </header>
+    </div>
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-      <!-- Judul Halaman -->
-      <div class="text-center max-w-2xl mx-auto mb-8">
-        <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Pangkalan Data Sekolah</span>
-        <h1 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Direktori Civitas Akademika</h1>
-        <p class="text-slate-500 text-xs sm:text-sm mt-2">
-          Data resmi tenaga pendidik, tenaga kependidikan (TU), dan peserta didik yang terhubung langsung dengan basis data sekolah.
-        </p>
+    <!-- Kotak Pencarian Instan -->
+    <div class="max-w-md mx-auto mb-10">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Cari berdasarkan nama, NIP/NISN, atau mapel..." 
+          class="w-full bg-white pl-11 pr-4 py-3 rounded-2xl border border-slate-200 shadow-sm text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition"
+        />
+        <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
       </div>
+    </div>
 
-      <!-- Tombol Switcher Tab (Guru, Tendik, Siswa) -->
-      <div class="flex justify-center mb-8">
-        <div class="bg-slate-200/80 p-1.5 rounded-2xl flex gap-1 sm:gap-2 text-xs font-bold shadow-inner">
-          <button id="tabGuru" class="tab-btn active-tab px-4 sm:px-6 py-2.5 rounded-xl transition" data-target="Guru">
-            👨‍🏫 Tenaga Pendidik (Guru)
-          </button>
-          <button id="tabTU" class="tab-btn px-4 sm:px-6 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition" data-target="TU">
-            🏢 Tenaga Kependidikan (TU)
-          </button>
-          <button id="tabSiswa" class="tab-btn px-4 sm:px-6 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition" data-target="Siswa">
-            🎓 Siswa
-          </button>
-        </div>
+    <!-- Indikator Loading -->
+    <div id="loadingState" class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-9 w-9 border-4 border-emerald-600 border-t-transparent mb-3"></div>
+      <p class="text-xs font-semibold text-slate-500 tracking-wide">Menghubungkan ke basis data Google Spreadsheet...</p>
+    </div>
+
+    <!-- Kontainer Tampilan Kartu Guru / Tendik -->
+    <div id="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+      <!-- Kartu di-generate via JavaScript -->
+    </div>
+
+    <!-- Kontainer Tabel Khusus Siswa -->
+    <div id="tableContainer" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-emerald-900 text-white font-bold text-xs uppercase tracking-wider">
+            <tr>
+              <th class="p-4 w-12 text-center">No</th>
+              <th class="p-4">Nama Lengkap</th>
+              <th class="p-4">NIS / NISN</th>
+              <th class="p-4">Kelas</th>
+              <th class="p-4">L/P</th>
+            </tr>
+          </thead>
+          <tbody id="tableBodySiswa" class="divide-y divide-slate-100">
+            <!-- Baris siswa di-generate via JavaScript -->
+          </tbody>
+        </table>
       </div>
+    </div>
 
-      <!-- Kotak Pencarian Instan -->
-      <div class="max-w-md mx-auto mb-10">
-        <div class="relative">
-          <input 
-            type="text" 
-            id="searchInput" 
-            placeholder="Cari berdasarkan nama, NIP/NISN, atau mapel..." 
-            class="w-full bg-white pl-11 pr-4 py-3 rounded-2xl border border-slate-200 shadow-sm text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition"
-          />
-          <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-      </div>
+    <!-- State Kosong / Tidak Ditemukan -->
+    <div id="emptyState" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200 hidden">
+      <p class="text-slate-400 text-sm font-medium">Tidak ada data yang sesuai dengan kriteria pencarian.</p>
+    </div>
+  </main>
 
-      <!-- Indikator Loading -->
-      <div id="loadingState" class="text-center py-16">
-        <div class="inline-block animate-spin rounded-full h-9 w-9 border-4 border-emerald-600 border-t-transparent mb-3"></div>
-        <p class="text-xs font-semibold text-slate-500 tracking-wide">Menghubungkan ke basis data Google Spreadsheet...</p>
-      </div>
+  <style>
+    .active-tab {
+      background-color: #047857; /* emerald-700 */
+      color: #ffffff;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+  </style>
 
-      <!-- Kontainer Tampilan Kartu Guru / Tendik -->
-      <div id="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
-        <!-- Kartu di-generate via JavaScript -->
-      </div>
+  <!-- Script Pengambilan & Manipulasi Data Realtime -->
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
 
-      <!-- Kontainer Tabel Khusus Siswa -->
-      <div id="tableContainer" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs sm:text-sm">
-            <thead class="bg-emerald-900 text-white font-bold text-xs uppercase tracking-wider">
-              <tr>
-                <th class="p-4 w-12 text-center">No</th>
-                <th class="p-4">Nama Lengkap</th>
-                <th class="p-4">NIS / NISN</th>
-                <th class="p-4">Kelas</th>
-                <th class="p-4">L/P</th>
-              </tr>
-            </thead>
-            <tbody id="tableBodySiswa" class="divide-y divide-slate-100">
-              <!-- Baris siswa di-generate via JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+    let currentTab = 'Guru';
+    const cacheData: Record<string, any[]> = {};
 
-      <!-- State Kosong / Tidak Ditemukan -->
-      <div id="emptyState" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200 hidden">
-        <p class="text-slate-400 text-sm font-medium">Tidak ada data yang sesuai dengan kriteria pencarian.</p>
-      </div>
+    const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const loadingState = document.getElementById('loadingState')!;
+    const gridContainer = document.getElementById('gridContainer')!;
+    const tableContainer = document.getElementById('tableContainer')!;
+    const tableBodySiswa = document.getElementById('tableBodySiswa')!;
+    const emptyState = document.getElementById('emptyState')!;
 
-    </main>
+    async function loadTabData(tabName: string) {
+      showLoading(true);
 
-    <style>
-      .active-tab {
-        background-color: #047857; /* emerald-700 */
-        color: #ffffff;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-      }
-    </style>
-
-    <!-- Script Pengambilan & Manipulasi Data Realtime -->
-    <script>
-      // GANTI URL DI BAWAH INI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
-
-      let currentTab = 'Guru';
-      const cacheData: Record<string, any[]> = {};
-
-      const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
-      const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-      const loadingState = document.getElementById('loadingState')!;
-      const gridContainer = document.getElementById('gridContainer')!;
-      const tableContainer = document.getElementById('tableContainer')!;
-      const tableBodySiswa = document.getElementById('tableBodySiswa')!;
-      const emptyState = document.getElementById('emptyState')!;
-
-      async function loadTabData(tabName: string) {
-        showLoading(true);
-
-        if (cacheData[tabName]) {
-          renderData(cacheData[tabName], tabName);
-          showLoading(false);
-          return;
-        }
-
-        try {
-          const res = await fetch(`${SCRIPT_URL}?tab=${encodeURIComponent(tabName)}`);
-          const data = await res.json();
-          cacheData[tabName] = Array.isArray(data) ? data : [];
-          renderData(cacheData[tabName], tabName);
-        } catch (err) {
-          loadingState.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal mengambil data dari Google Spreadsheet. Pastikan Web App disetel ke "Anyone".</p>';
-          return;
-        }
+      if (cacheData[tabName]) {
+        renderData(cacheData[tabName], tabName);
         showLoading(false);
+        return;
       }
 
-      function showLoading(isLoading: boolean) {
-        if (isLoading) {
-          loadingState.classList.remove('hidden');
-          gridContainer.classList.add('hidden');
-          tableContainer.classList.add('hidden');
-          emptyState.classList.add('hidden');
-        } else {
-          loadingState.classList.add('hidden');
-        }
+      try {
+        const res = await fetch(`${SCRIPT_URL}?tab=${encodeURIComponent(tabName)}`);
+        const data = await res.json();
+        cacheData[tabName] = Array.isArray(data) ? data : [];
+        renderData(cacheData[tabName], tabName);
+      } catch (err) {
+        loadingState.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal mengambil data dari Google Spreadsheet. Pastikan Web App disetel ke "Anyone".</p>';
+        return;
       }
+      showLoading(false);
+    }
 
-      function renderData(data: any[], tabName: string) {
-        const keyword = searchInput.value.toLowerCase().trim();
-        
-        // Filter pencarian
-        const filtered = data.filter((item) => {
-          const nama = (item.nama || item.name || '').toString().toLowerCase();
-          const nipNisn = (item.nip || item.nisn || item.nis || '').toString().toLowerCase();
-          const mapelJabatan = (item.mapel || item.jabatan || item.kelas || '').toString().toLowerCase();
-          return nama.includes(keyword) || nipNisn.includes(keyword) || mapelJabatan.includes(keyword);
-        });
-
-        if (filtered.length === 0) {
-          gridContainer.classList.add('hidden');
-          tableContainer.classList.add('hidden');
-          emptyState.classList.remove('hidden');
-          return;
-        }
+    function showLoading(isLoading: boolean) {
+      if (isLoading) {
+        loadingState.classList.remove('hidden');
+        gridContainer.classList.add('hidden');
+        tableContainer.classList.add('hidden');
         emptyState.classList.add('hidden');
-
-        // Jika Tab adalah Siswa -> Render format Tabel
-        if (tabName === 'Siswa') {
-          gridContainer.classList.add('hidden');
-          tableContainer.classList.remove('hidden');
-          tableBodySiswa.innerHTML = '';
-
-          filtered.forEach((siswa, index) => {
-            const tr = document.createElement('tr');
-            tr.className = 'hover:bg-slate-50 transition text-slate-700';
-            const nama = siswa.nama || siswa['nama siswa'] || '-';
-            const nisn = siswa.nisn || siswa.nis || '-';
-            const kelas = siswa.kelas || siswa.rombel || '-';
-            const jk = siswa.jk || siswa['jenis kelamin'] || '-';
-
-            tr.innerHTML = `
-              <td class="p-4 text-center font-bold text-slate-400">${index + 1}</td>
-              <td class="p-4 font-bold text-slate-900">${nama}</td>
-              <td class="p-4 font-mono text-xs text-slate-500">${nisn}</td>
-              <td class="p-4"><span class="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md font-bold text-xs">${kelas}</span></td>
-              <td class="p-4">${jk}</td>
-            `;
-            tableBodySiswa.appendChild(tr);
-          });
-        } 
-        // Jika Tab adalah Guru atau TU -> Render format Kartu Profil
-        else {
-          tableContainer.classList.add('hidden');
-          gridContainer.classList.remove('hidden');
-          gridContainer.innerHTML = '';
-
-          filtered.forEach((person) => {
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col items-center text-center hover:-translate-y-1 hover:border-emerald-500 hover:shadow-md transition duration-300';
-
-            const nama = person.nama || person['nama lengkap'] || 'Nama Belum Diisi';
-            const role = person.mapel || person.jabatan || (tabName === 'Guru' ? 'Tenaga Pendidik' : 'Staf Tata Usaha');
-            const nip = person.nip ? `NIP. ${person.nip}` : 'NIP. -';
-            const foto = person.foto || person.avatar || null;
-
-            card.innerHTML = `
-              ${foto ? `
-                <img src="${foto}" alt="${nama}" class="w-20 h-20 rounded-2xl object-cover mb-4 border border-slate-100 shadow-xs" />
-              ` : `
-                <div class="w-20 h-20 rounded-2xl bg-emerald-900 text-amber-300 flex items-center justify-center font-black text-2xl mb-4 shadow-sm">
-                  ${nama.charAt(0)}
-                </div>
-              `}
-              <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-2">${nama}</h3>
-              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-full mt-2">${role}</span>
-              <p class="text-[11px] text-slate-400 mt-3 font-mono">${nip}</p>
-            `;
-            gridContainer.appendChild(card);
-          });
-        }
+      } else {
+        loadingState.classList.add('hidden');
       }
+    }
 
-      // Event Klik Tombol Tab
-      tabBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          tabBtns.forEach((b) => {
-            b.classList.remove('active-tab');
-            b.classList.add('text-slate-600');
-          });
-          btn.classList.add('active-tab');
-          btn.classList.remove('text-slate-600');
+    function renderData(data: any[], tabName: string) {
+      const keyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      
+      const filtered = data.filter((item) => {
+        const nama = (item.nama || item.name || '').toString().toLowerCase();
+        const nipNisn = (item.nip || item.nisn || item.nis || '').toString().toLowerCase();
+        const mapelJabatan = (item.mapel || item.jabatan || item.kelas || '').toString().toLowerCase();
+        return nama.includes(keyword) || nipNisn.includes(keyword) || mapelJabatan.includes(keyword);
+      });
 
-          currentTab = btn.getAttribute('data-target') || 'Guru';
-          searchInput.value = ''; // Reset kolom pencarian saat ganti tab
-          loadTabData(currentTab);
+      if (filtered.length === 0) {
+        gridContainer.classList.add('hidden');
+        tableContainer.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      if (tabName === 'Siswa') {
+        gridContainer.classList.add('hidden');
+        tableContainer.classList.remove('hidden');
+        tableBodySiswa.innerHTML = '';
+
+        filtered.forEach((siswa, index) => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition text-slate-700';
+          const nama = siswa.nama || siswa['nama siswa'] || '-';
+          const nisn = siswa.nisn || siswa.nis || '-';
+          const kelas = siswa.kelas || siswa.rombel || '-';
+          const jk = siswa.jk || siswa['jenis kelamin'] || '-';
+
+          tr.innerHTML = `
+            <td class="p-4 text-center font-bold text-slate-400">${index + 1}</td>
+            <td class="p-4 font-bold text-slate-900">${nama}</td>
+            <td class="p-4 font-mono text-xs text-slate-500">${nisn}</td>
+            <td class="p-4"><span class="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md font-bold text-xs">${kelas}</span></td>
+            <td class="p-4">${jk}</td>
+          `;
+          tableBodySiswa.appendChild(tr);
         });
-      });
+      } else {
+        tableContainer.classList.add('hidden');
+        gridContainer.classList.remove('hidden');
+        gridContainer.innerHTML = '';
 
-      // Event Pencarian Real-time
-      searchInput.addEventListener('input', () => {
-        if (cacheData[currentTab]) {
-          renderData(cacheData[currentTab], currentTab);
-        }
-      });
+        filtered.forEach((person) => {
+          const card = document.createElement('div');
+          card.className = 'bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col items-center text-center hover:-translate-y-1 hover:border-emerald-500 hover:shadow-md transition duration-300';
 
-      // Muat tab awal (Guru) saat pertama kali halaman dibuka
-      loadTabData('Guru');
-    </script>
+          const nama = person.nama || person['nama lengkap'] || 'Nama Belum Diisi';
+          const role = person.mapel || person.jabatan || (tabName === 'Guru' ? 'Tenaga Pendidik' : 'Staf Tata Usaha');
+          const nip = person.nip ? `NIP. ${person.nip}` : 'NIP. -';
+          const foto = person.foto || person.avatar || null;
+
+          card.innerHTML = `
+            ${foto ? `
+              <img src="${foto}" alt="${nama}" class="w-20 h-20 rounded-2xl object-cover mb-4 border border-slate-100 shadow-xs" />
+            ` : `
+              <div class="w-20 h-20 rounded-2xl bg-emerald-900 text-amber-300 flex items-center justify-center font-black text-2xl mb-4 shadow-sm">
+                ${nama.charAt(0)}
+              </div>
+            `}
+            <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-2">${nama}</h3>
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-full mt-2">${role}</span>
+            <p class="text-[11px] text-slate-400 mt-3 font-mono">${nip}</p>
+          `;
+          gridContainer.appendChild(card);
+        });
+      }
+    }
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach((b) => {
+          b.classList.remove('active-tab');
+          b.classList.add('text-slate-600');
+        });
+        btn.classList.add('active-tab');
+        btn.classList.remove('text-slate-600');
+
+        currentTab = btn.getAttribute('data-target') || 'Guru';
+        if (searchInput) searchInput.value = '';
+        loadTabData(currentTab);
+      });
+    });
+
+    searchInput?.addEventListener('input', () => {
+      if (cacheData[currentTab]) {
+        renderData(cacheData[currentTab], currentTab);
+      }
+    });
+
+    loadTabData('Guru');
+  </script>
 </Layout>
