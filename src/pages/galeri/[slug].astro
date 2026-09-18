@@ -1,0 +1,209 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { daftarAlbum } from '../../data/galeri';
+
+export async function getStaticPaths() {
+  return daftarAlbum.map((album) => ({
+    params: { slug: album.slug },
+    props: { album },
+  }));
+}
+
+const { album } = Astro.props;
+---
+
+<Layout title={`${album.judul} - Album Galeri SMAN Alor Kecil`} description={album.deskripsi}>
+  
+  <!-- Breadcrumb Navigasi -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <a href="/galeri" class="hover:text-emerald-700 transition">Galeri</a>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">{album.labelKategori}</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+    
+    <!-- Header Album -->
+    <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs mb-10">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            {album.labelKategori}
+          </span>
+          <span class="text-xs text-slate-400 font-mono">• {album.tanggal}</span>
+        </div>
+        <a 
+          href="/galeri" 
+          class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-1.5 rounded-xl transition"
+        >
+          &larr; Kembali ke Semua Album
+        </a>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
+        {album.judul}
+      </h1>
+      <p class="text-slate-600 text-sm sm:text-base mt-3 max-w-3xl leading-relaxed">
+        {album.deskripsi}
+      </p>
+
+      <div class="mt-6 pt-6 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-semibold">
+        <span>📸 Memuat total <strong>{album.fotoList.length} foto dokumentasi</strong></span>
+        <span>•</span>
+        <span>Ketuk foto untuk memperbesar tampilan</span>
+      </div>
+    </div>
+
+    <!-- Grid Foto di Dalam Album -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {album.fotoList.map((foto, index) => (
+        <div 
+          class="photo-item bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg hover:-translate-y-1 transition duration-300 group cursor-pointer"
+          data-index={index}
+          data-url={foto.url}
+          data-caption={foto.caption}
+        >
+          <div class="relative aspect-square overflow-hidden bg-slate-100">
+            <img 
+              src={foto.url} 
+              alt={foto.caption}
+              loading="lazy" 
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3">
+              <span class="text-white text-xs font-bold flex items-center gap-1">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                Perbesar
+              </span>
+            </div>
+          </div>
+          <div class="p-3 bg-white">
+            <p class="text-xs text-slate-600 line-clamp-2 leading-snug">
+              {foto.caption}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </main>
+
+  <!-- MODAL LIGHTBOX DENGAN TOMBOL PREV & NEXT -->
+  <div 
+    id="photoModal" 
+    class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 sm:p-6"
+    role="dialog"
+    aria-modal="true"
+  >
+    <!-- Tombol Tutup -->
+    <button 
+      id="closeModal" 
+      class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+      aria-label="Tutup"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Tombol Sebelumnya (Prev) -->
+    <button 
+      id="btnPrev" 
+      class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm"
+      aria-label="Foto Sebelumnya"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+
+    <!-- Tombol Berikutnya (Next) -->
+    <button 
+      id="btnNext" 
+      class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm"
+      aria-label="Foto Berikutnya"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    </button>
+
+    <!-- Kontainer Gambar & Caption -->
+    <div class="relative max-w-4xl w-full max-h-[85vh] flex flex-col items-center">
+      <div class="w-full flex-1 overflow-hidden flex items-center justify-center">
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-[70vh] object-contain rounded-xl shadow-2xl" />
+      </div>
+      <div class="text-center mt-4 px-4 text-white">
+        <p id="modalCaption" class="text-sm sm:text-base font-medium text-slate-200"></p>
+        <span id="modalCounter" class="text-xs text-amber-400 font-mono mt-1 block"></span>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<!-- Script Slider & Keyboard Navigation -->
+<script define:vars={{ fotoList: album.fotoList }}>
+  let currentIndex = 0;
+  const modal = document.getElementById('photoModal');
+  const modalImg = document.getElementById('modalImage');
+  const modalCaption = document.getElementById('modalCaption');
+  const modalCounter = document.getElementById('modalCounter');
+  const closeModalBtn = document.getElementById('closeModal');
+  const prevBtn = document.getElementById('btnPrev');
+  const nextBtn = document.getElementById('btnNext');
+  const photoItems = document.querySelectorAll('.photo-item');
+
+  function showPhoto(index) {
+    if (!fotoList || fotoList.length === 0) return;
+    currentIndex = (index + fotoList.length) % fotoList.length;
+    const current = fotoList[currentIndex];
+
+    modalImg.src = current.url;
+    modalImg.alt = current.caption;
+    modalCaption.textContent = current.caption;
+    modalCounter.textContent = `Foto ${currentIndex + 1} dari ${fotoList.length}`;
+  }
+
+  function openModal(index) {
+    showPhoto(index);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  photoItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const idx = parseInt(item.getAttribute('data-index') || '0', 10);
+      openModal(idx);
+    });
+  });
+
+  closeModalBtn?.addEventListener('click', closeModal);
+  prevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPhoto(currentIndex - 1);
+  });
+  nextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPhoto(currentIndex + 1);
+  });
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Navigasi Keyboard Panah Kiri, Kanan, dan Esc
+  window.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('hidden')) {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') showPhoto(currentIndex - 1);
+      if (e.key === 'ArrowRight') showPhoto(currentIndex + 1);
+    }
+  });
+</script>
