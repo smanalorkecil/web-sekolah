@@ -171,7 +171,28 @@ const ekskulList = [
             </div>
           </div>
 
-          <a href="#program" class="hover:text-emerald-700 transition">Akademik</a>
+          <!-- DROPDOWN AKADEMIK -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Akademik</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+
+            <!-- Menu Melayang Dropdown -->
+            <div class="absolute left-0 top-full hidden group-hover:block w-56 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-1 text-xs font-semibold normal-case text-slate-700">
+                <a href="/akademik/kalender" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">📅</span> Kalender Pendidikan
+                </a>
+                <a href="/akademik/jadwal" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">⏰</span> Jadwal Pembelajaran
+                </a>
+              </div>
+            </div>
+          </div>
+          
           <a href="#guru" class="hover:text-emerald-700 transition">Guru & Tendik</a>
           <a href="#ekskul" class="hover:text-emerald-700 transition">Kesiswaan</a>
           <a href="/berita" class="hover:text-emerald-700 transition">Berita</a>
