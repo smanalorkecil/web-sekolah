@@ -124,9 +124,53 @@ const ekskulList = [
           </div>
         </a>
 
+<!-- Menu Navigasi Lengkap -->
         <nav class="hidden xl:flex items-center gap-7 text-xs font-bold text-slate-700 uppercase tracking-wide">
           <a href="/" class="text-emerald-700 border-b-2 border-emerald-600 pb-1">Beranda</a>
-          <a href="#sambutan" class="hover:text-emerald-700 transition">Profil</a>
+
+          <!-- DROPDOWN PROFIL SEKOLAH -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Profil</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+
+            <!-- Menu Melayang Dropdown -->
+            <div class="absolute left-0 top-full hidden group-hover:block w-64 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2.5 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
+                <a href="#sambutan" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🎙️</span> Sambutan Kepala Sekolah
+                </a>
+                <a href="/profil/sejarah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">📜</span> Sejarah Singkat
+                </a>
+                <a href="/profil/visi-misi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🎯</span> Visi & Misi
+                </a>
+                <a href="/profil/kondisi-sekolah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🏫</span> Kondisi Sekolah
+                </a>
+                <a href="/profil/sarana-prasarana" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🏢</span> Sarana & Prasarana
+                </a>
+                <a href="/profil/struktur-organisasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">👥</span> Struktur Organisasi
+                </a>
+                <a href="/profil/lambang-sekolah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🛡️</span> Lambang & Makna Logo
+                </a>
+                <a href="/profil/akreditasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">⭐</span> Akreditasi Sekolah
+                </a>
+                <a href="/profil/prestasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition flex items-center gap-2.5">
+                  <span class="text-emerald-600 text-sm">🏆</span> Prestasi Sekolah
+                </a>
+              </div>
+            </div>
+          </div>
+
           <a href="#program" class="hover:text-emerald-700 transition">Akademik</a>
           <a href="#guru" class="hover:text-emerald-700 transition">Guru & Tendik</a>
           <a href="#ekskul" class="hover:text-emerald-700 transition">Kesiswaan</a>
