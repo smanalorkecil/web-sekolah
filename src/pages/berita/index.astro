@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+let semuaBerita: any[] = [];
+try {
+  const koleksi = (await getCollection('berita')) || [];
+  // Urutkan dari yang paling baru
+  semuaBerita = koleksi.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
+} catch (e) {
+  semuaBerita = [];
+}
+---
+
+<Layout title="Berita & Artikel - SMA Negeri Alor Kecil">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header Halaman -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Kilas Sekolah</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mt-1">Berita & Kabar Kegiatan</h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2">
+        Dokumentasi aktivitas belajar mengajar, prestasi peserta didik, dan program pengembangan sekolah.
+      </p>
+    </div>
+
+    {semuaBerita.length === 0 ? (
+      <div class="bg-white rounded-3xl border border-dashed border-slate-200 p-16 text-center max-w-xl mx-auto shadow-xs">
+        <div class="w-16 h-16 bg-emerald-50 text-emerald-700 text-2xl rounded-2xl flex items-center justify-center mx-auto mb-4">
+          📰
+        </div>
+        <h3 class="font-bold text-slate-800 text-base">Belum Ada Artikel</h3>
+        <p class="text-xs text-slate-500 mt-2">
+          Artikel baru dapat dipublikasikan secara langsung melalui menu <a href="/admin" class="text-emerald-700 underline font-bold">Panel Admin Decap CMS</a>.
+        </p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {semuaBerita.map((item) => {
+          const slug = item.slug || item.id?.replace(/\.md$/, '') || '';
+          const tgl = item.data?.date 
+            ? new Date(item.data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+            : '-';
+
+          return (
+            <article class="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1 transition duration-300 flex flex-col group">
+              <div class="h-48 overflow-hidden bg-emerald-950/10 relative">
+                {item.data?.thumbnail ? (
+                  <img 
+                    src={item.data.thumbnail} 
+                    alt={item.data.title} 
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center text-emerald-800 font-black text-xs bg-emerald-50">
+                    Dokumentasi SMAN Alor Kecil
+                  </div>
+                )}
+                <span class="absolute top-4 left-4 bg-emerald-800/90 backdrop-blur-md text-amber-300 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">
+                  {item.data?.category || 'Berita'}
+                </span>
+              </div>
+
+              <div class="p-6 flex flex-col flex-1">
+                <span class="text-[11px] text-slate-400 font-medium mb-2">{tgl}</span>
+                <h2 class="font-bold text-base sm:text-lg text-slate-900 group-hover:text-emerald-700 transition line-clamp-2">
+                  <a href={`/berita/${slug}`}>{item.data.title}</a>
+                </h2>
+                <p class="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed flex-1">
+                  {item.data.description}
+                </p>
+                <a 
+                  href={`/berita/${slug}`} 
+                  class="mt-6 pt-4 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1"
+                >
+                  Baca Selengkapnya &rarr;
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </main>
+</Layout>
