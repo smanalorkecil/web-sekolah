@@ -2,11 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Mengambil data berita dari Decap CMS / Content Collections
-const semuaBerita = (await getCollection('berita'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const beritaUtama = semuaBerita.slice(0, 4);
+// Mengambil data berita dengan proteksi jika data masih kosong
+let beritaUtama: any[] = [];
+try {
+  const semuaBerita = (await getCollection('berita')) || [];
+  beritaUtama = semuaBerita
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 4);
+} catch (e) {
+  beritaUtama = [];
+}
 
 // Data Slide Banner
 const bannerSlides = [
@@ -129,7 +134,7 @@ const ekskulList = [
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
     </button>
     <button id="btnNextSlide" aria-label="Slide berikutnya" class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-emerald-950/60 hover:bg-emerald-600 text-white backdrop-blur-md border border-white/10 transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
     </button>
 
     <div class="absolute bottom-8 left-0 right-0 z-30 flex justify-center items-center gap-2.5">
@@ -202,34 +207,41 @@ const ekskulList = [
             </div>
           ) : (
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {beritaUtama.map((item) => (
-                <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
-                  <div class="h-44 overflow-hidden bg-emerald-50">
-                    {item.data.thumbnail ? (
-                      <img src={item.data.thumbnail} alt={item.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    ) : (
-                      <div class="w-full h-full flex items-center justify-center text-emerald-700/60 font-bold text-xs bg-emerald-50">
-                        Dokumentasi Sekolah
-                      </div>
-                    )}
-                  </div>
-                  <div class="p-5 flex flex-col flex-1">
-                    <div class="flex justify-between items-center text-[11px] text-slate-400 mb-2">
-                      <span class="font-bold text-emerald-700 uppercase tracking-wider">{item.data.category}</span>
-                      <span>{item.data.date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              {beritaUtama.map((item) => {
+                const linkSlug = item.slug || item.id?.replace(/\.md$/, '') || '';
+                const tanggalText = item.data?.date 
+                  ? new Date(item.data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                  : '-';
+                
+                return (
+                  <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
+                    <div class="h-44 overflow-hidden bg-emerald-50">
+                      {item.data?.thumbnail ? (
+                        <img src={item.data.thumbnail} alt={item.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                      ) : (
+                        <div class="w-full h-full flex items-center justify-center text-emerald-700/60 font-bold text-xs bg-emerald-50">
+                          Dokumentasi Sekolah
+                        </div>
+                      )}
                     </div>
-                    <h3 class="font-bold text-base text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition">
-                      <a href={`/berita/${item.id}`}>{item.data.title}</a>
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
-                      {item.data.description}
-                    </p>
-                    <a href={`/berita/${item.id}`} class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-block">
-                      Baca Selengkapnya &rarr;
-                    </a>
-                  </div>
-                </article>
-              ))}
+                    <div class="p-5 flex flex-col flex-1">
+                      <div class="flex justify-between items-center text-[11px] text-slate-400 mb-2">
+                        <span class="font-bold text-emerald-700 uppercase tracking-wider">{item.data?.category || 'Informasi'}</span>
+                        <span>{tanggalText}</span>
+                      </div>
+                      <h3 class="font-bold text-base text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition">
+                        <a href={`/berita/${linkSlug}`}>{item.data?.title}</a>
+                      </h3>
+                      <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
+                        {item.data?.description}
+                      </p>
+                      <a href={`/berita/${linkSlug}`} class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-block">
+                        Baca Selengkapnya &rarr;
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>
@@ -256,7 +268,7 @@ const ekskulList = [
               ))}
             </div>
 
-            <a href="/berita" class="mt-5 block text-center py-2.5 text-xs font-bold text-emerald-800 bg-emerald-100/60 hover:bg-emerald-100 rounded-xl transition">
+            <a href="/akademik/kalender" class="mt-5 block text-center py-2.5 text-xs font-bold text-emerald-800 bg-emerald-100/60 hover:bg-emerald-100 rounded-xl transition">
               Lihat Kalender Lengkap
             </a>
           </div>
@@ -330,7 +342,7 @@ const ekskulList = [
           </div>
           <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-2">{guru.nama}</h3>
           <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full mt-2">{guru.mapel}</span>
-          <p class="text-[11px] text-slate-400 mt-3">{guru.nip}</p>
+          <p class="text-[11px] text-slate-400 mt-3 font-mono">{guru.nip}</p>
           <a href="/guru" class="mt-4 w-full py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 transition">
             Lihat Profil
           </a>
@@ -420,15 +432,15 @@ const ekskulList = [
 
   function goToSlide(targetIndex: number) {
     if (slides.length === 0) return;
-    slides[currentIndex].classList.remove('opacity-100', 'z-10');
-    slides[currentIndex].classList.add('opacity-0', 'z-0', 'pointer-events-none');
+    slides[currentIndex]?.classList.remove('opacity-100', 'z-10');
+    slides[currentIndex]?.classList.add('opacity-0', 'z-0', 'pointer-events-none');
     dots[currentIndex]?.classList.remove('bg-amber-400', 'w-8');
     dots[currentIndex]?.classList.add('bg-white/40', 'w-2');
 
     currentIndex = (targetIndex + totalSlides) % totalSlides;
 
-    slides[currentIndex].classList.remove('opacity-0', 'z-0', 'pointer-events-none');
-    slides[currentIndex].classList.add('opacity-100', 'z-10');
+    slides[currentIndex]?.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+    slides[currentIndex]?.classList.add('opacity-100', 'z-10');
     dots[currentIndex]?.classList.remove('bg-white/40', 'w-2');
     dots[currentIndex]?.classList.add('bg-amber-400', 'w-8');
   }

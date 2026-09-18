@@ -1,5 +1,5 @@
 ---
-import '../../styles/global.css';
+import Layout from '../../layouts/Layout.astro';
 
 const aturanSeragam = [
   { hari: "Senin – Selasa", seragam: "Seragam Putih Abu-abu lengkap (Dasi, Topi Upacara, Ikat Pinggang & Sepatu Hitam)" },
@@ -9,19 +9,7 @@ const aturanSeragam = [
 ];
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tata Tertib Siswa - SMA Negeri Alor Kecil</title>
-  </head>
-  <body class="bg-slate-50 text-slate-800 antialiased font-sans">
-    <header class="bg-white border-b border-slate-200 py-4 px-6">
-      <div class="max-w-5xl mx-auto flex justify-between items-center">
-        <a href="/" class="font-bold text-xs sm:text-sm text-emerald-700 hover:text-emerald-800">&larr; Kembali ke Beranda</a>
-        <span class="text-xs font-semibold text-slate-500">SMA Negeri Alor Kecil</span>
-      </div>
-    </header>
+<Layout title="Tata Tertib Peserta Didik - SMA Negeri Alor Kecil">
 
     <main class="max-w-4xl mx-auto px-4 py-12">
       <div class="text-center max-w-xl mx-auto mb-10">
@@ -51,5 +39,4 @@ const aturanSeragam = [
         </div>
       </div>
     </main>
-  </body>
-</html>
+</Layout>
