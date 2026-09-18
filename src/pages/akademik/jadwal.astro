@@ -1,5 +1,5 @@
 ---
-import '../../styles/global.css';
+import Layout from '../../layouts/Layout.astro';
 
 const jamKBM = [
   { jamKe: "0", waktu: "07.15 – 07.30", kegiatan: "Apel Pagi / Literasi & Doa Bersama" },
@@ -13,48 +13,34 @@ const jamKBM = [
 ];
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jadwal Pembelajaran - SMA Negeri Alor Kecil</title>
-  </head>
-  <body class="bg-slate-50 text-slate-800 antialiased">
-    <header class="bg-white border-b border-slate-200 py-4 px-6">
-      <div class="max-w-5xl mx-auto flex justify-between items-center">
-        <a href="/" class="font-bold text-xs sm:text-sm text-emerald-700 hover:text-emerald-800">&larr; Kembali ke Beranda</a>
-        <span class="text-xs font-semibold text-slate-500">SMA Negeri Alor Kecil</span>
-      </div>
-    </header>
+<Layout title="Jadwal Pembelajaran - SMA Negeri Alor Kecil">
+  <main class="max-w-5xl mx-auto px-4 py-12">
+    <div class="text-center max-w-xl mx-auto mb-10">
+      <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Jam Operasional Belajar</span>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Alokasi Waktu KBM</h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2">Ketentuan jam belajar harian tatap muka untuk seluruh jenjang kelas X, XI, dan XII.</p>
+    </div>
 
-    <main class="max-w-5xl mx-auto px-4 py-12">
-      <div class="text-center max-w-xl mx-auto mb-10">
-        <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Jam Operasional Belajar</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Alokasi Waktu KBM</h1>
-        <p class="text-slate-500 text-xs sm:text-sm mt-2">Ketentuan jam belajar harian tatap muka untuk seluruh jenjang kelas X, XI, dan XII.</p>
-      </div>
-
-      <!-- Tabel Waktu KBM -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-10">
-        <table class="w-full text-left text-xs sm:text-sm">
-          <thead class="bg-emerald-900 text-white font-bold text-xs uppercase tracking-wider">
-            <tr>
-              <th class="p-4 text-center w-24">Jam Ke</th>
-              <th class="p-4 w-40">Waktu (WITA)</th>
-              <th class="p-4">Aktivitas / Kegiatan</th>
+    <!-- Tabel Waktu KBM -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-10">
+      <table class="w-full text-left text-xs sm:text-sm">
+        <thead class="bg-emerald-900 text-white font-bold text-xs uppercase tracking-wider">
+          <tr>
+            <th class="p-4 text-center w-24">Jam Ke</th>
+            <th class="p-4 w-40">Waktu (WITA)</th>
+            <th class="p-4">Aktivitas / Kegiatan</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {jamKBM.map((baris) => (
+            <tr class={baris.jamKe === '-' ? 'bg-amber-50/70 font-semibold text-amber-900' : 'hover:bg-slate-50/80'}>
+              <td class="p-4 text-center font-bold">{baris.jamKe}</td>
+              <td class="p-4 font-mono text-xs">{baris.waktu}</td>
+              <td class="p-4">{baris.kegiatan}</td>
             </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            {jamKBM.map((baris) => (
-              <tr class={baris.jamKe === '-' ? 'bg-amber-50/70 font-semibold text-amber-900' : 'hover:bg-slate-50/80'}>
-                <td class="p-4 text-center font-bold">{baris.jamKe}</td>
-                <td class="p-4 font-mono text-xs">{baris.waktu}</td>
-                <td class="p-4">{baris.kegiatan}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </main>
-  </body>
-</html>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</Layout>

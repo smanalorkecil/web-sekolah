@@ -1,0 +1,223 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "SMA Negeri Alor Kecil", 
+  description = "Portal Resmi SMA Negeri Alor Kecil - Unggul, Berkarakter, dan Berdaya Saing" 
+} = Astro.props;
+---
+
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/logo.png" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- 1. TOP BAR INFORMASI -->
+    <div class="bg-emerald-950 text-emerald-100 text-xs py-2 px-4 border-b border-emerald-900 hidden md:block">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-6">
+          <span class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z"/></svg>
+            (0386) 211234
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            smanalorkecil2013@gmail.com
+          </span>
+        </div>
+        <div class="flex items-center gap-4 text-emerald-200">
+          <span>Senin – Jumat: 07:15 – 14:00 WITA</span>
+          <a href="/admin" class="text-amber-300 hover:text-amber-200 font-semibold flex items-center gap-1">
+            Panel Admin CMS &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. NAVBAR UTAMA BESERTA DROPDOWN LENGKAP -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Logo & Nama Sekolah -->
+        <a href="/" class="flex items-center gap-3">
+          <img 
+            src="/logo.png" 
+            alt="Logo SMAN Alor Kecil" 
+            class="w-12 h-12 object-contain drop-shadow-sm"
+            onerror="this.style.display='none'; document.getElementById('layout-alt-logo').style.display='flex';"
+          />
+          <div id="layout-alt-logo" class="w-12 h-12 rounded-xl bg-emerald-700 text-amber-300 font-black hidden items-center justify-center text-xl shadow-inner">
+            AK
+          </div>
+          <div>
+            <span class="block font-black text-lg text-slate-900 leading-none tracking-tight">SMA NEGERI ALOR KECIL</span>
+            <span class="text-[11px] font-semibold text-emerald-700 tracking-wider uppercase">Kab. Alor, Nusa Tenggara Timur</span>
+          </div>
+        </a>
+
+        <!-- Menu Navigasi Lengkap -->
+        <nav class="hidden xl:flex items-center gap-6 text-xs font-bold text-slate-700 uppercase tracking-wide">
+          <a href="/" class="hover:text-emerald-700 transition pb-1">Beranda</a>
+
+          <!-- DROPDOWN PROFIL -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Profil</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="absolute left-0 top-full hidden group-hover:block w-64 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
+                <a href="/#sambutan" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🎙️ Sambutan Kepala Sekolah</a>
+                <a href="/profil/sejarah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📜 Sejarah Singkat</a>
+                <a href="/profil/visi-misi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🎯 Visi & Misi</a>
+                <a href="/profil/kondisi-sekolah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏫 Kondisi Sekolah</a>
+                <a href="/profil/sarana-prasarana" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏢 Sarana & Prasarana</a>
+                <a href="/profil/struktur-organisasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">👥 Struktur Organisasi</a>
+                <a href="/profil/lambang-sekolah" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🛡️ Lambang & Makna Logo</a>
+                <a href="/profil/akreditasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">⭐ Akreditasi Sekolah</a>
+                <a href="/profil/prestasi" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏆 Prestasi Sekolah</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- DROPDOWN AKADEMIK -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Akademik</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="absolute left-0 top-full hidden group-hover:block w-56 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-1 text-xs font-semibold normal-case text-slate-700">
+                <a href="/akademik/kalender" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📅 Kalender Pendidikan</a>
+                <a href="/akademik/jadwal" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">⏰ Jadwal Pembelajaran</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- DROPDOWN KESISWAAN -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Kesiswaan</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="absolute left-0 top-full hidden group-hover:block w-64 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
+                <a href="/kesiswaan/osis" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏛️ Organisasi Siswa (OSIS)</a>
+                <a href="/kesiswaan/ekskul" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">⛺ Ekstrakurikuler</a>
+                <a href="/kesiswaan/prestasi" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏆 Prestasi Siswa</a>
+                <a href="/kesiswaan/tata-tertib" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📜 Tata Tertib Siswa</a>
+                <a href="/kesiswaan/bk" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🤝 Bimbingan Konseling (BK)</a>
+                <a href="/kesiswaan/beasiswa" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🎓 Informasi Beasiswa (PIP)</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- DROPDOWN CIVITAS (GURU, TU, SISWA) -->
+          <div class="relative group py-4">
+            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-none">
+              <span>Civitas</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="absolute left-0 top-full hidden group-hover:block w-56 pt-2 z-50">
+              <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
+                <a href="/guru" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">👨‍🏫 Tenaga Pendidik (Guru)</a>
+                <a href="/guru" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏢 Tenaga Kependidikan (TU)</a>
+                <a href="/guru" class="px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🎓 Direktori Siswa</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="/berita" class="hover:text-emerald-700 transition">Berita</a>
+          <a href="/galeri" class="hover:text-emerald-700 transition">Galeri</a>
+          <a href="/#ppdb" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl transition shadow-sm">
+            SPMB 2026
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 3. TEMPAT KONTEN HALAMAN DIINJEKSI OTOMATIS -->
+    <div class="flex-1">
+      <slot />
+    </div>
+
+    <!-- 4. FOOTER RESMI SEKOLAH BESERTA GOOGLE MAPS -->
+    <footer class="bg-[#022c22] text-emerald-200/80 text-xs pt-16 pb-12 border-t border-emerald-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-emerald-900/60">
+        
+        <div class="md:col-span-4">
+          <div class="flex items-center gap-3 mb-3">
+            <img src="/logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.style.display='none'" />
+            <span class="text-base font-black text-white tracking-tight uppercase">SMAN ALOR KECIL</span>
+          </div>
+          <p class="text-emerald-200/70 leading-relaxed text-xs">
+            Lembaga pendidikan menengah atas negeri di Kabupaten Alor yang menjunjung tinggi keunggulan akademik, keluhuran budi pekerti, dan keterampilan vokasional siswa.
+          </p>
+          <div class="mt-4 space-y-1.5 text-[11px] text-emerald-300">
+            <p>📍 Alor Kecil, Kec. Alor Barat Laut, Kab. Alor, NTT</p>
+            <p>✉️ smanalorkecil2013@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="md:col-span-2">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Navigasi</h4>
+          <ul class="space-y-2 text-[11px]">
+            <li><a href="/" class="hover:text-amber-300 transition">Beranda</a></li>
+            <li><a href="/berita" class="hover:text-amber-300 transition">Berita Sekolah</a></li>
+            <li><a href="/galeri" class="hover:text-amber-300 transition">Galeri Foto</a></li>
+            <li><a href="/guru" class="hover:text-amber-300 transition">Direktori Civitas</a></li>
+            <li><a href="/admin" class="hover:text-amber-300 transition">Panel Decap CMS</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-2">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs">Layanan</h4>
+          <ul class="space-y-2 text-[11px]">
+            <li><a href="/#ppdb" class="hover:text-amber-300 transition">SPMB Online</a></li>
+            <li><a href="/akademik/kalender" class="hover:text-amber-300 transition">Kalender Belajar</a></li>
+            <li><a href="/kesiswaan/osis" class="hover:text-amber-300 transition">OSIS & Ekskul</a></li>
+            <li><a href="/kesiswaan/beasiswa" class="hover:text-amber-300 transition">Info PIP Kemdikbud</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-4 flex flex-col">
+          <h4 class="font-bold text-white uppercase tracking-wider mb-3 text-xs flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Lokasi Kampus Sekolah
+          </h4>
+          <div class="w-full h-44 rounded-2xl overflow-hidden border border-emerald-800 shadow-md bg-emerald-950">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.771966205844!2d124.498!3d-8.22!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMTMnMTIuMCJTIDEyNMKwMjknNTIuOCJF!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta SMAN Alor Kecil"
+              class="w-full h-full filter contrast-105"
+            ></iframe>
+          </div>
+          <span class="text-[10px] text-emerald-300/60 mt-2">Ketuk peta untuk membuka rute di Google Maps.</span>
+        </div>
+
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px]">
+        <p>&copy; {new Date().getFullYear()} SMA Negeri Alor Kecil. Seluruh Hak Cipta Dilindungi.</p>
+        <p class="text-emerald-400/60">Dikembangkan dengan Astro & Cloudflare</p>
+      </div>
+    </footer>
+
+  </body>
+</html>

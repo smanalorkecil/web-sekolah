@@ -1,5 +1,5 @@
 ---
-import '../../styles/global.css';
+import Layout from '../../layouts/Layout.astro';
 
 const agendaSemester = [
   { tanggal: "14 Juli 2026", kegiatan: "Hari Pertama Masuk Sekolah & Pembukaan MPLS", kategori: "Awal Semester" },
@@ -11,20 +11,7 @@ const agendaSemester = [
 ];
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kalender Pendidikan - SMA Negeri Alor Kecil</title>
-  </head>
-  <body class="bg-slate-50 text-slate-800 antialiased">
-    <header class="bg-white border-b border-slate-200 py-4 px-6">
-      <div class="max-w-5xl mx-auto flex justify-between items-center">
-        <a href="/" class="font-bold text-xs sm:text-sm text-emerald-700 hover:text-emerald-800">&larr; Kembali ke Beranda</a>
-        <span class="text-xs font-semibold text-slate-500">SMA Negeri Alor Kecil</span>
-      </div>
-    </header>
-
+<Layout title="Kalender Pendidikan - SMAN Alor Kecil">
     <main class="max-w-5xl mx-auto px-4 py-12">
       <div class="text-center max-w-xl mx-auto mb-10">
         <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Tahun Ajaran 2026/2027</span>
@@ -59,5 +46,4 @@ const agendaSemester = [
         </div>
       </div>
     </main>
-  </body>
-</html>
+</Layout>
