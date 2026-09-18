@@ -1,0 +1,50 @@
+---
+import '../../styles/global.css';
+
+const daftarEkskul = [
+  { nama: "Gerakan Pramuka", kategori: "Wajib Kepanduan", jadwal: "Jumat, 15:00 WITA", pembina: "Kakak Pembina Gugus Depan", ikon: "⛺" },
+  { nama: "Paskibra Sekolah", kategori: "Bela Negara", jadwal: "Sabtu, 07:30 WITA", pembina: "Pelatih Paskibra", ikon: "🇮🇩" },
+  { nama: "Palang Merah Remaja (PMR)", kategori: "Kemanusiaan", jadwal: "Kamis, 15:30 WITA", pembina: "Pembina PMR", ikon: "🩺" },
+  { nama: "Futsal & Bola Kaki", kategori: "Olahraga", jadwal: "Rabu & Sabtu Sore", pembina: "Guru Penjasorkes", ikon: "⚽" },
+  { nama: "Bola Voli", kategori: "Olahraga", jadwal: "Selasa & Jumat Sore", pembina: "Guru Penjasorkes", ikon: "🏐" },
+  { nama: "Seni Tari Tradisional Alor", kategori: "Seni Budaya", jadwal: "Sabtu Pagi", pembina: "Guru Seni Budaya", ikon: "💃" },
+  { nama: "Paduan Suara / Gita Remaja", kategori: "Seni Suara", jadwal: "Kamis Sore", pembina: "Pembina Padus", ikon: "🎵" },
+  { nama: "Klub TIK & Komputer", kategori: "Sains & Teknologi", jadwal: "Senin Sore di Lab TIK", pembina: "Guru TIK", ikon: "💻" }
+];
+---
+
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ekstrakurikuler - SMA Negeri Alor Kecil</title>
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased font-sans">
+    <header class="bg-white border-b border-slate-200 py-4 px-6">
+      <div class="max-w-5xl mx-auto flex justify-between items-center">
+        <a href="/" class="font-bold text-xs sm:text-sm text-emerald-700 hover:text-emerald-800">&larr; Kembali ke Beranda</a>
+        <span class="text-xs font-semibold text-slate-500">SMA Negeri Alor Kecil</span>
+      </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Pengembangan Bakat</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Ekstrakurikuler Sekolah</h1>
+        <p class="text-slate-500 text-xs sm:text-sm mt-2">Pilihan cabang kegiatan untuk mengasah kepemimpinan, olahraga, seni, dan teknologi.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {daftarEkskul.map((ekskul) => (
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:border-emerald-500 hover:shadow-md transition">
+            <span class="text-3xl mb-3 block">{ekskul.ikon}</span>
+            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">{ekskul.kategori}</span>
+            <h3 class="font-bold text-base text-slate-900 mt-2">{ekskul.nama}</h3>
+            <p class="text-xs text-slate-500 mt-2">🕒 {ekskul.jadwal}</p>
+            <p class="text-xs text-slate-400 mt-1">👤 {ekskul.pembina}</p>
+          </div>
+        ))}
+      </div>
+    </main>
+  </body>
+</html>
