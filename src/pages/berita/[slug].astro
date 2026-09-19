@@ -125,14 +125,13 @@ const jamRilis = post.data?.date
           <!-- Gambar Utama + Caption / Kredit Foto -->
           {post.data.thumbnail && (
             <figure class="mb-8">
-              <div class="rounded-2xl overflow-hidden shadow-sm max-h-[480px] bg-slate-100">
-                <img 
-                  src={post.data.thumbnail} 
-                  alt={post.data.title} 
-                  class="w-full h-full object-cover" 
-                  onerror="this.style.display='none'"
-                />
-              </div>
+<div class="rounded-2xl overflow-hidden shadow-sm bg-slate-100 flex items-center justify-center">
+    <img 
+      src={post.data.thumbnail} 
+      alt={post.data.title} 
+      class="w-full max-h-[520px] object-cover object-top rounded-2xl" 
+    />
+  </div>
               <figcaption class="text-[11px] text-slate-400 mt-2.5 flex items-center gap-1.5 italic font-mono">
                 <span>📷</span> Dokumentasi Humas SMA Negeri Alor Kecil
               </figcaption>

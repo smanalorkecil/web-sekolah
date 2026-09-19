@@ -15,7 +15,7 @@ collections:
     label: "Berita & Pengumuman"
     folder: "src/content/berita"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
       - { label: "Judul Berita", name: "title", widget: "string" }
       - { label: "Tanggal", name: "date", widget: "datetime" }
@@ -33,3 +33,21 @@ collections:
         }
       - { label: "Ringkasan Singkat", name: "description", widget: "text" }
       - { label: "Isi Berita", name: "body", widget: "markdown" }
+
+- {
+          label: "Foto Utama",
+          name: "thumbnail",
+          widget: "image",
+          required: false,
+        }
+      - {
+          label: "Fokus Posisi Thumbnail",
+          name: "thumbnail_pos",
+          widget: "select",
+          options:
+            - { label: "Atas / Wajah (Cocok untuk Foto Orang)", value: "top" }
+            - { label: "Tengah (Standar)", value: "center" }
+            - { label: "Bawah", value: "bottom" },
+          default: "top",
+          required: false,
+        }
