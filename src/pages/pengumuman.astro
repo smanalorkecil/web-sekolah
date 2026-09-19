@@ -1,44 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-
-let pengumumanList: any[] = [];
-try {
-  const semua = (await getCollection('berita')) || [];
-  pengumumanList = semua
-    .filter((item) => item.data?.category?.toLowerCase() === 'pengumuman')
-    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-} catch (e) {
-  pengumumanList = [];
-}
-
-// Data Pengumuman Cadangan (Jika belum ada entri di Decap CMS)
-const fallbackPengumuman = [
-  {
-    nomor: "421.3/084/SMAN-AK/IX/2026",
-    judul: "Jadwal Pelaksanaan Asesmen Sumatif Tengah Semester (ASTS) Ganjil 2026/2027",
-    tanggal: "15 September 2026",
-    lampiran: true
-  },
-  {
-    nomor: "421.3/072/SMAN-AK/VIII/2026",
-    judul: "Pemberitahuan Aktivasi Rekening SimPel Program Indonesia Pintar (PIP) Tahap II",
-    tanggal: "28 Agustus 2026",
-    lampiran: false
-  },
-  {
-    nomor: "421.3/065/SMAN-AK/VII/2026",
-    judul: "Ketentuan Seragam dan Jadwal Masuk Pembelajaran Semester Ganjil",
-    tanggal: "12 Juli 2026",
-    lampiran: true
-  }
-];
 ---
 
-<Layout title="Pengumuman Resmi - SMA Negeri Alor Kecil">
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+<Layout title="Pengumuman Resmi Sekolah - SMA Negeri Alor Kecil">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
     <!-- Header Halaman -->
-    <div class="text-center max-w-xl mx-auto mb-12">
+    <div class="text-center max-w-2xl mx-auto mb-10">
       <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Papan Informasi</span>
       <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mt-1">Pengumuman Resmi Sekolah</h1>
       <p class="text-slate-500 text-xs sm:text-sm mt-2">
@@ -46,87 +14,174 @@ const fallbackPengumuman = [
       </p>
     </div>
 
-    <!-- Papan Pengumuman -->
-    {pengumumanList.length > 0 ? (
-      <div class="space-y-4 mb-10">
-        {pengumumanList.map((item) => {
-          const slug = item.slug || item.id?.replace(/\.md$/, '') || '';
-          const tgl = item.data?.date 
-            ? new Date(item.data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-            : '-';
-
-          return (
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-emerald-500 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div class="flex items-center gap-2 mb-2">
-                  <span class="bg-amber-100 text-amber-900 font-black text-[10px] px-2.5 py-0.5 rounded-md uppercase">
-                    Pengumuman Resmi
-                  </span>
-                  <span class="text-xs text-slate-400 font-mono">{tgl}</span>
-                </div>
-                <h2 class="text-base font-bold text-slate-900 hover:text-emerald-700 transition">
-                  <a href={`/berita/${slug}`}>{item.data.title}</a>
-                </h2>
-                <p class="text-xs text-slate-500 mt-1 line-clamp-2">{item.data.description}</p>
-              </div>
-
-              <a 
-                href={`/berita/${slug}`} 
-                class="bg-emerald-50 text-emerald-800 hover:bg-emerald-700 hover:text-white font-bold px-4 py-2 rounded-xl text-xs transition self-start sm:self-center flex-shrink-0"
-              >
-                Baca Edaran &rarr;
-              </a>
-            </div>
-          );
-        })}
+    <!-- Papan Pengumuman Kontainer -->
+    <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      
+      <!-- Banner Header Hijau -->
+      <div class="bg-emerald-900 text-white p-5 sm:p-6 flex items-center gap-4">
+        <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0 text-xl">
+          📢
+        </div>
+        <div>
+          <h2 class="font-bold text-sm sm:text-base text-white">Papan Edaran & Maklumat Terkini</h2>
+          <p class="text-xs text-emerald-100/80 mt-0.5">Diterbitkan oleh Tata Usaha & Humas SMA Negeri Alor Kecil</p>
+        </div>
       </div>
-    ) : (
-      <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden mb-10">
-        <div class="bg-emerald-900 text-white p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="text-2xl">📢</span>
-            <div>
-              <h2 class="font-bold text-sm">Papan Edaran & Maklumat Terkini</h2>
-              <p class="text-[11px] text-emerald-200">Diterbitkan oleh Tata Usaha & Humas SMA Negeri Alor Kecil</p>
-            </div>
+
+      <!-- Skeleton Loading -->
+      <div id="pengumumanLoading" class="p-6 space-y-6">
+        {[1, 2, 3].map(() => (
+          <div class="space-y-2 animate-pulse">
+            <div class="h-3 w-40 bg-slate-200 rounded"></div>
+            <div class="h-5 w-3/4 bg-slate-200 rounded"></div>
+            <div class="h-3 w-28 bg-slate-200 rounded"></div>
           </div>
-        </div>
-
-        <div class="divide-y divide-slate-100">
-          {fallbackPengumuman.map((item) => (
-            <div class="p-6 hover:bg-slate-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span class="text-[11px] font-mono text-emerald-700 font-bold block mb-1">
-                  Nomor: {item.nomor}
-                </span>
-                <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                  {item.judul}
-                </h3>
-                <span class="text-xs text-slate-400 mt-1 block">🕒 Tanggal: {item.tanggal}</span>
-              </div>
-
-              <div class="flex items-center gap-2 self-start sm:self-center">
-                {item.lampiran && (
-                  <span class="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-lg border border-amber-200">
-                    📎 Ada Lampiran
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
-    )}
 
-    <!-- Layanan Informasi -->
-    <div class="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 text-xs text-emerald-900 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        <h4 class="font-bold text-sm mb-1">Butuh Salinan Surat Fisik?</h4>
-        <p class="text-emerald-800/80">Silakan kunjungi Ruang Tata Usaha (TU) SMAN Alor Kecil pada jam kerja (07.15 – 14.00 WITA).</p>
+      <!-- Daftar Baris Pengumuman -->
+      <div id="pengumumanList" class="divide-y divide-slate-100 hidden"></div>
+
+      <!-- Status Kosong -->
+      <div id="pengumumanEmpty" class="text-center py-16 px-4 hidden">
+        <p class="text-slate-400 text-xs sm:text-sm font-medium">Belum ada surat edaran atau maklumat resmi yang diterbitkan.</p>
       </div>
-      <a href="https://wa.me/6281234567890" target="_blank" class="bg-emerald-800 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl transition flex-shrink-0">
-        Hubungi Staf TU
-      </a>
+
     </div>
+
   </main>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
+    const pengumumanLoading = document.getElementById('pengumumanLoading')!;
+    const pengumumanList = document.getElementById('pengumumanList')!;
+    const pengumumanEmpty = document.getElementById('pengumumanEmpty')!;
+
+    const bulanIndo: { [key: string]: number } = {
+      jan: 0, januari: 0,
+      feb: 1, februari: 1,
+      mar: 2, maret: 2,
+      apr: 3, april: 3,
+      mei: 4,
+      jun: 5, juni: 5,
+      jul: 6, juli: 6,
+      agu: 7, ags: 7, agustus: 7,
+      sep: 8, september: 8,
+      okt: 9, oktober: 9,
+      nov: 10, november: 10,
+      des: 11, desember: 11
+    };
+
+    function ubahKeTimestamp(teksTgl: string): number {
+      if (!teksTgl) return 0;
+      const bagian = teksTgl.trim().toLowerCase().split(/[\s,/-]+/);
+      if (bagian.length >= 3) {
+        let tgl = parseInt(bagian[0], 10);
+        let blnKey = bagian[1];
+        let thn = parseInt(bagian[2], 10);
+
+        if (bagian[0].length === 4) {
+          thn = parseInt(bagian[0], 10);
+          blnKey = bagian[1];
+          tgl = parseInt(bagian[2], 10);
+        }
+
+        let blnIdx = bulanIndo[blnKey];
+        if (blnIdx === undefined) blnIdx = parseInt(blnKey, 10) - 1;
+
+        if (!isNaN(tgl) && blnIdx >= 0 && !isNaN(thn)) {
+          return new Date(thn, blnIdx, tgl).getTime();
+        }
+      }
+      const parsed = Date.parse(teksTgl);
+      return !isNaN(parsed) ? parsed : 0;
+    }
+
+    function ambilNilai(obj: any, daftarKunci: string[]): string {
+      if (!obj || typeof obj !== 'object') return '';
+      const keys = Object.keys(obj);
+      for (const kunci of daftarKunci) {
+        if (obj[kunci] !== undefined && obj[kunci] !== null && String(obj[kunci]).trim() !== '') {
+          return String(obj[kunci]).trim();
+        }
+        const kunciBersih = kunci.toLowerCase().replace(/[\s_-]/g, '');
+        const cocok = keys.find((k) => k.toLowerCase().replace(/[\s_-]/g, '') === kunciBersih);
+        if (cocok && obj[cocok] !== undefined && obj[cocok] !== null && String(obj[cocok]).trim() !== '') {
+          return String(obj[cocok]).trim();
+        }
+      }
+      return '';
+    }
+
+    fetch(SCRIPT_URL + '?tab=Pengumuman')
+      .then((res) => res.json())
+      .then((data) => {
+        pengumumanLoading.classList.add('hidden');
+
+        if (Array.isArray(data) && data.length > 0) {
+          pengumumanList.classList.remove('hidden');
+          pengumumanList.innerHTML = '';
+
+          // Urutkan pengumuman paling baru di urutan teratas
+          data.sort((a, b) => {
+            const timeA = ubahKeTimestamp(ambilNilai(a, ['Tanggal', 'tgl']));
+            const timeB = ubahKeTimestamp(ambilNilai(b, ['Tanggal', 'tgl']));
+            return timeB - timeA;
+          });
+
+          data.forEach((item) => {
+            const nomor = ambilNilai(item, ['NomorSurat', 'Nomor', 'no']);
+            const judul = ambilNilai(item, ['Judul', 'Perihal', 'Pengumuman']);
+            const tanggal = ambilNilai(item, ['Tanggal', 'tgl']) || '-';
+            const lampiran = ambilNilai(item, ['LinkLampiran', 'Lampiran', 'File', 'Link']);
+
+            const row = document.createElement('div');
+            row.className = 'p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/80 transition';
+
+            row.innerHTML = `
+              <div class="space-y-1.5 flex-1">
+                ${nomor ? `
+                  <span class="block text-emerald-700 font-bold text-xs">
+                    Nomor: ${nomor}
+                  </span>
+                ` : ''}
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                  ${judul || 'Pengumuman Tanpa Judul'}
+                </h3>
+                <div class="flex items-center gap-1.5 text-xs text-slate-400 font-medium pt-0.5">
+                  <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <span>Tanggal: ${tanggal}</span>
+                </div>
+              </div>
+
+              ${lampiran ? `
+                <div class="flex-shrink-0 self-start sm:self-center">
+                  <a 
+                    href="${lampiran}" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-amber-900 text-xs font-semibold transition"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                    </svg>
+                    <span>Ada Lampiran</span>
+                  </a>
+                </div>
+              ` : ''}
+            `;
+
+            pengumumanList.appendChild(row);
+          });
+        } else {
+          pengumumanEmpty.classList.remove('hidden');
+        }
+      })
+      .catch((err) => {
+        console.error('Gagal mengambil data pengumuman:', err);
+        pengumumanLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold text-center py-8">Gagal memuat edaran pengumuman dari server.</p>';
+      });
+  </script>
 </Layout>
