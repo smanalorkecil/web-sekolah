@@ -510,9 +510,11 @@ const ekskulList = [
 
 </Layout>
 
-<!-- Script Interaktif Slider Banner & Pengambilan Guru dari Google Sheet -->
+<!-- Script Bersatu: Slider Banner & Slider Guru Realtime -->
 <script>
-  // 1. SLIDER HERO BANNER
+  // ==========================================
+  // 1. KONTROL SLIDER BANNER ATAS
+  // ==========================================
   let currentIndex = 0;
   const slides = document.querySelectorAll<HTMLElement>('.slide-banner');
   const dots = document.querySelectorAll<HTMLElement>('.dot-slider');
@@ -566,13 +568,14 @@ const ekskulList = [
 
   startTimer();
 
-// PENGAMBILAN DATA GURU REAL-TIME & KONTROL SLIDER GURU
+  // ==========================================
+  // 2. SLIDER DAFTAR GURU DARI GOOGLE SHEETS
+  // ==========================================
   const SCRIPT_URL_GURU = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
   const homeGuruTrack = document.getElementById('homeGuruTrack');
   const btnGuruPrev = document.getElementById('btnSliderGuruPrev');
   const btnGuruNext = document.getElementById('btnSliderGuruNext');
 
-  // Kontrol Klik Tombol Geser
   if (btnGuruPrev && homeGuruTrack) {
     btnGuruPrev.addEventListener('click', () => {
       homeGuruTrack.scrollBy({ left: -260, behavior: 'smooth' });
@@ -584,8 +587,22 @@ const ekskulList = [
     });
   }
 
-  // Pengambilan Data Tab 'Guru' dari Google Spreadsheet
-// Pengambilan Data Tab 'Guru' dari Google Spreadsheet
+  function ambilNilai(obj: any, daftarNamaKunci: string[]) {
+    if (!obj || typeof obj !== 'object') return '';
+    const keys = Object.keys(obj);
+    for (const kunci of daftarNamaKunci) {
+      if (obj[kunci] !== undefined && obj[kunci] !== null && String(obj[kunci]).trim() !== '') {
+        return String(obj[kunci]).trim();
+      }
+      const kunciBersih = kunci.toLowerCase().replace(/[\s_-]/g, '');
+      const keyCocok = keys.find((k) => k.toLowerCase().replace(/[\s_-]/g, '') === kunciBersih);
+      if (keyCocok && obj[keyCocok] !== undefined && obj[keyCocok] !== null && String(obj[keyCocok]).trim() !== '') {
+        return String(obj[keyCocok]).trim();
+      }
+    }
+    return '';
+  }
+
   if (homeGuruTrack) {
     fetch(SCRIPT_URL_GURU + '?tab=Guru')
       .then((res) => res.json())
@@ -593,39 +610,42 @@ const ekskulList = [
         if (Array.isArray(data) && data.length > 0) {
           homeGuruTrack.innerHTML = '';
 
-          // Urutkan pimpinan ke paling depan jika ada (Kepala Sekolah -> Waka -> Guru)
-          const sortedGuru = data.sort((a, b) => {
-            const posA = (a.TugasTambahan || a.TugasTambaha || a.Jabatan || '').toLowerCase();
-            const posB = (b.TugasTambahan || b.TugasTambaha || b.Jabatan || '').toLowerCase();
-            if (posA.includes('kepala sekolah')) return -1;
-            if (posB.includes('kepala sekolah')) return 1;
-            if (posA.includes('waka')) return -1;
-            if (posB.includes('waka')) return 1;
-            return 0;
-          });
-
-          sortedGuru.forEach((guru) => {
+          data.forEach((guru) => {
             const card = document.createElement('div');
             card.className = 'w-52 sm:w-60 flex-shrink-0 aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 snap-start group select-none';
 
             // 1. Ambil Nama Lengkap
-            const nama = guru.NamaLengkap || guru['NamaLengkap'] || guru.nama || 'Nama Guru';
+            const nama = ambilNilai(guru, [
+              'NamaLengkap',
+              'Nama Lengkap',
+              'namalengkap',
+              'Nama',
+              'nama'
+            ]) || 'Nama Guru';
 
-            // 2. Tentukan Posisi/Jabatan (Prioritas: TugasTambahan -> Mapel -> Jabatan)
-            const tugasTambahan = guru.TugasTambahan || guru.TugasTambaha || guru['TugasTambaha'];
-            const mapel = guru.Mapel || guru.mapel;
-            let posisiTampil = 'Tenaga Pendidik';
+            // 2. Ambil Nilai Tugas Tambahan, Mapel, & Jabatan
+            const tugas = ambilNilai(guru, ['TugasTambaha', 'TugasTambahan', 'Tugas Tambahan', 'tugastambahan', 'tugas']);
+            const mapel = ambilNilai(guru, ['Mapel', 'mapel', 'Mata Pelajaran', 'matapelajaran']);
+            const jabatan = ambilNilai(guru, ['Jabatan', 'jabatan']);
 
-            if (tugasTambahan && tugasTambahan.trim() !== '' && tugasTambahan.trim() !== '-') {
-              posisiTampil = tugasTambahan;
-            } else if (mapel && mapel.trim() !== '' && mapel.trim() !== '-') {
-              posisiTampil = `Guru ${mapel}`;
-            } else if (guru.Jabatan) {
-              posisiTampil = guru.Jabatan;
+            // 3. Susun 2 Baris Keterangan
+            let baris1 = '';
+            let baris2 = '';
+
+            const teksMapel = (mapel && mapel !== '-') 
+              ? (mapel.toLowerCase().startsWith('guru') ? mapel : `Guru ${mapel}`) 
+              : '';
+
+            if (tugas && tugas !== '-') {
+              baris1 = tugas;
+              baris2 = teksMapel || 'Tenaga Pendidik';
+            } else {
+              baris1 = teksMapel || (jabatan && jabatan !== '-' ? jabatan : 'Guru Mata Pelajaran');
+              baris2 = 'Tenaga Pendidik';
             }
 
-            // 3. Format URL Foto (Mendukung link Google Drive atau link web langsung)
-            let foto = guru.Foto || guru.foto || null;
+            // 4. Ambil Foto
+            let foto = ambilNilai(guru, ['Foto', 'foto', 'avatar', 'image']);
             if (foto && foto.includes('drive.google.com')) {
               const fileIdMatch = foto.match(/\/d\/([a-zA-Z0-9_-]+)/) || foto.match(/id=([a-zA-Z0-9_-]+)/);
               if (fileIdMatch && fileIdMatch[1]) {
@@ -633,19 +653,23 @@ const ekskulList = [
               }
             }
 
+            const inisial = nama !== 'Nama Guru' ? nama.charAt(0) : 'G';
             const imageHtml = foto 
-              ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" />`
-              : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${nama.charAt(0)}</div>`;
+              ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 hidden items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`
+              : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`;
 
+            // Render Kartu dengan 2 Baris Keterangan
             card.innerHTML = `
               ${imageHtml}
-              <!-- Gradien Hitam di Bawah Foto -->
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent flex flex-col justify-end p-4 text-left">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent flex flex-col justify-end p-4 text-left">
                 <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
                   ${nama}
                 </h4>
-                <p class="text-xs text-slate-200 mt-1 line-clamp-1 font-medium">
-                  ${posisiTampil}
+                <p class="text-xs text-white mt-1.5 line-clamp-1 font-semibold">
+                  ${baris1}
+                </p>
+                <p class="text-[11px] text-slate-300 mt-0.5 line-clamp-1 font-medium">
+                  ${baris2}
                 </p>
               </div>
             `;
@@ -655,7 +679,7 @@ const ekskulList = [
         }
       })
       .catch((err) => {
-        console.error('Gagal memuat slider guru:', err);
+        console.error('Gagal memuat data guru di beranda:', err);
       });
   }
 </script>
