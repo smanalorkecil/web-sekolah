@@ -1,0 +1,206 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// Statistik Utama
+const statKunci = [
+  { label: "Luas Lahan", nilai: "12.450 m²", keterangan: "Status Hak Milik Pemprov NTT", icon: "📐" },
+  { label: "Ruang Kelas (Rombel)", nilai: "9 Ruang", keterangan: "Kondisi 100% Laik Pakai", icon: "🏫" },
+  { label: "Laboratorium & Praktik", nilai: "3 Unit", keterangan: "Komputer, Biologi, & Kimia", icon: "🔬" },
+  { label: "Daya Listrik & Daya Dukung", nilai: "5.500 VA", keterangan: "PLN Pascarayar + Cadangan", icon: "⚡" },
+];
+
+// Rekapitulasi Sarana & Prasarana
+const daftarRuang = [
+  { nama: "Ruang Kelas Belajar (Teori)", jumlah: 9, kondisi: "Baik", keterangan: "Dilengkapi meja-kursi siswa, papan tulis, dan ventilasi pesisir" },
+  { nama: "Laboratorium Komputer / ANBK", jumlah: 1, kondisi: "Baik", keterangan: "30 unit PC/Chromebook, switch hub, dan AC penyejuk" },
+  { nama: "Laboratorium IPA Terpadu", jumlah: 1, kondisi: "Rusak Ringan", keterangan: "Perlu pembaruan alat peraga mikroskop dan instalasi wastafel" },
+  { nama: "Perpustakaan Sekolah", jumlah: 1, kondisi: "Baik", keterangan: "Area baca representatif, rak buku referensi, dan koleksi fiksi" },
+  { nama: "Ruang Pimpinan / Kepala Sekolah", jumlah: 1, kondisi: "Baik", keterangan: "Ruang kerja dan penerimaan tamu dinas" },
+  { nama: "Ruang Dewan Guru & TU", jumlah: 1, kondisi: "Baik", keterangan: "Meja kerja personal pendidik, jaringan LAN, dan printer arsip" },
+  { nama: "Ruang Bimbingan Konseling (BK)", jumlah: 1, kondisi: "Baik", keterangan: "Ruang mediasi dan konsultasi pribadi peserta didik" },
+  { nama: "Ruang UKS", jumlah: 1, kondisi: "Baik", keterangan: "Tempat tidur periksa, kotak P3K, dan timbangan digital" },
+  { nama: "Toilet Guru & Tenaga Kependidikan", jumlah: 2, kondisi: "Baik", keterangan: "Sanitasi air bersih dan kloset jongkok/duduk" },
+  { nama: "Toilet Peserta Didik (Pria/Wanita)", jumlah: 6, kondisi: "Baik", keterangan: "Terpisah putra-putri dengan sumber air reservoir" },
+  { nama: "Lapangan Upacara & Olahraga", jumlah: 1, kondisi: "Baik", keterangan: "Multifungsi: apel bendera, bola voli, dan sepak takraw" },
+];
+
+// Utilitas & Infrastruktur
+const utilitas = [
+  {
+    judul: "Sumber Daya Air Bersih",
+    deskripsi: "Menggunakan sumur bor dan tendon penampung air hujan berkapasitas 5.000 liter untuk menjamin sanitasi harian warga sekolah.",
+    status: "Normal",
+    icon: "💧"
+  },
+  {
+    judul: "Konektivitas Internet & Jaringan",
+    deskripsi: "Akses broadband nirkabel dan penguat sinyal untuk menunjang Asesmen Nasional Berbasis Komputer (ANBK) dan administrasi digital.",
+    status: "Terhubung",
+    icon: "🌐"
+  },
+  {
+    judul: "Aksesibilitas & Keamanan Kampus",
+    deskripsi: "Pagar keliling area lingkungan sekolah, gerbang utama terpadu, dan jalur evakuasi terbuka menghadap area lapangan.",
+    status: "Aman",
+    icon: "🛡️"
+  }
+];
+---
+
+<Layout 
+  title="Kondisi Sekolah & Sarana Prasarana - SMA Negeri Alor Kecil" 
+  description="Data transparan kondisi fisik bangunan, fasilitas laboratorium, sarana belajar, dan utilitas penunjang SMA Negeri Alor Kecil."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-400">Profil</span>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">Kondisi Sekolah</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    
+    <!-- Header Halaman -->
+    <header class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest block mb-1">Sarana & Prasarana</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        Kondisi Satuan Pendidikan
+      </h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2 leading-relaxed">
+        Inventarisasi sarana pembelajaran, daya tampung rombongan belajar, dan sarana penunjang kenyamanan belajar mengajar.
+      </p>
+    </header>
+
+    <!-- 1. KARTU STATISTIK KUNCI -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      {statKunci.map((stat) => (
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold text-slate-400 uppercase">{stat.label}</span>
+            <span class="text-2xl">{stat.icon}</span>
+          </div>
+          <div>
+            <span class="text-2xl sm:text-3xl font-black text-slate-900 block leading-tight">{stat.nilai}</span>
+            <span class="text-[11px] text-emerald-700 font-medium mt-1 block">{stat.keterangan}</span>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- 2. TABEL REKAPITULASI RUANG & KELAIKAN (DAPODIK FORMAT) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-12">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-600"></span>
+            Rekapitulasi Ruang & Bangunan
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Pemutakhiran berkala basis data inventaris barang milik daerah (BMD).</p>
+        </div>
+        <span class="inline-flex items-center text-[11px] font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full w-fit">
+          Status: Semester Berjalan
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-50/80 text-slate-600 border-b border-slate-200">
+              <th class="py-3 px-3.5 font-bold uppercase tracking-wider text-[11px]">Nama Sarana / Prasarana</th>
+              <th class="py-3 px-3.5 font-bold uppercase tracking-wider text-[11px] text-center">Volume</th>
+              <th class="py-3 px-3.5 font-bold uppercase tracking-wider text-[11px] text-center">Status Kelayakan</th>
+              <th class="py-3 px-3.5 font-bold uppercase tracking-wider text-[11px]">Keterangan Fasilitas</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {daftarRuang.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3.5 px-3.5 font-bold text-slate-800">
+                  {item.nama}
+                </td>
+                <td class="py-3.5 px-3.5 font-black text-center text-slate-900">
+                  {item.jumlah}
+                </td>
+                <td class="py-3.5 px-3.5 text-center">
+                  <span class={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                    item.kondisi === 'Baik' 
+                      ? 'bg-emerald-100 text-emerald-800' 
+                      : 'bg-amber-100 text-amber-800'
+                  }`}>
+                    {item.kondisi}
+                  </span>
+                </td>
+                <td class="py-3.5 px-3.5 text-xs text-slate-600 leading-relaxed">
+                  {item.keterangan}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. UTILITAS & DAYA DUKUNG OPERASIONAL -->
+    <section class="mb-12">
+      <div class="text-center mb-8">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Infrastruktur</span>
+        <h2 class="text-2xl font-black text-slate-900 mt-1">Daya Dukung & Utilitas Sekolah</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {utilitas.map((u) => (
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">{u.icon}</span>
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-100 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                  {u.status}
+                </span>
+              </div>
+              <h3 class="font-bold text-base text-slate-900 mb-2 leading-snug">
+                {u.judul}
+              </h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                {u.deskripsi}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 4. NAVIGASI PINTAS MENU PROFIL LAINNYA -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+      <a 
+        href="/profil/sambutan" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Profil Pimpinan</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Sambutan Kepala Sekolah &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/visi-misi" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Landasan Kerja</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Visi & Misi &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/sejarah" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Jejak Lembaga</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Sejarah Singkat &rarr;</h4>
+      </a>
+    </div>
+
+  </main>
+</Layout>

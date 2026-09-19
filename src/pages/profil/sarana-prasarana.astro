@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const fasilitasUtama = [
+  {
+    nama: "Laboratorium Komputer & ANBK",
+    kategori: "Laboratorium",
+    foto: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Pusat asesmen berbasis komputer, pelatihan literasi digital, dan pemrograman dasar bagi peserta didik.",
+    fasilitas: ["30 Unit PC & Chromebook", "Jaringan LAN Gigabit & WiFi", "Ruangan Ber-AC", "Server Cadangan ANBK"]
+  },
+  {
+    nama: "Perpustakaan Sekolah & Ruang Baca",
+    kategori: "Sumber Belajar",
+    foto: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Menyediakan ribuan judul buku teks Kurikulum Merdeka, koleksi fiksi sastra, serta area membaca yang tenang.",
+    fasilitas: ["Koleksi Buku Referensi", "Area Meja Diskusi Kelompok", "Komputer Katalog Digital", "Sirkulasi Peminjaman Cepat"]
+  },
+  {
+    nama: "Laboratorium IPA Terpadu",
+    kategori: "Laboratorium",
+    foto: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Ruang eksperimen sains terpadu untuk pengamatan biologi, kimia dasar, dan fenomena fisika secara kontekstual.",
+    fasilitas: ["Mikroskop Cahaya & Elektrik", "Alat Peraga Anatomi", "Wastafel & Saluran Kimia", "Perlengkapan Keselamatan Lab"]
+  },
+  {
+    nama: "Ruang Kelas Kurikulum Merdeka",
+    kategori: "Ruang Belajar",
+    foto: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Ruang kelas representatif dengan tata letak bangku fleksibel untuk diskusi kelompok dan presentasi proyek P5.",
+    fasilitas: ["Meja & Kursi Ergonomis", "Papan Tulis Whiteboard", "Pencahayaan & Sirkulasi Alami", "Stop Kontak Tiap Sudut"]
+  },
+  {
+    nama: "Lapangan Olahraga & Apel Bendera",
+    kategori: "Olahraga & Seni",
+    foto: "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Area terbuka multifungsi untuk kegiatan apel rutin, upacara bendera, senam kebugaran, dan ekstrakurikuler olahraga.",
+    fasilitas: ["Lapangan Bola Voli", "Area Sepak Takraw", "Tiang Bendera Permanen", "Tribun Mini Teduh"]
+  },
+  {
+    nama: "Ruang Unit Kesehatan Sekolah (UKS)",
+    kategori: "Layanan Siswa",
+    foto: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop",
+    deskripsi: "Fasilitas pertolongan pertama pada kecelakaan (P3K) dan ruang istirahat bagi siswa yang sakit saat KBM berlangsung.",
+    fasilitas: ["Tempat Tidur Pasien", "Obat & Antiseptik Standar", "Timbangan & Pengukur Tinggi", "Tabung Oksigen Portabel"]
+  }
+];
+---
+
+<Layout 
+  title="Sarana & Prasarana - SMA Negeri Alor Kecil" 
+  description="Fasilitas pembelajaran, laboratorium modern, ruang perpustakaan, dan sarana olahraga pendukung di SMA Negeri Alor Kecil."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-400">Profil</span>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">Sarana & Prasarana</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    
+    <!-- Header Halaman -->
+    <header class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest block mb-1">Fasilitas Kampus</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        Sarana & Prasarana Sekolah
+      </h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2 leading-relaxed">
+        Ruang belajar representatif dan perangkat pendukung pembelajaran inovatif demi kenyamanan seluruh civitas akademika.
+      </p>
+    </header>
+
+    <!-- Grid Kartu Fasilitas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      {fasilitasUtama.map((item) => (
+        <article class="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col group">
+          
+          <!-- Foto Sarana -->
+          <div class="relative h-52 overflow-hidden bg-slate-100">
+            <img 
+              src={item.foto} 
+              alt={item.nama}
+              loading="lazy"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+            />
+            <span class="absolute top-3 left-3 bg-emerald-950/85 backdrop-blur-md text-amber-300 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">
+              {item.kategori}
+            </span>
+          </div>
+
+          <!-- Keterangan & Fitur -->
+          <div class="p-6 flex flex-col flex-1 justify-between">
+            <div>
+              <h2 class="font-bold text-lg text-slate-900 group-hover:text-emerald-700 transition leading-snug">
+                {item.nama}
+              </h2>
+              <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                {item.deskripsi}
+              </p>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Kelengkapan:</span>
+              <ul class="space-y-1.5">
+                {item.fasilitas.map((f) => (
+                  <li class="flex items-center gap-2 text-xs text-slate-700">
+                    <span class="text-emerald-600 font-bold">✓</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+        </article>
+      ))}
+    </div>
+
+    <!-- Kotak Tautan ke Halaman Data Kondisi Fisik -->
+    <div class="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      <div>
+        <h3 class="font-bold text-slate-900 text-base">Mencari Rekapitulasi Data Teknis & Kelayakan Aset?</h3>
+        <p class="text-xs text-slate-500 mt-1">Data inventaris barang milik daerah (BMD), luas lahan, status kerusakan, dan utilitas dapat dilihat pada halaman Kondisi Sekolah.</p>
+      </div>
+      <a 
+        href="/profil/kondisi-sekolah" 
+        class="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition flex-shrink-0"
+      >
+        <span>Lihat Data Kondisi Sekolah</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+
+  </main>
+</Layout>

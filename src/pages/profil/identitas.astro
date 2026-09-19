@@ -1,0 +1,208 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Data Identitas Satuan Pendidikan (Sesuai Data Referensi Kemendikdasmen)
+const identitasUtama = [
+  { label: "Nama Satuan Pendidikan", nilai: "SMA NEGERI ALOR KECIL" },
+  { label: "NPSN", nilai: "69774846", isPenting: true },
+  { label: "Bentuk Pendidikan", nilai: "SMA (Sekolah Menengah Atas)" },
+  { label: "Jenjang Pendidikan", nilai: "Pendidikan Menengah (DIKMEN)" },
+  { label: "Status Satuan Pendidikan", nilai: "NEGERI" },
+  { label: "Status Kepemilikan", nilai: "Pemerintah Daerah (Pemprov NTT)" },
+  { label: "Kurikulum Operasional", nilai: "Kurikulum Merdeka" },
+  { label: "Waktu Penyelenggaraan", nilai: "Pagi / 6 Hari" },
+];
+
+// 2. Data Alamat & Wilayah Administratif
+const dataWilayah = [
+  { label: "Alamat Lengkap", nilai: "Jln. Kalabahi - Kokar, Km 14" },
+  { label: "RT / RW", nilai: "00 / 00" },
+  { label: "Desa / Kelurahan", nilai: "LEFOKISU" },
+  { label: "Kecamatan", nilai: "KEC. ALOR BARAT LAUT" },
+  { label: "Kabupaten", nilai: "KAB. ALOR" },
+  { label: "Provinsi", nilai: "PROV. NUSA TENGGARA TIMUR" },
+  { label: "Kode Pos", nilai: "85223" }, // Sesuaikan bila ada kode pos spesifik
+  { label: "Lintang / Bujur (Koordinat)", nilai: "-8.2145 / 124.5167" },
+];
+
+// 3. Dokumen, Perizinan, & Legalitas
+const dokumenPerizinan = [
+  { label: "SK Pendirian Sekolah", nilai: "Disahkan Pemprov NTT" },
+  { label: "Tanggal SK Pendirian", nilai: "2014-01-01" },
+  { label: "SK Izin Operasional", nilai: "Tersertifikasi Definitif Dinas Pendidikan NTT" },
+  { label: "Status Akreditasi", nilai: "Terakreditasi B (BAN-PDM)" },
+  { label: "Nomor Sertifikasi Standar ISO", nilai: "Belum Bersertifikat" },
+];
+
+// 4. Layanan Kontak Resmi Satuan Pendidikan
+const kontakSekolah = [
+  { label: "Nomor Telepon / Seluler", nilai: "+62 812-xxxx-xxxx" },
+  { label: "Surat Elektronik (Email)", nilai: "smanalorkecil@gmail.com" },
+  { label: "Laman Resmi (Website)", nilai: "https://smanalorkecil.web.id" },
+  { label: "Kementerian Pembina", nilai: "Kementerian Pendidikan Dasar dan Menengah" },
+];
+---
+
+<Layout 
+  title="Identitas Satuan Pendidikan - SMA Negeri Alor Kecil" 
+  description="Data referensi pokok identitas kelembagaan, NPSN 69774846, alamat legalitas, dan dokumen perizinan resmi SMA Negeri Alor Kecil."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-400">Profil</span>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">Identitas Satuan Pendidikan</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    
+    <!-- Header Halaman -->
+    <header class="text-center max-w-2xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-3">
+        Data Referensi Kementerian
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        Identitas Satuan Pendidikan
+      </h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2 leading-relaxed">
+        Rangkuman data pokok kelembagaan yang sinkron dengan Pusat Data dan Teknologi Informasi (Pusdatin).
+      </p>
+    </header>
+
+    <!-- Kartu Banner Verifikasi Pusdatin -->
+    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-800 text-amber-300 font-black text-lg flex items-center justify-center shadow-xs flex-shrink-0">
+          AK
+        </div>
+        <div>
+          <h2 class="font-black text-slate-900 text-base sm:text-lg">SMA NEGERI ALOR KECIL</h2>
+          <p class="text-xs text-slate-500 font-mono">NPSN: <span class="font-bold text-emerald-700">69774846</span> • Status: <span class="font-semibold text-slate-800">Negeri</span></p>
+        </div>
+      </div>
+      <a 
+        href="https://referensi.data.kemdikbud.go.id" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-800 bg-slate-50 hover:bg-emerald-50 border border-slate-200 px-3.5 py-2 rounded-xl transition"
+      >
+        <span>Verifikasi Pusdatin</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+
+    <!-- TABEL 1: IDENTITAS POKOK -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+      <h3 class="text-base sm:text-lg font-black text-slate-900 pb-4 mb-4 border-b border-slate-100 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+        Identitas Pokok Lembaga
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <tbody class="divide-y divide-slate-100">
+            {identitasUtama.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3 px-3 font-semibold text-slate-500 w-1/3 sm:w-2/5">
+                  {item.label}
+                </td>
+                <td class="py-3 px-3 font-bold text-slate-900">
+                  {item.isPenting ? (
+                    <span class="font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+                      {item.nilai}
+                    </span>
+                  ) : (
+                    item.nilai
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TABEL 2: WILAYAH ADMINISTRATIF & LOKASI -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+      <h3 class="text-base sm:text-lg font-black text-slate-900 pb-4 mb-4 border-b border-slate-100 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+        Alamat & Wilayah Geografis
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <tbody class="divide-y divide-slate-100">
+            {dataWilayah.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3 px-3 font-semibold text-slate-500 w-1/3 sm:w-2/5">
+                  {item.label}
+                </td>
+                <td class="py-3 px-3 font-bold text-slate-900">
+                  {item.nilai}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TABEL 3: DOKUMEN & PERIZINAN -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+      <h3 class="text-base sm:text-lg font-black text-slate-900 pb-4 mb-4 border-b border-slate-100 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+        Dokumen, Izin Operasional, & Akreditasi
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <tbody class="divide-y divide-slate-100">
+            {dokumenPerizinan.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3 px-3 font-semibold text-slate-500 w-1/3 sm:w-2/5">
+                  {item.label}
+                </td>
+                <td class="py-3 px-3 font-bold text-slate-900">
+                  {item.nilai}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TABEL 4: KONTAK RESMI DINAS -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-12">
+      <h3 class="text-base sm:text-lg font-black text-slate-900 pb-4 mb-4 border-b border-slate-100 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+        Kontak & Laman Komunikasi
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <tbody class="divide-y divide-slate-100">
+            {kontakSekolah.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3 px-3 font-semibold text-slate-500 w-1/3 sm:w-2/5">
+                  {item.label}
+                </td>
+                <td class="py-3 px-3 font-bold text-slate-900">
+                  {item.nilai}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Catatan Hak Cipta Pusdatin Bawah -->
+    <div class="text-center text-slate-400 text-xs py-2">
+      Pusat Data dan Teknologi Informasi (Pusdatin) © Kementerian Pendidikan Dasar dan Menengah
+    </div>
+
+  </main>
+</Layout>

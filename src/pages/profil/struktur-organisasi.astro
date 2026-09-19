@@ -1,0 +1,261 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// Data Unsur Pimpinan Utama
+const kepalaSekolah = {
+  nama: "Nama Kepala Sekolah, S.Pd., M.Pd.",
+  nip: "19750101 200003 1 001",
+  jabatan: "Kepala Sekolah",
+  foto: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
+};
+
+const komiteSekolah = {
+  nama: "Tokoh Masyarakat / Ketua Komite",
+  jabatan: "Ketua Komite Sekolah",
+  peran: "Mitra Pertimbangan & Pengawasan Mandiri"
+};
+
+const kepalaTU = {
+  nama: "Nama Kepala Tata Usaha, S.Sos.",
+  nip: "19820512 200801 1 005",
+  jabatan: "Kepala Urusan Tata Usaha",
+  foto: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
+};
+
+// Wakil Kepala Sekolah (Urusan)
+const wakasekList = [
+  {
+    bidang: "Kurikulum & Pengajaran",
+    nama: "Guru Kurikulum, S.Pd., Gr.",
+    nip: "19850314 201001 1 012",
+    tugas: "Pengelolaan KBM, Kurikulum Merdeka, modul ajar, dan evaluasi hasil belajar."
+  },
+  {
+    bidang: "Kesiswaan & Karakter",
+    nama: "Guru Kesiswaan, S.Pd.",
+    nip: "19880720 201402 2 003",
+    tugas: "Pembinaan OSIS, kedisiplinan, ekstrakurikuler, dan beasiswa PIP."
+  },
+  {
+    bidang: "Sarana & Prasarana",
+    nama: "Guru Sarpras, S.Pd.",
+    nip: "19831105 200903 1 004",
+    tugas: "Inventarisasi aset BMD, perawatan gedung, fasilitas lab, dan lingkungan fisik."
+  },
+  {
+    bidang: "Humas & Kemitraan",
+    nama: "Guru Humas, S.Pd.",
+    nip: "19900218 201504 1 002",
+    tugas: "Publikasi warta, kerja sama instansi dinas, komite, dan hubungan masyarakat."
+  }
+];
+
+// Koordinator Layanan & Unit Penunjang
+const unitKhusus = [
+  { unit: "Kepala Laboratorium Komputer", pj: "Penanggung Jawab Komputer", icon: "💻" },
+  { unit: "Kepala Perpustakaan Sekolah", pj: "Pustakawan Sekolah", icon: "📚" },
+  { unit: "Koordinator Bimbingan Konseling (BK)", pj: "Guru BK / Konselor", icon: "🤝" },
+  { unit: "Koordinator Projek P5", pj: "Tim Fasilitator P5", icon: "🌱" }
+];
+---
+
+<Layout 
+  title="Struktur Organisasi - SMA Negeri Alor Kecil" 
+  description="Bagan susunan organisasi kepemimpinan, urusan wakil kepala sekolah, tata usaha, dan tata kelola kelembagaan SMAN Alor Kecil."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-400">Profil</span>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">Struktur Organisasi</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    
+    <!-- Header Halaman -->
+    <header class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest block mb-1">Tata Kelola Lembaga</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        Struktur Organisasi Sekolah
+      </h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2 leading-relaxed">
+        Garis koordinasi, wewenang, dan penanggung jawab penyelenggaraan pendidikan di SMA Negeri Alor Kecil.
+      </p>
+    </header>
+
+    <!-- ==================== BAGAN STRUKTUR ORGANISASI VISUAL ==================== -->
+    <section class="mb-16">
+      
+      <!-- TINGKAT 1: KEPALA SEKOLAH & KOMITE -->
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-10">
+        
+        <!-- Mitra Komite -->
+        <div class="w-full md:w-80 bg-white rounded-3xl p-5 border border-dashed border-amber-300 shadow-xs text-center order-2 md:order-1">
+          <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider block w-fit mx-auto mb-2">
+            Mitra Pertimbangan
+          </span>
+          <h3 class="font-black text-slate-900 text-sm sm:text-base">{komiteSekolah.nama}</h3>
+          <p class="text-xs font-bold text-amber-800 mt-0.5">{komiteSekolah.jabatan}</p>
+          <p class="text-[11px] text-slate-500 mt-1">{komiteSekolah.peran}</p>
+        </div>
+
+        <!-- Garis Penghubung Horizontal (Desktop) -->
+        <div class="hidden md:block w-12 h-0.5 border-t-2 border-dashed border-slate-300 order-2"></div>
+
+        <!-- Kepala Sekolah (Center Core) -->
+        <div class="w-full md:w-96 bg-gradient-to-b from-emerald-900 to-emerald-950 text-white rounded-3xl p-6 shadow-md text-center order-1 md:order-3 relative ring-4 ring-emerald-100">
+          <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-3.5 py-0.5 rounded-full uppercase tracking-widest inline-block mb-4 shadow-xs">
+            Pimpinan Satuan Pendidikan
+          </span>
+          <div class="w-24 h-24 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-300 shadow-sm mb-3 bg-emerald-800">
+            <img src={kepalaSekolah.foto} alt={kepalaSekolah.nama} class="w-full h-full object-cover object-top" />
+          </div>
+          <h2 class="text-lg font-black text-amber-100 leading-snug">{kepalaSekolah.nama}</h2>
+          <p class="text-xs text-emerald-200 font-bold mt-0.5">{kepalaSekolah.jabatan}</p>
+          <p class="text-[11px] font-mono text-emerald-300/80 mt-1">NIP. {kepalaSekolah.nip}</p>
+        </div>
+
+      </div>
+
+      <!-- GARIS VERTIKAL PUSAT -->
+      <div class="w-0.5 h-10 bg-emerald-700 mx-auto"></div>
+
+      <!-- TINGKAT 2: KEPALA TATA USAHA -->
+      <div class="max-w-md mx-auto mb-10">
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs text-center">
+          <span class="bg-slate-100 text-slate-700 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider block w-fit mx-auto mb-2">
+            Layanan Administrasi & Kepegawaian
+          </span>
+          <h3 class="font-black text-slate-900 text-sm sm:text-base">{kepalaTU.nama}</h3>
+          <p class="text-xs font-bold text-emerald-700 mt-0.5">{kepalaTU.jabatan}</p>
+          <p class="text-[11px] font-mono text-slate-400 mt-1">NIP. {kepalaTU.nip}</p>
+        </div>
+      </div>
+
+      <!-- GARIS CABANG KE WAKASEK -->
+      <div class="w-0.5 h-10 bg-emerald-700 mx-auto"></div>
+      <div class="hidden lg:block w-3/4 h-0.5 bg-emerald-700 mx-auto mb-6"></div>
+
+      <!-- TINGKAT 3: WAKIL KEPALA SEKOLAH (4 URUSAN) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        {wakasekList.map((waka) => (
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs hover:border-emerald-200 transition duration-200 flex flex-col justify-between">
+            <div>
+              <span class="inline-block bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider mb-2">
+                Wakasek Urusan
+              </span>
+              <h4 class="font-black text-sm sm:text-base text-slate-900 leading-snug">
+                {waka.bidang}
+              </h4>
+              <p class="text-xs font-bold text-emerald-700 mt-1">{waka.nama}</p>
+              <p class="text-[11px] font-mono text-slate-400">NIP. {waka.nip}</p>
+            </div>
+            <p class="text-xs text-slate-500 mt-4 pt-3 border-t border-slate-100 leading-relaxed">
+              {waka.tugas}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <!-- TINGKAT 4: UNIT KHUSUS & KOORDINATOR -->
+      <div class="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest text-center mb-6">
+          Koordinator Teknis & Penunjang Pembelajaran
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {unitKhusus.map((u) => (
+            <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5">
+              <span class="text-2xl">{u.icon}</span>
+              <div>
+                <h5 class="text-xs font-bold text-slate-900 leading-snug">{u.unit}</h5>
+                <p class="text-[11px] text-slate-500 mt-0.5">{u.pj}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- TINGKAT 5: PELAKSANA PEMBELAJARAN (FOOTER BAGAN) -->
+      <div class="mt-6 text-center">
+        <div class="inline-block bg-white border border-slate-200 rounded-2xl px-6 py-3 shadow-xs">
+          <p class="text-xs font-bold text-slate-700">
+            Wali Kelas • Dewan Guru Mata Pelajaran • Seluruh Peserta Didik
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TABEL RINCIAN TUPOKSI ==================== -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-12">
+      <div class="pb-4 mb-6 border-b border-slate-100">
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+          Tugas Pokok & Fungsi (Tupoksi)
+        </h3>
+        <p class="text-xs text-slate-500 mt-1">Pembagian peran dan tanggung jawab manajerial satuan pendidikan.</p>
+      </div>
+
+      <div class="divide-y divide-slate-100 text-xs sm:text-sm">
+        <div class="py-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <span class="font-bold text-slate-900">Kepala Sekolah</span>
+          <span class="sm:col-span-2 text-slate-600 leading-relaxed">
+            Pemimpin edukatif, manajer sekolah, administrator satuan pendidikan, supervisor KBM, inovator sistem, serta motivator iklim belajar yang kondusif.
+          </span>
+        </div>
+        <div class="py-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <span class="font-bold text-slate-900">Urusan Kurikulum</span>
+          <span class="sm:col-span-2 text-slate-600 leading-relaxed">
+            Penyusunan Kurikulum Satuan Pendidikan (KSP), pembagian jam mengajar guru, kalender akademik, jadwal asesmen sumatif, dan pelaporan rapor hasil belajar.
+          </span>
+        </div>
+        <div class="py-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <span class="font-bold text-slate-900">Urusan Kesiswaan</span>
+          <span class="sm:col-span-2 text-slate-600 leading-relaxed">
+            Penerimaan Murid Baru (SPMB), pembinaan disiplin dan etika siswa, kepengurusan OSIS, monitoring presensi harian, serta pembinaan prestasi lomba/ekskul.
+          </span>
+        </div>
+        <div class="py-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <span class="font-bold text-slate-900">Tata Usaha (TU)</span>
+          <span class="sm:col-span-2 text-slate-600 leading-relaxed">
+            Pengelolaan administrasi persuratan, kearsipan dinas, kepegawaian guru/staf, sistem basis data Dapodik, serta pencatatan inventaris barang milik daerah.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigasi Pintas Antar-Profil -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+      <a 
+        href="/profil/sambutan" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Profil Pimpinan</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Sambutan Kepala Sekolah &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/visi-misi" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Landasan Kerja</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Visi & Misi &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/sarana-prasarana" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Fasilitas Kampus</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Sarana & Prasarana &rarr;</h4>
+      </a>
+    </div>
+
+  </main>
+</Layout>

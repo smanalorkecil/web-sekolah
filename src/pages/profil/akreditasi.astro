@@ -1,0 +1,228 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// Data Resmi Akreditasi Sekolah (Sesuaikan dengan data sertifikat fisik)
+const akreditasi = {
+  peringkat: "B",
+  predikat: "Baik",
+  skor: "88",
+  nomorSK: "1857/BAN-SM/SK/2022",
+  tanggalTerbit: "30 November 2022",
+  berlakuSampai: "30 November 2027",
+  lembaga: "Badan Akreditasi Nasional Pendidikan Anak Usia Dini, Pendidikan Dasar, dan Pendidikan Menengah (BAN-PDM)",
+  pejabat: "Ketua BAN-S/M Provinsi Nusa Tenggara Timur",
+  fileSertifikat: "/dokumen/sertifikat-akreditasi-sman-alor-kecil.pdf"
+};
+
+// Nilai Komponen Mutu Penilaian Akreditasi (Instrumen IASP)
+const komponenPenilaian = [
+  {
+    kode: "KM-01",
+    nama: "Mutu Lulusan",
+    deskripsi: "Karakter kedisiplinan, etika religius, pembiasaan literasi, dan rekam jejak prestasi akademik maupun non-akademik peserta didik.",
+    skorKomponen: "87"
+  },
+  {
+    kode: "KM-02",
+    nama: "Proses Pembelajaran",
+    deskripsi: "Kualitas interaksi belajar mengajar di kelas, penerapan Kurikulum Merdeka berdiferensiasi, serta pemanfaatan sarana TIK.",
+    skorKomponen: "89"
+  },
+  {
+    kode: "KM-03",
+    nama: "Mutu Guru & Tenaga Kependidikan",
+    deskripsi: "Kompetensi pedagogik, keikutsertaan pelatihan keprofesian berkelanjutan (PKB), dan sertifikasi pendidik dewan guru.",
+    skorKomponen: "88"
+  },
+  {
+    kode: "KM-04",
+    nama: "Manajemen Sekolah",
+    deskripsi: "Tata kelola administrasi transparan, akuntabilitas RKAS, keterlibatan komite sekolah, dan iklim lingkungan belajar yang aman.",
+    skorKomponen: "88"
+  }
+];
+
+// Data Legalitas Sertifikat
+const legalitasAkreditasi = [
+  { label: "Nomor SK Penetapan", nilai: akreditasi.nomorSK },
+  { label: "Peringkat / Status", nilai: `Akreditasi ${akreditasi.peringkat} (${akreditasi.predikat})` },
+  { label: "Nilai Akhir", nilai: `${akreditasi.skor} dari skala 100` },
+  { label: "Lembaga Akreditasi", nilai: akreditasi.lembaga },
+  { label: "Tanggal Penetapan", nilai: akreditasi.tanggalTerbit },
+  { label: "Masa Berlaku", nilai: `s.d. ${akreditasi.berlakuSampai}` },
+];
+---
+
+<Layout 
+  title="Akreditasi Sekolah - SMA Negeri Alor Kecil" 
+  description="Status sertifikasi dan peringkat akreditasi resmi BAN-PDM SMA Negeri Alor Kecil beserta rincian capaian komponen mutu pendidikan."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <a href="/" class="hover:text-emerald-700 transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-400">Profil</span>
+        <span>/</span>
+        <span class="text-emerald-800 font-bold">Akreditasi Sekolah</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    
+    <!-- Header Halaman -->
+    <header class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest block mb-1">Standar Penjaminan Mutu</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        Status Akreditasi Sekolah
+      </h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2 leading-relaxed">
+        Bukti formal pengakuan kelayakan institusi dan akuntabilitas mutu penyelenggaraan pendidikan di SMA Negeri Alor Kecil.
+      </p>
+    </header>
+
+    <!-- 1. KARTU UTAMA SERTIFIKAT AKREDITASI -->
+    <section class="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 rounded-3xl p-8 sm:p-12 text-white shadow-lg overflow-hidden mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        
+        <!-- Sisi Kiri: Cap Badge Peringkat -->
+        <div class="md:col-span-5 text-center md:border-r md:border-emerald-800/80 md:pr-8">
+          <span class="inline-block bg-amber-400 text-slate-950 text-[10px] font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-4 shadow-xs">
+            Status Akreditasi Resmi
+          </span>
+          
+          <div class="w-32 h-32 sm:w-36 sm:h-36 mx-auto rounded-3xl bg-emerald-900/90 border-4 border-amber-400/40 flex flex-col items-center justify-center shadow-xl mb-3">
+            <span class="text-xs font-bold text-amber-200 uppercase tracking-wider">Peringkat</span>
+            <span class="text-6xl sm:text-7xl font-black text-amber-300 leading-none my-1">{akreditasi.peringkat}</span>
+            <span class="text-[11px] font-semibold text-emerald-200">Skor: {akreditasi.skor}/100</span>
+          </div>
+          
+          <p class="text-xs text-emerald-200 font-mono mt-2">Predikat: {akreditasi.predikat}</p>
+        </div>
+
+        <!-- Sisi Kanan: Ikhtisar SK & Dokumen -->
+        <div class="md:col-span-7 space-y-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black text-amber-100 leading-snug">
+              Terakreditasi {akreditasi.peringkat} ({akreditasi.predikat})
+            </h2>
+            <p class="text-xs text-emerald-300 font-mono mt-1">
+              SK BAN-S/M No. {akreditasi.nomorSK}
+            </p>
+          </div>
+
+          <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed text-justify">
+            Berdasarkan surat keputusan penetapan hasil akreditasi sekolah/madrasah oleh Badan Akreditasi Nasional, SMA Negeri Alor Kecil dinyatakan memenuhi seluruh standar penjaminan mutu pendidikan dengan status aktif.
+          </p>
+
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <!-- Tombol Unduh Sertifikat -->
+            <a 
+              href={akreditasi.fileSertifikat} 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Unduh Salinan Sertifikat (PDF)
+            </a>
+
+            <span class="text-[11px] text-emerald-300 font-mono">
+              Berlaku hingga: {akreditasi.berlakuSampai}
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. CAPAIAN KOMPONEN PENILAIAN MUTU (INSTRUMEN IASP) -->
+    <section class="mb-14">
+      <div class="flex items-center gap-3 pb-3 mb-8 border-b border-slate-200">
+        <span class="w-3 h-3 rounded-full bg-emerald-600"></span>
+        <h3 class="text-2xl font-black text-slate-900">Rincian Komponen Mutu Penilaian</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {komponenPenilaian.map((item) => (
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-200 transition duration-200">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+                  {item.kode}
+                </span>
+                <span class="text-xs font-black text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-md">
+                  Skor: {item.skorKomponen}
+                </span>
+              </div>
+              <h4 class="font-bold text-base text-slate-900 leading-snug">
+                {item.nama}
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed text-justify">
+                {item.deskripsi}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 3. TABEL LEGALITAS DOKUMEN AKREDITASI -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-12">
+      <div class="pb-4 mb-6 border-b border-slate-100">
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          Data Pengesahan & Legalitas Sertifikasi
+        </h3>
+        <p class="text-xs text-slate-500 mt-1">Keterangan arsip registrasi akreditasi satuan pendidikan.</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <tbody class="divide-y divide-slate-100">
+            {legalitasAkreditasi.map((item) => (
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="py-3.5 px-3 font-semibold text-slate-500 w-1/3 sm:w-1/4">
+                  {item.label}
+                </td>
+                <td class="py-3.5 px-3 font-bold text-slate-900">
+                  {item.nilai}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Navigasi Pintas Antar-Profil -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+      <a 
+        href="/profil/visi-misi" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Landasan Institusi</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Visi & Misi &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/struktur-organisasi" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Tata Kelola</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Struktur Organisasi &rarr;</h4>
+      </a>
+
+      <a 
+        href="/profil/kondisi-sekolah" 
+        class="bg-white hover:bg-emerald-50 border border-slate-200 rounded-2xl p-4 transition text-center group"
+      >
+        <span class="text-[11px] font-bold text-slate-400 group-hover:text-emerald-700 block">Sarana & Aset</span>
+        <h4 class="font-black text-xs sm:text-sm text-slate-800 mt-0.5">Kondisi Sekolah &rarr;</h4>
+      </a>
+    </div>
+
+  </main>
+</Layout>
