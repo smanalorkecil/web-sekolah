@@ -103,6 +103,23 @@ import Layout from '../layouts/Layout.astro';
     const tableBodySiswa = document.getElementById('tableBodySiswa')!;
     const emptyState = document.getElementById('emptyState')!;
 
+    // FUNGSI PEMBANTU: Membaca nilai objek tanpa terpengaruh huruf besar/kecil atau spasi kolom
+    function ambilNilai(obj: any, daftarNamaKunci: string[]) {
+      if (!obj || typeof obj !== 'object') return '';
+      const keys = Object.keys(obj);
+      for (const kunci of daftarNamaKunci) {
+        if (obj[kunci] !== undefined && obj[kunci] !== null && String(obj[kunci]).trim() !== '') {
+          return String(obj[kunci]).trim();
+        }
+        const kunciBersih = kunci.toLowerCase().replace(/[\s_-]/g, '');
+        const keyCocok = keys.find((k) => k.toLowerCase().replace(/[\s_-]/g, '') === kunciBersih);
+        if (keyCocok && obj[keyCocok] !== undefined && obj[keyCocok] !== null && String(obj[keyCocok]).trim() !== '') {
+          return String(obj[keyCocok]).trim();
+        }
+      }
+      return '';
+    }
+
     async function loadTabData(tabName: string) {
       showLoading(true);
 
@@ -135,14 +152,23 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    function renderData(data: any[], tabName: string) {
+function renderData(data: any[], tabName: string) {
       const keyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
       
+      // 1. FILTER PENCARIAN (Mendukung Nama, NISN, NIS, Kelas, & Jurusan)
       const filtered = data.filter((item) => {
-        const nama = (item.nama || item.name || '').toString().toLowerCase();
-        const nipNisn = (item.nip || item.nisn || item.nis || '').toString().toLowerCase();
-        const mapelJabatan = (item.mapel || item.jabatan || item.kelas || '').toString().toLowerCase();
-        return nama.includes(keyword) || nipNisn.includes(keyword) || mapelJabatan.includes(keyword);
+        const nama = ambilNilai(item, ['NamaLengkap', 'Nama Lengkap', 'Nama', 'nama']).toLowerCase();
+        const nipNisn = ambilNilai(item, ['NISN', 'nisn', 'NIS', 'nis', 'NIP', 'nip']).toLowerCase();
+        const kelasJurusan = (
+          ambilNilai(item, ['Kelas', 'kelas']) + ' ' + 
+          ambilNilai(item, ['Jurusan', 'jurusan', 'Rombel', 'rombel'])
+        ).toLowerCase();
+        const mapelJabatan = ambilNilai(item, ['TugasTambaha', 'TugasTambahan', 'Mapel', 'mapel', 'Jabatan', 'jabatan']).toLowerCase();
+
+        return nama.includes(keyword) || 
+               nipNisn.includes(keyword) || 
+               kelasJurusan.includes(keyword) || 
+               mapelJabatan.includes(keyword);
       });
 
       if (filtered.length === 0) {
@@ -153,6 +179,7 @@ import Layout from '../layouts/Layout.astro';
       }
       emptyState.classList.add('hidden');
 
+      // 2. TAMPILAN TABEL KHUSUS SISWA
       if (tabName === 'Siswa') {
         gridContainer.classList.add('hidden');
         tableContainer.classList.remove('hidden');
@@ -161,17 +188,33 @@ import Layout from '../layouts/Layout.astro';
         filtered.forEach((siswa, index) => {
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-slate-50 transition text-slate-700';
-          const nama = siswa.nama || siswa['nama siswa'] || '-';
-          const nisn = siswa.nisn || siswa.nis || '-';
-          const kelas = siswa.kelas || siswa.rombel || '-';
-          const jk = siswa.jk || siswa['jenis kelamin'] || '-';
+
+          // Ambil data sesuai header kolom di Google Sheets
+          const nama = ambilNilai(siswa, ['NamaLengkap', 'Nama Lengkap', 'nama']) || '-';
+          
+          // Prioritaskan NISN, jika kosong tampilkan NIS
+          const nisn = ambilNilai(siswa, ['NISN', 'nisn']);
+          const nis = ambilNilai(siswa, ['NIS', 'nis']);
+          const nomorInduk = nisn ? nisn : (nis ? nis : '-');
+
+          // Gabungkan Kelas dan Jurusan (contoh: "XII" + "A" -> "XII A")
+          const kelas = ambilNilai(siswa, ['Kelas', 'kelas']);
+          const jurusan = ambilNilai(siswa, ['Jurusan', 'jurusan']);
+          const kelasTampil = [kelas, jurusan].filter(Boolean).join(' ') || '-';
+
+          // Jenis Kelamin
+          const jk = ambilNilai(siswa, ['JK', 'jk', 'Jenis Kelamin']) || '-';
 
           tr.innerHTML = `
             <td class="p-4 text-center font-bold text-slate-400">${index + 1}</td>
             <td class="p-4 font-bold text-slate-900">${nama}</td>
-            <td class="p-4 font-mono text-xs text-slate-500">${nisn}</td>
-            <td class="p-4"><span class="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md font-bold text-xs">${kelas}</span></td>
-            <td class="p-4">${jk}</td>
+            <td class="p-4 font-mono text-xs text-slate-500">${nomorInduk}</td>
+            <td class="p-4">
+              <span class="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md font-bold text-xs border border-emerald-100">
+                ${kelasTampil}
+              </span>
+            </td>
+            <td class="p-4 text-center font-semibold text-slate-600">${jk}</td>
           `;
           tableBodySiswa.appendChild(tr);
         });
@@ -180,24 +223,29 @@ import Layout from '../layouts/Layout.astro';
         gridContainer.classList.remove('hidden');
         gridContainer.innerHTML = '';
 
-filtered.forEach((person) => {
+        filtered.forEach((person) => {
           const card = document.createElement('div');
           card.className = 'w-full aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 group select-none hover:-translate-y-1 hover:shadow-xl transition duration-300';
 
-          const nama = person.NamaLengkap || person['NamaLengkap'] || person.nama || 'Nama Guru';
-          const tugas = person.TugasTambahan || person.TugasTambaha || person['TugasTambaha'];
-          const mapel = person.Mapel || person.mapel;
+          // 1. Ambil Nama Lengkap
+          const nama = ambilNilai(person, ['NamaLengkap', 'Nama Lengkap', 'namalengkap', 'Nama', 'nama']) || 'Nama Belum Diisi';
           
-          let role = 'Tenaga Pendidik';
-          if (tugas && tugas.trim() !== '' && tugas.trim() !== '-') {
+          // 2. Tentukan Posisi/Jabatan (Tugas Tambahan -> Mapel -> Jabatan)
+          const tugas = ambilNilai(person, ['TugasTambaha', 'TugasTambahan', 'Tugas Tambahan', 'tugastambahan']);
+          const mapel = ambilNilai(person, ['Mapel', 'mapel']);
+          const jabatan = ambilNilai(person, ['Jabatan', 'jabatan']);
+
+          let role = tabName === 'Guru' ? 'Tenaga Pendidik' : 'Staf Tata Usaha';
+          if (tugas && tugas !== '-') {
             role = tugas;
-          } else if (mapel && mapel.trim() !== '' && mapel.trim() !== '-') {
+          } else if (mapel && mapel !== '-') {
             role = `Guru ${mapel}`;
-          } else if (person.Jabatan) {
-            role = person.Jabatan;
+          } else if (jabatan && jabatan !== '-') {
+            role = jabatan;
           }
 
-          let foto = person.Foto || person.foto || null;
+          // 3. Ambil Foto (Support Google Drive)
+          let foto = ambilNilai(person, ['Foto', 'foto', 'avatar', 'image']);
           if (foto && foto.includes('drive.google.com')) {
             const fileIdMatch = foto.match(/\/d\/([a-zA-Z0-9_-]+)/) || foto.match(/id=([a-zA-Z0-9_-]+)/);
             if (fileIdMatch && fileIdMatch[1]) {
@@ -205,12 +253,14 @@ filtered.forEach((person) => {
             }
           }
 
+          const inisial = nama !== 'Nama Belum Diisi' ? nama.charAt(0) : 'G';
           const imageHtml = foto 
-            ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" />`
-            : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${nama.charAt(0)}</div>`;
+            ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 hidden items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`
+            : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`;
 
           card.innerHTML = `
             ${imageHtml}
+            <!-- Gradien Hitam Elegan di Bawah Foto -->
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-transparent flex flex-col justify-end p-4 text-left">
               <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
                 ${nama}
