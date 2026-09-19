@@ -180,29 +180,46 @@ import Layout from '../layouts/Layout.astro';
         gridContainer.classList.remove('hidden');
         gridContainer.innerHTML = '';
 
-        filtered.forEach((person) => {
+filtered.forEach((person) => {
           const card = document.createElement('div');
-card.className = 'w-full aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 group select-none hover:-translate-y-1 hover:shadow-xl transition duration-300';
+          card.className = 'w-full aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 group select-none hover:-translate-y-1 hover:shadow-xl transition duration-300';
 
-const nama = person.nama || person['nama lengkap'] || 'Nama Guru';
-const role = person.jabatan || person.mapel || (tabName === 'Guru' ? 'Tenaga Pendidik' : 'Staf Tata Usaha');
-const foto = person.foto || person.avatar || null;
+          const nama = person.NamaLengkap || person['NamaLengkap'] || person.nama || 'Nama Guru';
+          const tugas = person.TugasTambahan || person.TugasTambaha || person['TugasTambaha'];
+          const mapel = person.Mapel || person.mapel;
+          
+          let role = 'Tenaga Pendidik';
+          if (tugas && tugas.trim() !== '' && tugas.trim() !== '-') {
+            role = tugas;
+          } else if (mapel && mapel.trim() !== '' && mapel.trim() !== '-') {
+            role = `Guru ${mapel}`;
+          } else if (person.Jabatan) {
+            role = person.Jabatan;
+          }
 
-const imageHtml = foto 
-  ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" />`
-  : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${nama.charAt(0)}</div>`;
+          let foto = person.Foto || person.foto || null;
+          if (foto && foto.includes('drive.google.com')) {
+            const fileIdMatch = foto.match(/\/d\/([a-zA-Z0-9_-]+)/) || foto.match(/id=([a-zA-Z0-9_-]+)/);
+            if (fileIdMatch && fileIdMatch[1]) {
+              foto = `https://lh3.googleusercontent.com/u/0/d/${fileIdMatch[1]}`;
+            }
+          }
 
-card.innerHTML = `
-  ${imageHtml}
-  <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-transparent flex flex-col justify-end p-4 text-left">
-    <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
-      ${nama}
-    </h4>
-    <p class="text-xs text-slate-200 mt-1 line-clamp-1 font-medium">
-      ${role}
-    </p>
-  </div>
-`;
+          const imageHtml = foto 
+            ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" />`
+            : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${nama.charAt(0)}</div>`;
+
+          card.innerHTML = `
+            ${imageHtml}
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-transparent flex flex-col justify-end p-4 text-left">
+              <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
+                ${nama}
+              </h4>
+              <p class="text-xs text-slate-200 mt-1 line-clamp-1 font-medium">
+                ${role}
+              </p>
+            </div>
+          `;
           gridContainer.appendChild(card);
         });
       }
