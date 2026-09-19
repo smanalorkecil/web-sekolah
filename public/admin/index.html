@@ -1,18 +1,136 @@
 <!doctype html>
-<html lang="id">
+<html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panel Berita Sekolah</title>
+    <title>Panel Admin CMS - SMA Negeri Alor Kecil</title>
+    <!-- Mencegah halaman admin terindeks di mesin pencari Google -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <style>
+      /* Kotak Login Pengunci */
+      #auth-overlay {
+        position: fixed;
+        inset: 0;
+        background: #0f172a;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+      .auth-box {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1.5rem;
+        width: 100%;
+        max-width: 360px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        text-align: center;
+      }
+      .auth-box h2 {
+        margin: 0 0 0.5rem;
+        color: #0f172a;
+        font-size: 1.25rem;
+        font-weight: 800;
+      }
+      .auth-box p {
+        margin: 0 0 1.5rem;
+        color: #64748b;
+        font-size: 0.8rem;
+      }
+      .auth-box input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        border: 1.5px solid #cbd5e1;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        outline: none;
+      }
+      .auth-box input:focus {
+        border-color: #047857;
+      }
+      .auth-box button {
+        width: 100%;
+        padding: 0.75rem;
+        background: #047857;
+        color: white;
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .auth-box button:hover {
+        background: #065f46;
+      }
+      .auth-error {
+        color: #e11d48;
+        font-size: 0.75rem;
+        margin-top: 0.75rem;
+        display: none;
+        font-weight: 600;
+      }
+    </style>
   </head>
   <body>
-    <!-- 1. Script Pustaka Widget Cloudinary (Wajib ada sebelum Decap CMS) -->
-    <script
-      src="https://media-library.cloudinary.com/global/all.js"
-      type="text/javascript"
-    ></script>
+    <!-- FORM KUNCI KEAMANAN -->
+    <div id="auth-overlay">
+      <div class="auth-box">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem">🔒</div>
+        <h2>Akses Terbatas</h2>
+        <p>
+          Silakan masukkan kata sandi pengelola untuk membuka Panel Admin CMS.
+        </p>
+        <form id="auth-form" onsubmit="handleLogin(event)">
+          <input
+            type="password"
+            id="admin-password"
+            placeholder="Masukkan kata sandi..."
+            required
+            autofocus
+          />
+          <button type="submit">Buka Panel Admin</button>
+          <div id="auth-error" class="auth-error">Kata sandi tidak sesuai!</div>
+        </form>
+      </div>
+    </div>
 
-    <!-- Memuat Sveltia CMS (Ringan & Kompatibel dengan config.yml Decap) -->
+    <script>
+      // ==========================================
+      // ATUR KATA SANDI PANEL ADMIN DI SINI
+      // ==========================================
+      const PASSWORD_ADMIN = "AlorKecil2026"; // Ganti dengan password yang Anda inginkan
+
+      // Cek apakah sudah pernah login di sesi browser ini
+      if (sessionStorage.getItem("admin_authenticated") === "true") {
+        document.getElementById("auth-overlay").style.display = "none";
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const inputPass = document.getElementById("admin-password").value;
+        const errElem = document.getElementById("auth-error");
+
+        if (inputPass === PASSWORD_ADMIN) {
+          sessionStorage.setItem("admin_authenticated", "true");
+          document.getElementById("auth-overlay").style.display = "none";
+        } else {
+          errElem.style.display = "block";
+          document.getElementById("admin-password").value = "";
+          document.getElementById("admin-password").focus();
+        }
+      }
+    </script>
+
+    <!-- Script Sveltia CMS -->
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
   </body>
 </html>
