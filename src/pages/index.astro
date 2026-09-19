@@ -267,41 +267,40 @@ const ekskulList = [
         </div>
 
 <!-- WIDGET AGENDA / PENGUMUMAN DINAMIS -->
-<div class="lg:col-span-4 bg-emerald-50/60 rounded-3xl p-6 border border-emerald-100/80 flex flex-col justify-between">
+    <div class="lg:col-span-4 bg-emerald-50/60 rounded-3xl p-6 border border-emerald-100/80 flex flex-col justify-between">
     <!-- Header Widget -->
-    <div class="flex items-center gap-2 mb-5">
-      <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-      <h3 class="font-black text-xs sm:text-sm uppercase tracking-wider text-slate-900">
-        Agenda Kegiatan & Pengumuman
-      </h3>
+        <div class="flex items-center gap-2 mb-5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+          <h3 class="font-black text-xs sm:text-sm uppercase tracking-wider text-slate-900">
+           Agenda Kegiatan & Pengumuman
+          </h3>
+       </div>
+
+       <!-- Skeleton Loading saat mengambil data -->
+        <div id="berandaAgendaLoading" class="space-y-3">
+          {[1, 2, 3, 4].map(() => (
+           <div class="h-16 bg-white/80 rounded-2xl border border-slate-100 animate-pulse"></div>
+         ))}
+        </div>
+
+        <!-- Kontainer Item Dinamis dari Google Sheets -->
+       <div id="berandaAgendaList" class="space-y-3 hidden"></div>
+
+       <!-- Tampilan jika belum ada data -->
+       <div id="berandaAgendaEmpty" class="hidden text-center py-8">
+          <p class="text-xs text-slate-400">Belum ada agenda atau edaran terkini.</p>
+       </div>
     </div>
 
-    <!-- Skeleton Loading saat mengambil data -->
-    <div id="berandaAgendaLoading" class="space-y-3">
-      {[1, 2, 3, 4].map(() => (
-        <div class="h-16 bg-white/80 rounded-2xl border border-slate-100 animate-pulse"></div>
-      ))}
-    </div>
+        <!-- Tombol Tautan ke Halaman Pengumuman Lengkap -->
+     <a 
+        href="/pengumuman" 
+        class="mt-6 block text-center py-2.5 px-4 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs rounded-xl transition duration-200"
+     >
+        Lihat Papan Pengumuman &rarr;
+     </a>
 
-    <!-- Kontainer Item Dinamis dari Google Sheets -->
-    <div id="berandaAgendaList" class="space-y-3 hidden"></div>
-
-    <!-- Tampilan jika belum ada data -->
-    <div id="berandaAgendaEmpty" class="hidden text-center py-8">
-      <p class="text-xs text-slate-400">Belum ada agenda atau edaran terkini.</p>
-    </div>
   </div>
-
-  <!-- Tombol Tautan ke Halaman Pengumuman Lengkap -->
-  <a 
-    href="/pengumuman" 
-    class="mt-6 block text-center py-2.5 px-4 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs rounded-xl transition duration-200"
-  >
-    Lihat Papan Pengumuman &rarr;
-  </a>
-</div>
-
-      </div>
     </div>
   </section>
 
