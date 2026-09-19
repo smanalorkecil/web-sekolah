@@ -223,28 +223,37 @@ function renderData(data: any[], tabName: string) {
         gridContainer.classList.remove('hidden');
         gridContainer.innerHTML = '';
 
-        filtered.forEach((person) => {
+filtered.forEach((person) => {
           const card = document.createElement('div');
           card.className = 'w-full aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 group select-none hover:-translate-y-1 hover:shadow-xl transition duration-300';
 
-          // 1. Ambil Nama Lengkap
           const nama = ambilNilai(person, ['NamaLengkap', 'Nama Lengkap', 'namalengkap', 'Nama', 'nama']) || 'Nama Belum Diisi';
           
-          // 2. Tentukan Posisi/Jabatan (Tugas Tambahan -> Mapel -> Jabatan)
-          const tugas = ambilNilai(person, ['TugasTambaha', 'TugasTambahan', 'Tugas Tambahan', 'tugastambahan']);
-          const mapel = ambilNilai(person, ['Mapel', 'mapel']);
+          const tugas = ambilNilai(person, ['TugasTambaha', 'TugasTambahan', 'Tugas Tambahan', 'tugastambahan', 'tugas']);
+          const mapel = ambilNilai(person, ['Mapel', 'mapel', 'Mata Pelajaran', 'matapelajaran']);
           const jabatan = ambilNilai(person, ['Jabatan', 'jabatan']);
 
-          let role = tabName === 'Guru' ? 'Tenaga Pendidik' : 'Staf Tata Usaha';
-          if (tugas && tugas !== '-') {
-            role = tugas;
-          } else if (mapel && mapel !== '-') {
-            role = `Guru ${mapel}`;
-          } else if (jabatan && jabatan !== '-') {
-            role = jabatan;
+          let baris1 = '';
+          let baris2 = '';
+
+          const teksMapel = (mapel && mapel !== '-') 
+            ? (mapel.toLowerCase().startsWith('guru') ? mapel : `Guru ${mapel}`) 
+            : '';
+
+          if (tabName === 'Guru') {
+            if (tugas && tugas !== '-') {
+              baris1 = tugas;
+              baris2 = teksMapel || 'Tenaga Pendidik';
+            } else {
+              baris1 = teksMapel || (jabatan && jabatan !== '-' ? jabatan : 'Guru Mata Pelajaran');
+              baris2 = 'Tenaga Pendidik';
+            }
+          } else {
+            // Khusus Tab Tenaga Kependidikan (TU)
+            baris1 = tugas || jabatan || 'Staf Tata Usaha';
+            baris2 = mapel || 'Tenaga Kependidikan';
           }
 
-          // 3. Ambil Foto (Support Google Drive)
           let foto = ambilNilai(person, ['Foto', 'foto', 'avatar', 'image']);
           if (foto && foto.includes('drive.google.com')) {
             const fileIdMatch = foto.match(/\/d\/([a-zA-Z0-9_-]+)/) || foto.match(/id=([a-zA-Z0-9_-]+)/);
@@ -260,13 +269,15 @@ function renderData(data: any[], tabName: string) {
 
           card.innerHTML = `
             ${imageHtml}
-            <!-- Gradien Hitam Elegan di Bawah Foto -->
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-transparent flex flex-col justify-end p-4 text-left">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent flex flex-col justify-end p-4 text-left">
               <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
                 ${nama}
               </h4>
-              <p class="text-xs text-slate-200 mt-1 line-clamp-1 font-medium">
-                ${role}
+              <p class="text-xs text-white mt-1.5 line-clamp-1 font-semibold">
+                ${baris1}
+              </p>
+              <p class="text-[11px] text-slate-300 mt-0.5 line-clamp-1 font-medium">
+                ${baris2}
               </p>
             </div>
           `;
