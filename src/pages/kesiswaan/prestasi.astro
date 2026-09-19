@@ -1,36 +1,97 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const listPrestasi = [
-  { tahun: "2026", judul: "Juara 1 Lomba Inovasi Sains & Teknologi Terapan", bidang: "Sains / Riset", tingkat: "Kabupaten Alor" },
-  { tahun: "2025", judul: "Medali Perak Cabor Atletik Lari Cepat O2SN", bidang: "Olahraga", tingkat: "Provinsi NTT" },
-  { tahun: "2025", judul: "Juara Harapan 1 Festival Lomba Seni Siswa (FLS2N) Kategori Tari", bidang: "Seni Budaya", tingkat: "Provinsi NTT" },
-  { tahun: "2024", judul: "Regu Tergiat Lomba Tingkat Kepanduan Pramuka Penegak", bidang: "Kepramukaan", tingkat: "Kwartir Cabang Alor" }
-];
 ---
 
 <Layout title="Prestasi Siswa - SMA Negeri Alor Kecil">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Etalase Kebanggaan</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mt-1">Prestasi Siswa</h1>
+      <p class="text-slate-500 text-xs sm:text-sm mt-2">
+        Daftar torehan piala dan medali siswa dalam bidang akademik, seni, dan olahraga.
+      </p>
+    </div>
 
-    <main class="max-w-5xl mx-auto px-4 py-12">
-      <div class="text-center max-w-xl mx-auto mb-10">
-        <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Etalase Kebanggaan</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Prestasi Siswa</h1>
-        <p class="text-slate-500 text-xs sm:text-sm mt-2">Daftar torehan piala dan medali siswa dalam bidang akademik, seni, dan olahraga.</p>
-      </div>
+    <!-- Loading State Skeleton -->
+    <div id="prestasiLoading" class="space-y-4">
+      {[1, 2, 3, 4].map(() => (
+        <div class="h-24 bg-white border border-slate-200/80 rounded-2xl animate-pulse"></div>
+      ))}
+    </div>
 
-      <div class="space-y-4">
-        {listPrestasi.map((p) => (
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-emerald-500 transition">
-            <div>
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded">{p.tahun}</span>
-                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">{p.tingkat}</span>
+    <!-- Kontainer Daftar Prestasi -->
+    <div id="prestasiList" class="space-y-4 hidden"></div>
+
+    <!-- Empty State -->
+    <div id="prestasiEmpty" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200 hidden">
+      <p class="text-slate-400 text-sm font-medium">Belum ada data prestasi yang dicatat di Spreadsheet.</p>
+    </div>
+
+  </main>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
+    const prestasiLoading = document.getElementById('prestasiLoading')!;
+    const prestasiList = document.getElementById('prestasiList')!;
+    const prestasiEmpty = document.getElementById('prestasiEmpty')!;
+
+    fetch(SCRIPT_URL + '?tab=Prestasi')
+      .then((res) => res.json())
+      .then((data) => {
+        prestasiLoading.classList.add('hidden');
+
+        if (Array.isArray(data) && data.length > 0) {
+          prestasiList.classList.remove('hidden');
+          prestasiList.innerHTML = '';
+
+          // Urutkan tahun terbaru di paling atas
+          data.sort((a, b) => {
+            const thnA = parseInt(a.tahun || '0', 10);
+            const thnB = parseInt(b.tahun || '0', 10);
+            return thnB - thnA;
+          });
+
+          data.forEach((item) => {
+            const tahun = item.tahun || '-';
+            const tingkat = item.tingkat || 'Sekolah';
+            const namaPrestasi = item.namaprestasi || item.nama || item.prestasi || item.judul || '-';
+            const bidang = item.bidang || 'Umum';
+
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group';
+
+            card.innerHTML = `
+              <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="bg-amber-100 text-amber-800 text-[11px] font-black px-2.5 py-0.5 rounded-md">
+                    ${tahun}
+                  </span>
+                  <span class="bg-emerald-50 text-emerald-700 text-[11px] font-bold px-2.5 py-0.5 rounded-md">
+                    ${tingkat}
+                  </span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-base sm:text-lg leading-snug group-hover:text-emerald-700 transition">
+                  ${namaPrestasi}
+                </h3>
               </div>
-              <h3 class="font-bold text-slate-900 text-sm sm:text-base">{p.judul}</h3>
-            </div>
-            <span class="w-fit text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{p.bidang}</span>
-          </div>
-        ))}
-      </div>
-    </main>
+              <div class="self-start sm:self-center flex-shrink-0">
+                <span class="inline-block bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium px-3 py-1 rounded-full">
+                  ${bidang}
+                </span>
+              </div>
+            `;
+
+            prestasiList.appendChild(card);
+          });
+        } else {
+          prestasiEmpty.classList.remove('hidden');
+        }
+      })
+      .catch((err) => {
+        console.error('Gagal mengambil data prestasi:', err);
+        prestasiLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold text-center py-8">Gagal memuat data prestasi dari server.</p>';
+      });
+  </script>
 </Layout>
