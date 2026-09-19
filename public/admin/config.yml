@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: smanalorkecil/NAMA_REPOSITORY_KAMU # Ganti dengan nama repositori GitHub kamu (contoh: smanalorkecil/web-sekolah)
+  repo: smanalorkecil/web-sekolah # Ganti dengan nama repositori GitHub kamu (contoh: smanalorkecil/web-sekolah)
   branch: main # Mengarah ke branch main
 
 # Konfigurasi integrasi Cloudinary
