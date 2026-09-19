@@ -1,12 +1,14 @@
 backend:
-  name: test-repo # atau github saat sudah production
+  name: github
+  repo: smanalorkecil/NAMA_REPOSITORY_KAMU # Ganti dengan nama repositori GitHub kamu (contoh: smanalorkecil/web-sekolah)
+  branch: main # Mengarah ke branch main
 
 # Konfigurasi integrasi Cloudinary
 media_library:
   name: cloudinary
   config:
-    cloud_name: qi797bcl # ganti dengan Cloud Name dari dasbor Cloudinary
-    api_key: "334214273144456" # ganti dengan API Key (beri tanda kutip dua)
+    cloud_name: qi797bcl
+    api_key: "334214273144456"
 
 collections:
   - name: "berita"
