@@ -1,7 +1,7 @@
 backend:
   name: github
-  repo: smanalorkecil/web-sekolah # Ganti dengan nama repositori GitHub kamu (contoh: smanalorkecil/web-sekolah)
-  branch: main # Mengarah ke branch main
+  repo: smanalorkecil/web-sekolah
+  branch: main
 
 # Konfigurasi integrasi Cloudinary
 media_library:
@@ -9,6 +9,9 @@ media_library:
   config:
     cloud_name: qi797bcl
     api_key: "334214273144456"
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 collections:
   - name: "berita"
@@ -19,35 +22,22 @@ collections:
     fields:
       - { label: "Judul Berita", name: "title", widget: "string" }
       - { label: "Tanggal", name: "date", widget: "datetime" }
-      - {
-          label: "Kategori",
-          name: "category",
-          widget: "select",
-          options: ["Akademik", "Kesiswaan", "Prestasi", "Pengumuman"],
-        }
-      - {
-          label: "Foto Utama",
-          name: "thumbnail",
-          widget: "image",
-          required: false,
-        }
+      - label: "Kategori"
+        name: "category"
+        widget: "select"
+        options: ["Akademik", "Kesiswaan", "Prestasi", "Pengumuman"]
+      - label: "Foto Utama"
+        name: "thumbnail"
+        widget: "image"
+        required: false
+      - label: "Fokus Posisi Thumbnail"
+        name: "thumbnail_pos"
+        widget: "select"
+        options:
+          - { label: "Atas / Wajah (Cocok untuk Foto Orang)", value: "top" }
+          - { label: "Tengah (Standar)", value: "center" }
+          - { label: "Bawah", value: "bottom" }
+        default: "top"
+        required: false
       - { label: "Ringkasan Singkat", name: "description", widget: "text" }
       - { label: "Isi Berita", name: "body", widget: "markdown" }
-
-- {
-          label: "Foto Utama",
-          name: "thumbnail",
-          widget: "image",
-          required: false,
-        }
-      - {
-          label: "Fokus Posisi Thumbnail",
-          name: "thumbnail_pos",
-          widget: "select",
-          options:
-            - { label: "Atas / Wajah (Cocok untuk Foto Orang)", value: "top" }
-            - { label: "Tengah (Standar)", value: "center" }
-            - { label: "Bawah", value: "bottom" },
-          default: "top",
-          required: false,
-        }
