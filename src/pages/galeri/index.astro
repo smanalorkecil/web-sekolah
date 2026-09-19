@@ -1,138 +1,143 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { daftarAlbum } from '../../data/galeri';
-
-const daftarKategori = [
-  { slug: "all", label: "Semua Album" },
-  { slug: "p5", label: "KBM & P5" },
-  { slug: "ekskul", label: "Ekstrakurikuler" },
-  { slug: "upacara", label: "Upacara & Hari Besar" },
-  { slug: "prestasi", label: "Prestasi" }
-];
 ---
 
-<Layout title="Galeri Dokumentasi & Album Kegiatan - SMA Negeri Alor Kecil">
+<Layout title="Galeri Dokumentasi Kegiatan - SMA Negeri Alor Kecil">
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
-    <!-- Header Halaman -->
     <div class="text-center max-w-2xl mx-auto mb-10">
       <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi Sekolah</span>
       <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mt-1">Album Galeri Kegiatan</h1>
       <p class="text-slate-500 text-xs sm:text-sm mt-2">
-        Kumpulan dokumentasi foto kegiatan pembelajaran, kesiswaan, dan prestasi SMA Negeri Alor Kecil.
+        Kumpulan arsip visual kegiatan pembelajaran, ekstrakurikuler, dan peristiwa penting di SMA Negeri Alor Kecil.
       </p>
     </div>
 
-    <!-- Filter Kategori Album -->
-    <div class="flex flex-wrap justify-center gap-2 mb-12">
-      {daftarKategori.map((kat, index) => (
-        <button
-          class={`filter-btn px-4 py-2 rounded-xl text-xs font-bold transition duration-200 cursor-pointer ${
-            index === 0
-              ? 'bg-emerald-800 text-white shadow-sm filter-active'
-              : 'bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200/80'
-          }`}
-          data-category={kat.slug}
-        >
-          {kat.label}
-        </button>
-      ))}
+    <!-- Indikator Loading -->
+    <div id="galeriLoading" class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-9 w-9 border-4 border-emerald-600 border-t-transparent mb-3"></div>
+      <p class="text-xs font-semibold text-slate-500 tracking-wide">Menghubungkan ke basis data Google Drive...</p>
     </div>
 
-    <!-- Grid Album -->
-    <div id="albumGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {daftarAlbum.map((album) => (
-        <article 
-          class="album-card bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition duration-300 flex flex-col group"
-          data-cat={album.kategori}
-        >
-          <!-- Gambar Sampul Album -->
-          <div class="relative h-56 overflow-hidden bg-slate-100">
-            <img 
-              src={album.cover} 
-              alt={album.judul}
-              loading="lazy"
-              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-            />
-            
-            <!-- Badge Jumlah Foto (Khas Album) -->
-            <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-              <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-              </svg>
-              <span>{album.fotoList.length} Foto</span>
-            </div>
-
-            <span class="absolute top-3 left-3 bg-emerald-900/90 backdrop-blur-md text-amber-300 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">
-              {album.labelKategori}
-            </span>
-          </div>
-
-          <!-- Keterangan Album -->
-          <div class="p-6 flex flex-col flex-1">
-            <span class="text-[11px] font-mono text-slate-400 mb-1.5">🕒 {album.tanggal}</span>
-            <h2 class="font-bold text-base sm:text-lg text-slate-900 group-hover:text-emerald-700 transition line-clamp-2 leading-snug">
-              <a href={`/galeri/${album.slug}`}>{album.judul}</a>
-            </h2>
-            <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
-              {album.deskripsi}
-            </p>
-
-            <!-- Tombol Buka Album -->
-            <a 
-              href={`/galeri/${album.slug}`} 
-              class="mt-6 pt-4 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center justify-between"
-            >
-              <span>Buka Album ({album.fotoList.length} Foto)</span>
-              <span>&rarr;</span>
-            </a>
-          </div>
-        </article>
-      ))}
-    </div>
+    <!-- Grid Album Foto -->
+    <div id="galeriGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
 
     <!-- State Kosong -->
-    <div id="emptyAlbums" class="hidden text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
-      <p class="text-slate-400 text-sm">Belum ada album dalam kategori ini.</p>
+    <div id="galeriEmpty" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200 hidden">
+      <p class="text-slate-400 text-sm font-medium">Belum ada album foto yang diterbitkan di Spreadsheet.</p>
+    </div>
+
+    <!-- Modal Popup Tampilan Seluruh Foto -->
+    <div id="modalAlbum" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs hidden flex items-center justify-center p-4 sm:p-6">
+      <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <span id="modalKategori" class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block"></span>
+            <h3 id="modalJudul" class="text-base sm:text-lg font-black text-slate-900 leading-snug"></h3>
+          </div>
+          <button id="modalClose" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition text-2xl font-bold leading-none">
+            &times;
+          </button>
+        </div>
+        <div id="modalFotoList" class="p-5 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+      </div>
     </div>
 
   </main>
-</Layout>
 
-<!-- Filter Script -->
-<script>
-  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const cards = document.querySelectorAll<HTMLElement>('.album-card');
-  const emptyState = document.getElementById('emptyAlbums')!;
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
+    const galeriLoading = document.getElementById('galeriLoading')!;
+    const galeriGrid = document.getElementById('galeriGrid')!;
+    const galeriEmpty = document.getElementById('galeriEmpty')!;
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => {
-        b.classList.remove('bg-emerald-800', 'text-white', 'shadow-sm', 'filter-active');
-        b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200/80');
-      });
+    const modalAlbum = document.getElementById('modalAlbum')!;
+    const modalJudul = document.getElementById('modalJudul')!;
+    const modalKategori = document.getElementById('modalKategori')!;
+    const modalFotoList = document.getElementById('modalFotoList')!;
+    const modalClose = document.getElementById('modalClose')!;
 
-      btn.classList.add('bg-emerald-800', 'text-white', 'shadow-sm', 'filter-active');
-      btn.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200/80');
+    let dataAlbum: any[] = [];
 
-      const targetCategory = btn.getAttribute('data-category') || 'all';
-      let visibleCount = 0;
+    fetch(SCRIPT_URL + '?tab=Galeri')
+      .then((res) => res.json())
+      .then((data) => {
+        galeriLoading.classList.add('hidden');
 
-      cards.forEach((card) => {
-        const cardCat = card.getAttribute('data-cat');
-        if (targetCategory === 'all' || cardCat === targetCategory) {
-          card.classList.remove('hidden');
-          visibleCount++;
+        if (Array.isArray(data) && data.length > 0) {
+          dataAlbum = data;
+          galeriGrid.classList.remove('hidden');
+          galeriGrid.innerHTML = '';
+
+          data.forEach((album, idx) => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer';
+            
+            card.innerHTML = `
+              <div class="relative aspect-[4/3] overflow-hidden bg-slate-900">
+                <img src="${album.cover}" alt="${album.judul}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                <span class="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-lg">
+                  📷 ${album.jumlahFoto} Foto
+                </span>
+                <span class="absolute bottom-3 left-3 bg-emerald-700/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase">
+                  ${album.kategori}
+                </span>
+              </div>
+              <div class="p-5 flex flex-col flex-1">
+                <span class="text-[11px] text-slate-400 font-medium mb-1.5">📅 ${album.tanggal}</span>
+                <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition line-clamp-2">
+                  ${album.judul}
+                </h3>
+                <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
+                  ${album.deskripsi}
+                </p>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700">
+                  <span>Buka Seluruh Album</span>
+                  <span>&rarr;</span>
+                </div>
+              </div>
+            `;
+
+            card.addEventListener('click', () => {
+              bukaModalAlbum(idx);
+            });
+
+            galeriGrid.appendChild(card);
+          });
         } else {
-          card.classList.add('hidden');
+          galeriEmpty.classList.remove('hidden');
         }
+      })
+      .catch((err) => {
+        galeriLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal memuat album galeri dari Google Drive.</p>';
       });
 
-      if (visibleCount === 0) {
-        emptyState.classList.remove('hidden');
-      } else {
-        emptyState.classList.add('hidden');
-      }
+    function bukaModalAlbum(index: number) {
+      const album = dataAlbum[index];
+      if (!album) return;
+
+      modalJudul.innerText = album.judul;
+      modalKategori.innerText = album.kategori + ' • ' + album.tanggal;
+      modalFotoList.innerHTML = '';
+
+      album.foto.forEach((fotoUrl: string) => {
+        const item = document.createElement('a');
+        item.href = fotoUrl;
+        item.target = '_blank';
+        item.className = 'aspect-square rounded-2xl overflow-hidden bg-slate-100 block shadow-xs hover:opacity-90 transition';
+        item.innerHTML = `<img src="${fotoUrl}" class="w-full h-full object-cover" loading="lazy" />`;
+        modalFotoList.appendChild(item);
+      });
+
+      modalAlbum.classList.remove('hidden');
+    }
+
+    modalClose.addEventListener('click', () => {
+      modalAlbum.classList.add('hidden');
     });
-  });
-</script>
+
+    modalAlbum.addEventListener('click', (e) => {
+      if (e.target === modalAlbum) modalAlbum.classList.add('hidden');
+    });
+  </script>
+</Layout>
