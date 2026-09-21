@@ -68,7 +68,7 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
     <!-- 2. NAVBAR UTAMA BESERTA TOMBOL BURGER -->
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-xs border-b border-slate-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        
+
         <!-- Logo & Nama Sekolah -->
         <a href="/" class="flex items-center gap-3">
           <img 
@@ -88,19 +88,19 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
 
         <!-- Menu Navigasi Desktop -->
         <nav class="hidden xl:flex items-center gap-5 text-xs font-bold text-slate-700 uppercase tracking-wide">
-          
-          <!-- Tombol Beranda (Sudah Sejajar Presisi) -->
+
+          <!-- Beranda -->
           <a href="/" class="flex items-center py-4 hover:text-emerald-700 transition">
             Beranda
           </a>
 
           <!-- DROPDOWN PROFIL -->
-          <div class="relative group py-4">
-            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
+          <div class="relative dropdown-group py-4">
+            <button type="button" class="dropdown-btn flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
               <span>Profil</span>
-              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="dropdown-arrow w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="absolute left-0 top-full hidden group-hover:block w-64 pt-2 z-50">
+            <div class="dropdown-menu absolute left-0 top-full hidden w-64 pt-2 z-50">
               <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
                 <a href="/profil/identitas" class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition"><span class="text-base">🪪</span> Identitas Satuan Pendidikan</a>
                 <a href="/profil/sambutan" class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition"><span class="text-base">🎙️</span> Sambutan Kepala Sekolah</a>
@@ -115,13 +115,13 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
             </div>
           </div>
 
-          <!-- DROPDOWN AKADEMIK (TERMASUK DIREKTORI GURU & TENDIK) -->
-          <div class="relative group py-4">
-            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
+          <!-- DROPDOWN AKADEMIK (TERMASUK GURU & TENDIK) -->
+          <div class="relative dropdown-group py-4">
+            <button type="button" class="dropdown-btn flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
               <span>Akademik</span>
-              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="dropdown-arrow w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="absolute left-0 top-full hidden group-hover:block w-60 pt-2 z-50">
+            <div class="dropdown-menu absolute left-0 top-full hidden w-60 pt-2 z-50">
               <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-1 text-xs font-semibold normal-case text-slate-700">
                 <a href="/akademik/kalender" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📅 Kalender Pendidikan</a>
                 <a href="/akademik/jadwal" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">⏰ Jadwal Pembelajaran</a>
@@ -132,12 +132,12 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
           </div>
 
           <!-- DROPDOWN KESISWAAN -->
-          <div class="relative group py-4">
-            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
+          <div class="relative dropdown-group py-4">
+            <button type="button" class="dropdown-btn flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
               <span>Kesiswaan</span>
-              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="dropdown-arrow w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="absolute left-0 top-full hidden group-hover:block w-64 pt-2 z-50">
+            <div class="dropdown-menu absolute left-0 top-full hidden w-64 pt-2 z-50">
               <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-0.5 text-xs font-semibold normal-case text-slate-700">
                 <a href="/kesiswaan/osis" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">🏛️ Organisasi Siswa (OSIS)</a>
                 <a href="/kesiswaan/ekskul" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">⛺ Ekstrakurikuler</a>
@@ -149,13 +149,13 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
             </div>
           </div>
 
-          <!-- DROPDOWN PUBLIKASI (TERMASUK GALERI FOTO) -->
-          <div class="relative group py-4">
-            <button class="flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
+          <!-- DROPDOWN PUBLIKASI (TERMASUK GALERI) -->
+          <div class="relative dropdown-group py-4">
+            <button type="button" class="dropdown-btn flex items-center gap-1 hover:text-emerald-700 transition uppercase tracking-wide focus:outline-hidden">
               <span>Publikasi</span>
-              <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700 group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="dropdown-arrow w-3.5 h-3.5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="absolute left-0 top-full hidden group-hover:block w-56 pt-2 z-50">
+            <div class="dropdown-menu absolute left-0 top-full hidden w-56 pt-2 z-50">
               <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-col gap-1 text-xs font-semibold normal-case text-slate-700">
                 <a href="/berita" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📰 Berita & Artikel</a>
                 <a href="/pengumuman" class="px-3.5 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition">📢 Pengumuman Resmi</a>
@@ -165,13 +165,13 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
             </div>
           </div>
 
-          <!-- PORTAL APLIKASI DI HEADER -->
+          <!-- PORTAL APLIKASI -->
           <a href="/portal" class="flex items-center gap-1.5 py-4 text-emerald-700 hover:text-emerald-800 transition">
             <span>🚀</span>
             <span>Portal</span>
           </a>
 
-          <!-- HALAMAN KONTAK DI HEADER -->
+          <!-- KONTAK -->
           <a href="/kontak" class="flex items-center py-4 hover:text-emerald-700 transition">
             Kontak
           </a>
@@ -248,6 +248,8 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
             <a href="/kesiswaan/osis" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50">🏛️ OSIS</a>
             <a href="/kesiswaan/ekskul" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50">⛺ Ekstrakurikuler</a>
             <a href="/kesiswaan/prestasi" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50 font-bold text-emerald-800">🏆 Prestasi Siswa</a>
+            <a href="/kesiswaan/tata-tertib" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50">📜 Tata Tertib Siswa</a>
+            <a href="/kesiswaan/bk" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50">🤝 Bimbingan Konseling (BK)</a>
             <a href="/kesiswaan/beasiswa" class="px-3.5 py-1.5 rounded-lg hover:bg-emerald-50">🎓 Informasi PIP</a>
           </div>
         </div>
@@ -278,7 +280,7 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
     <!-- 4. FOOTER RESMI SEKOLAH -->
     <footer class="bg-[#022c22] text-emerald-200/80 text-xs pt-16 pb-12 border-t border-emerald-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-emerald-900/60">
-        
+
         <div class="md:col-span-4">
           <div class="flex items-center gap-3 mb-3">
             <img src="/logo.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.style.display='none'" />
@@ -344,8 +346,60 @@ const imageURL = new URL(image, Astro.site || 'https://smanalorkecil.web.id').to
       </div>
     </footer>
 
-    <!-- SKRIP TOGGLE HAMBURGER MENU -->
+    <!-- SKRIP LENGKAP: DROPDOWN HOVER & KLIK SERTA HAMBURGER HP -->
     <script is:inline>
+      // 1. KONTROL DROPDOWN DESKTOP (Mendukung Hover & Klik)
+      const dropdownGroups = document.querySelectorAll('.dropdown-group');
+
+      dropdownGroups.forEach((group) => {
+        const btn = group.querySelector('.dropdown-btn');
+        const menu = group.querySelector('.dropdown-menu');
+        const arrow = group.querySelector('.dropdown-arrow');
+
+        // Buka / Tutup saat diklik
+        btn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isCurrentlyHidden = menu?.classList.contains('hidden');
+
+          // Tutup dropdown lain yang sedang terbuka
+          dropdownGroups.forEach((otherGroup) => {
+            if (otherGroup !== group) {
+              otherGroup.querySelector('.dropdown-menu')?.classList.add('hidden');
+              otherGroup.querySelector('.dropdown-arrow')?.classList.remove('rotate-180', 'text-emerald-700');
+            }
+          });
+
+          if (isCurrentlyHidden) {
+            menu?.classList.remove('hidden');
+            arrow?.classList.add('rotate-180', 'text-emerald-700');
+          } else {
+            menu?.classList.add('hidden');
+            arrow?.classList.remove('rotate-180', 'text-emerald-700');
+          }
+        });
+
+        // Tampilkan saat kursor diarahkan (Hover)
+        group.addEventListener('mouseenter', () => {
+          menu?.classList.remove('hidden');
+          arrow?.classList.add('rotate-180', 'text-emerald-700');
+        });
+
+        // Sembunyikan saat kursor menjauh
+        group.addEventListener('mouseleave', () => {
+          menu?.classList.add('hidden');
+          arrow?.classList.remove('rotate-180', 'text-emerald-700');
+        });
+      });
+
+      // Tutup semua dropdown jika pengguna mengeklik di luar menu
+      document.addEventListener('click', () => {
+        dropdownGroups.forEach((group) => {
+          group.querySelector('.dropdown-menu')?.classList.add('hidden');
+          group.querySelector('.dropdown-arrow')?.classList.remove('rotate-180', 'text-emerald-700');
+        });
+      });
+
+      // 2. TOGGLE HAMBURGER MENU HP
       const menuBtn = document.getElementById('menu-btn');
       const mobileMenu = document.getElementById('mobile-menu');
 
