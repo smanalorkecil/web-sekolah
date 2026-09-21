@@ -24,7 +24,7 @@ const tanggalRilis = post.data?.date
       weekday: 'long', 
       day: 'numeric', 
       month: 'long', 
-      year: 'numeric' 
+      year: 'numeric',
     })
   : '-';
 
@@ -129,13 +129,13 @@ const jamRilis = post.data?.date
           <!-- Gambar Utama + Caption / Kredit Foto -->
           {post.data.thumbnail && (
             <figure class="mb-8">
-<div class="rounded-2xl overflow-hidden shadow-sm bg-slate-100 flex items-center justify-center">
-    <img 
-      src={post.data.thumbnail} 
-      alt={post.data.title} 
-      class="w-full max-h-[520px] object-cover object-top rounded-2xl" 
-    />
-  </div>
+              <div class="rounded-2xl overflow-hidden shadow-sm bg-slate-100 flex items-center justify-center">
+                <img 
+                  src={post.data.thumbnail} 
+                  alt={post.data.title} 
+                  class="w-full max-h-[520px] object-cover object-top rounded-2xl" 
+                />
+              </div>
               <figcaption class="text-[11px] text-slate-400 mt-2.5 flex items-center gap-1.5 italic font-mono">
                 <span>📷</span> Dokumentasi Humas SMA Negeri Alor Kecil
               </figcaption>
@@ -143,8 +143,22 @@ const jamRilis = post.data?.date
           )}
 
           <!-- Isi Lengkap Berita (Gaya Editorial Nyaman Dibaca) -->
-          <div class="prose prose-slate prose-emerald prose-headings:font-black prose-p:leading-relaxed prose-img:rounded-2xl prose-img:mx-auto max-w-none text-slate-800 text-base sm:text-lg">
+          <div 
+            id="article-content" 
+            class="prose prose-slate prose-emerald prose-headings:font-black prose-p:leading-relaxed prose-img:rounded-2xl prose-img:mx-auto max-w-none text-slate-800 text-base sm:text-lg"
+          >
             <Content />
+          </div>
+
+          <!-- Wadah Navigasi Paginasi Halaman (Otomatis muncul jika artikel berisi pembatas ---) -->
+          <div id="pagination-wrapper" class="hidden mt-10 pt-6 border-t border-slate-100">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
+              <span class="text-xs font-bold text-slate-600">
+                Halaman <span id="current-page-num" class="text-emerald-700 font-extrabold">1</span> dari <span id="total-pages-num">1</span>
+              </span>
+
+              <div id="pagination-buttons" class="flex items-center gap-1.5 flex-wrap"></div>
+            </div>
           </div>
 
           <!-- Tag & Catatan Redaksi Bawah -->
@@ -262,8 +276,9 @@ const jamRilis = post.data?.date
   }
 </style>
 
-<!-- Script Interaktif Salin Tautan -->
+<!-- Script Gabungan: Salin Tautan & Paginasi Artikel Berita -->
 <script>
+  // 1. Salin Tautan Berita
   document.getElementById('btnCopyLink')?.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -272,4 +287,123 @@ const jamRilis = post.data?.date
       prompt('Salin tautan berita ini:', window.location.href);
     }
   });
+
+  // 2. Logika Paginasi Multi-Halaman Artikel
+  function initPagination() {
+    const article = document.getElementById('article-content');
+    const paginationWrapper = document.getElementById('pagination-wrapper');
+    const paginationButtons = document.getElementById('pagination-buttons');
+    const currentPageNum = document.getElementById('current-page-num');
+    const totalPagesNum = document.getElementById('total-pages-num');
+
+    if (!article || !paginationWrapper || !paginationButtons) return;
+
+    const elements = Array.from(article.children);
+    const hasHr = elements.some((el) => el.tagName === 'HR');
+
+    // Jika artikel tidak memiliki pembatas garis (---), biarkan normal memanjang
+    if (!hasHr) return;
+
+    const pages = [];
+    let currentPageElements = [];
+
+    elements.forEach((el) => {
+      if (el.tagName === 'HR') {
+        if (currentPageElements.length > 0) {
+          pages.push(currentPageElements);
+          currentPageElements = [];
+        }
+      } else {
+        currentPageElements.push(el);
+      }
+    });
+
+    if (currentPageElements.length > 0) {
+      pages.push(currentPageElements);
+    }
+
+    // Jika hanya ada 1 halaman, batalkan paginasi
+    if (pages.length <= 1) return;
+
+    // Bungkus setiap kelompok konten ke dalam kontainer halaman
+    article.innerHTML = '';
+    const pageNodes = pages.map((pageEls, index) => {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = `article-page ${index !== 0 ? 'hidden' : ''}`;
+      pageEls.forEach((el) => pageDiv.appendChild(el));
+      article.appendChild(pageDiv);
+      return pageDiv;
+    });
+
+    paginationWrapper.classList.remove('hidden');
+    if (totalPagesNum) totalPagesNum.textContent = pages.length.toString();
+
+    let activeIndex = 0;
+
+    function renderControls() {
+      paginationButtons.innerHTML = '';
+
+      // Tombol Prev
+      const prevBtn = document.createElement('button');
+      prevBtn.innerHTML = '&larr; Sebelumnya';
+      prevBtn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+        activeIndex === 0
+          ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+          : 'bg-white text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 shadow-2xs'
+      }`;
+      prevBtn.disabled = activeIndex === 0;
+      prevBtn.onclick = () => goTo(activeIndex - 1);
+      paginationButtons.appendChild(prevBtn);
+
+      // Tombol Nomor Halaman
+      pages.forEach((_, idx) => {
+        const numBtn = document.createElement('button');
+        numBtn.textContent = (idx + 1).toString();
+        numBtn.className = `w-8 h-8 rounded-xl text-xs font-bold transition ${
+          idx === activeIndex
+            ? 'bg-emerald-700 text-white shadow-2xs'
+            : 'bg-white text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 shadow-2xs'
+        }`;
+        numBtn.onclick = () => goTo(idx);
+        paginationButtons.appendChild(numBtn);
+      });
+
+      // Tombol Next
+      const nextBtn = document.createElement('button');
+      nextBtn.innerHTML = 'Selanjutnya &rarr;';
+      nextBtn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+        activeIndex === pages.length - 1
+          ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+          : 'bg-white text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 shadow-2xs'
+      }`;
+      nextBtn.disabled = activeIndex === pages.length - 1;
+      nextBtn.onclick = () => goTo(activeIndex + 1);
+      paginationButtons.appendChild(nextBtn);
+    }
+
+    function goTo(index) {
+      if (index < 0 || index >= pages.length) return;
+      activeIndex = index;
+
+      pageNodes.forEach((node, idx) => {
+        if (idx === index) {
+          node.classList.remove('hidden');
+        } else {
+          node.classList.add('hidden');
+        }
+      });
+
+      if (currentPageNum) currentPageNum.textContent = (index + 1).toString();
+      renderControls();
+
+      // Gulir otomatis kembali ke awal artikel saat berpindah halaman
+      article.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    renderControls();
+  }
+
+  // Inisialisasi paginasi saat halaman siap
+  initPagination();
+  document.addEventListener('astro:page-load', initPagination);
 </script>
