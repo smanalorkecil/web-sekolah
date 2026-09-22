@@ -465,23 +465,28 @@ const ekskulList = [
   </section>
 
 <!-- ==================== 8. PREVIEW GALERI KEGIATAN (REALTIME DRIVE) ==================== -->
-  <section class="bg-white py-14 sm:py-20 border-t border-slate-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi</span>
-      <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1 mb-8">Galeri Kegiatan Sekolah</h2>
-      
-      <!-- Kontainer Grid Foto Beranda -->
-      <div id="homeGaleriGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
-        {[1, 2, 3, 4].map(() => (
-          <div class="rounded-2xl aspect-square bg-slate-100 animate-pulse"></div>
-        ))}
-      </div>
-
-      <a href="/galeri" class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition">
-        Buka Seluruh Album Galeri &rarr;
-      </a>
+<section class="bg-white py-14 sm:py-20 border-t border-slate-200/80">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi</span>
+    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1 mb-8">
+      Galeri Kegiatan Sekolah
+    </h2>
+    
+    <!-- Kontainer Grid Foto Beranda -->
+    <div id="homeGaleriGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
+      {[1, 2, 3, 4].map(() => (
+        <div class="rounded-2xl aspect-square bg-slate-100 animate-pulse"></div>
+      ))}
     </div>
-  </section>
+
+    <a 
+      href="/galeri" 
+      class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-sm"
+    >
+      Buka Seluruh Album Galeri &rarr;
+    </a>
+  </div>
+</section>
 
   <!-- ==================== 9. CTA BANNER SPMB ==================== -->
   <section id="ppdb" class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-16 sm:py-20">
@@ -673,12 +678,12 @@ const ekskulList = [
       });
   }
 
-  // ==========================================
+// ==========================================
   // 3. PREVIEW GALERI KEGIATAN
   // ==========================================
   const homeGaleriGrid = document.getElementById('homeGaleriGrid');
   if (homeGaleriGrid) {
-    fetch(SCRIPT_URL + '?tab=Galeri')
+    fetch(SCRIPT_URL + '?tab=galeri')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
@@ -686,14 +691,31 @@ const ekskulList = [
           const previewAlbum = data.slice(0, 4);
 
           previewAlbum.forEach((album) => {
+            // Deteksi cerdas: ambil fotoSampul (baru) atau cover (lama)
+            let imgCover = album.fotoSampul || album.cover || '';
+            if (!imgCover && Array.isArray(album.foto) && album.foto.length > 0) {
+              imgCover = typeof album.foto[0] === 'string' ? album.foto[0] : (album.foto[0].thumbnail || album.foto[0].url);
+            }
+            if (!imgCover) imgCover = '/logo.png';
+
+            // Deteksi jumlah foto: totalFoto (baru) atau jumlahFoto (lama)
+            const jumlah = album.totalFoto || album.jumlahFoto || (album.foto ? album.foto.length : 0);
+
             const item = document.createElement('a');
             item.href = '/galeri';
-            item.className = 'group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 block shadow-xs';
+            item.className = 'group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 block shadow-xs hover:shadow-lg transition';
+            
             item.innerHTML = `
-              <img src="${album.cover}" alt="${album.judul}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <img 
+                src="${imgCover}" 
+                alt="${album.judul}" 
+                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-3.5 text-left">
                 <span class="text-[10px] font-bold text-amber-300 bg-emerald-950/80 px-2 py-0.5 rounded-md w-fit mb-1">
-                  📷 ${album.jumlahFoto} Foto
+                  📷 ${jumlah} Foto
                 </span>
                 <h4 class="text-white text-xs font-bold line-clamp-2 leading-snug">
                   ${album.judul}
@@ -708,7 +730,6 @@ const ekskulList = [
         console.error('Gagal memuat galeri beranda:', err);
       });
   }
-
   // ==========================================
   // 4. AGENDA & PENGUMUMAN DARI SPREADSHEET
   // ==========================================
