@@ -312,13 +312,15 @@ const urlLengkap = Astro.url.href;
 </Layout>
 
 <style>
-  article :global(img[width]) {
-    width: auto;
+  /* Batasi tinggi foto di dalam naskah agar foto vertikal/portrait tidak raksasa */
+  article :global(#article-content img) {
+    max-height: 480px;        /* Batas tinggi maksimal foto */
+    width: auto;              /* Lebar menyesuaikan proporsi asli */
     max-width: 100%;
-    height: auto;
-    display: block;
-    margin-left: auto;
+    margin-left: auto;        /* Otomatis rata tengah */
     margin-right: auto;
+    border-radius: 1rem;      /* Sudut foto tumpul rapi */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
   }
 </style>
 
