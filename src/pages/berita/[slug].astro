@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 const { post, allPosts } = Astro.props;
 const { Content } = await render(post);
 
-// Filter berita lainnya untuk sidebar (selain berita yang sedang dibaca)
+// Filter berita terkini untuk sidebar (selain berita yang sedang dibaca)
 const beritaTerkini = allPosts
   .filter((p) => p.id !== post.id)
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
@@ -31,6 +31,24 @@ const tanggalRilis = post.data?.date
 const jamRilis = post.data?.date 
   ? new Date(post.data.date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WITA'
   : '';
+
+// Pengaturan posisi fokus gambar thumbnail
+const posisiFoto = post.data?.thumbnail_pos === 'center' 
+  ? 'object-center' 
+  : post.data?.thumbnail_pos === 'bottom' 
+  ? 'object-bottom' 
+  : 'object-top';
+
+// Inisial avatar penulis
+const namaPenulis = post.data?.author || 'Tim Jurnalistik SMAN Alor Kecil';
+const inisialPenulis = namaPenulis
+  .split(' ')
+  .slice(0, 2)
+  .map((kata: string) => kata[0])
+  .join('')
+  .toUpperCase();
+
+const urlLengkap = Astro.url.href;
 ---
 
 <Layout 
@@ -70,7 +88,7 @@ const jamRilis = post.data?.date
 
           <!-- Ringkasan / Lead Paragraph Khas Berita -->
           {post.data.description && (
-            <p class="text-slate-600 text-sm sm:text-base font-medium leading-relaxed mb-6 border-l-4 border-emerald-600 pl-4 py-1 bg-slate-50/70 rounded-r-xl">
+            <p class="text-slate-600 text-sm sm:text-base font-medium leading-relaxed mb-6 border-l-4 border-emerald-600 pl-4 py-1.5 bg-slate-50/70 rounded-r-xl">
               {post.data.description}
             </p>
           )}
@@ -78,11 +96,11 @@ const jamRilis = post.data?.date
           <!-- Info Redaksi & Waktu Publikasi -->
           <div class="py-4 border-y border-slate-100 flex flex-wrap items-center justify-between gap-4 mb-8">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-emerald-900 text-amber-300 font-black text-sm flex items-center justify-center shadow-xs">
-                AK
+              <div class="w-10 h-10 rounded-full bg-emerald-900 text-amber-300 font-black text-xs flex items-center justify-center shadow-xs">
+                {inisialPenulis}
               </div>
               <div>
-                <span class="block text-xs font-bold text-slate-900">Tim Jurnalistik & Humas SMAN Alor Kecil</span>
+                <span class="block text-xs font-bold text-slate-900">{namaPenulis}</span>
                 <span class="text-[11px] text-slate-400 font-medium">
                   {tanggalRilis} {jamRilis && `• ${jamRilis}`}
                 </span>
@@ -95,7 +113,7 @@ const jamRilis = post.data?.date
               
               <!-- WhatsApp -->
               <a 
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.data.title + ' - Baca selengkapnya: ')}`} 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.data.title + '\n' + urlLengkap)}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition shadow-xs"
@@ -106,7 +124,7 @@ const jamRilis = post.data?.date
 
               <!-- Facebook -->
               <a 
-                href="https://www.facebook.com/sharer/sharer.php" 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlLengkap)}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shadow-xs"
@@ -126,23 +144,24 @@ const jamRilis = post.data?.date
             </div>
           </div>
 
-          <!-- Gambar Utama + Caption / Kredit Foto -->
+          <!-- Gambar Utama + Kredit Foto -->
           {post.data.thumbnail && (
             <figure class="mb-8">
-              <div class="rounded-2xl overflow-hidden shadow-sm bg-slate-100 flex items-center justify-center">
+              <div class="rounded-2xl overflow-hidden shadow-sm bg-slate-900 flex items-center justify-center">
                 <img 
                   src={post.data.thumbnail} 
                   alt={post.data.title} 
-                  class="w-full max-h-[520px] object-cover object-top rounded-2xl" 
+                  class={`w-full max-h-[520px] object-cover ${posisiFoto} rounded-2xl`}
+                  loading="eager"
                 />
               </div>
               <figcaption class="text-[11px] text-slate-400 mt-2.5 flex items-center gap-1.5 italic font-mono">
-                <span>📷</span> Dokumentasi Humas SMA Negeri Alor Kecil
+                <span>📷</span> Foto: {post.data.photographer || 'Dokumentasi Sekolah'}
               </figcaption>
             </figure>
           )}
 
-          <!-- Isi Lengkap Berita (Gaya Editorial Nyaman Dibaca) -->
+          <!-- Isi Lengkap Berita (Prose Editor) -->
           <div 
             id="article-content" 
             class="prose prose-slate prose-emerald prose-headings:font-black prose-p:leading-relaxed prose-img:rounded-2xl prose-img:mx-auto max-w-none text-slate-800 text-base sm:text-lg"
@@ -150,7 +169,35 @@ const jamRilis = post.data?.date
             <Content />
           </div>
 
-          <!-- Wadah Navigasi Paginasi Halaman (Otomatis muncul jika artikel berisi pembatas ---) -->
+          <!-- Dokumentasi Tambahan (Jika Ada Lampiran Galeri di CMS) -->
+          {post.data.gallery && post.data.gallery.length > 0 && (
+            <section class="mt-12 pt-8 border-t border-slate-100">
+              <h3 class="text-base sm:text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
+                <span>📷</span> Dokumentasi Terkait
+              </h3>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                {post.data.gallery.map((item: any) => (
+                  <div class="space-y-1.5">
+                    <div class="aspect-square rounded-2xl overflow-hidden bg-slate-900 shadow-xs border border-slate-200/80">
+                      <img 
+                        src={item.image} 
+                        alt={item.caption || post.data.title} 
+                        class="w-full h-full object-cover object-center hover:scale-105 transition duration-500" 
+                        loading="lazy"
+                      />
+                    </div>
+                    {item.caption && (
+                      <p class="text-[11px] text-slate-500 italic text-center leading-snug">
+                        {item.caption}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Wadah Navigasi Paginasi Halaman (Otomatis jika artikel berisi pembatas ---) -->
           <div id="pagination-wrapper" class="hidden mt-10 pt-6 border-t border-slate-100">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
               <span class="text-xs font-bold text-slate-600">
@@ -173,8 +220,8 @@ const jamRilis = post.data?.date
             <!-- Kotak Penutup Redaksi -->
             <div class="bg-emerald-50/60 rounded-2xl p-5 border border-emerald-100 flex items-center justify-between text-xs text-slate-600">
               <div>
-                <p class="font-bold text-emerald-950">Pusat Informasi Humas SMAN Alor Kecil</p>
-                <p class="text-[11px] text-slate-500 mt-0.5">Menerima rilis kegiatan kesiswaan, kejuaraan, dan publikasi pembelajaran.</p>
+                <p class="font-bold text-emerald-950">Redaksi & Publikasi SMAN Alor Kecil</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Menerima rilis kegiatan kesiswaan, kejuaraan, liputan ekskul, dan karya sastra siswa.</p>
               </div>
               <a href="/berita" class="font-bold text-emerald-700 hover:underline flex-shrink-0">
                 &larr; Indeks Berita
@@ -185,7 +232,7 @@ const jamRilis = post.data?.date
         </article>
       </div>
 
-      <!-- ==================== KOLOM KANAN (SIDEBAR BERITA ONLINE) ==================== -->
+      <!-- ==================== KOLOM KANAN (SIDEBAR) ==================== -->
       <aside class="lg:col-span-4 space-y-8">
         
         <!-- Widget 1: Berita Terkini Lainnya -->
@@ -235,7 +282,7 @@ const jamRilis = post.data?.date
             <h3 class="font-black text-xs uppercase tracking-widest text-amber-400">Papan Edaran</h3>
           </div>
           <p class="text-xs text-emerald-100 leading-relaxed mb-4">
-            Informasi surat keputusan dinas, jadwal asesmen, dan edaran beasiswa PIP resmi dapat diakses pada papan pengumuman.
+            Informasi surat edaran resmi, jadwal asesmen, dan edaran beasiswa PIP dapat diakses pada laman pengumuman.
           </p>
           <a 
             href="/pengumuman" 
@@ -251,8 +298,7 @@ const jamRilis = post.data?.date
           <h4 class="font-bold text-sm text-slate-900">Layanan Informasi</h4>
           <p class="text-xs text-slate-500 mt-1">Ada pertanyaan mengenai berita atau agenda sekolah?</p>
           <a 
-            href="https://wa.me/6281234567890" 
-            target="_blank" 
+            href="/kontak" 
             class="mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition"
           >
             Hubungi Tata Usaha (TU)
@@ -301,7 +347,6 @@ const jamRilis = post.data?.date
     const elements = Array.from(article.children);
     const hasHr = elements.some((el) => el.tagName === 'HR');
 
-    // Jika artikel tidak memiliki pembatas garis (---), biarkan normal memanjang
     if (!hasHr) return;
 
     const pages = [];
@@ -322,10 +367,8 @@ const jamRilis = post.data?.date
       pages.push(currentPageElements);
     }
 
-    // Jika hanya ada 1 halaman, batalkan paginasi
     if (pages.length <= 1) return;
 
-    // Bungkus setiap kelompok konten ke dalam kontainer halaman
     article.innerHTML = '';
     const pageNodes = pages.map((pageEls, index) => {
       const pageDiv = document.createElement('div');
@@ -396,14 +439,12 @@ const jamRilis = post.data?.date
       if (currentPageNum) currentPageNum.textContent = (index + 1).toString();
       renderControls();
 
-      // Gulir otomatis kembali ke awal artikel saat berpindah halaman
       article.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     renderControls();
   }
 
-  // Inisialisasi paginasi saat halaman siap
   initPagination();
   document.addEventListener('astro:page-load', initPagination);
 </script>

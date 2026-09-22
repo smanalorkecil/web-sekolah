@@ -15,21 +15,54 @@ public_folder: "/uploads"
 
 collections:
   - name: "berita"
-    label: "Berita & Pengumuman"
+    label: "Berita & Majalah Dinding"
     folder: "src/content/berita"
     create: true
     slug: "{{slug}}"
+    editor:
+      preview: true
     fields:
-      - { label: "Judul Berita", name: "title", widget: "string" }
-      - { label: "Tanggal", name: "date", widget: "datetime" }
-      - label: "Kategori"
+      # ==================== 1. INFORMASI UTAMA ====================
+      - { label: "Judul Berita / Tulisan", name: "title", widget: "string" }
+      - {
+          label: "Tanggal Terbit",
+          name: "date",
+          widget: "datetime",
+          format: "YYYY-MM-DD HH:mm",
+        }
+
+      - label: "Kategori Rubrik"
         name: "category"
         widget: "select"
-        options: ["Akademik", "Kesiswaan", "Prestasi", "Pengumuman"]
-      - label: "Foto Utama"
+        options:
+          - "Akademik"
+          - "Kesiswaan"
+          - "Prestasi"
+          - "Pengumuman"
+          - "Karya Siswa"
+          - "Opini Pelajar"
+          - "Liputan Khusus"
+
+      # ==================== 2. KREDIT REDAKSI (JURNALISTIK) ====================
+      - label: "Penulis / Reporter"
+        name: "author"
+        widget: "string"
+        default: "Tim Jurnalistik Siswa"
+        hint: "Contoh: Siti Rahma (Kelas XI-1) atau Tim Redaksi SMANACIL"
+
+      - label: "Fotografer / Dokumentasi"
+        name: "photographer"
+        widget: "string"
+        default: "Dokumentasi Sekolah"
+        required: false
+        hint: "Nama siswa/guru yang mengambil foto dokumentasi"
+
+      # ==================== 3. MEDIA & SAMPUL UTAMA ====================
+      - label: "Foto Utama (Thumbnail)"
         name: "thumbnail"
         widget: "image"
         required: false
+
       - label: "Fokus Posisi Thumbnail"
         name: "thumbnail_pos"
         widget: "select"
@@ -37,7 +70,47 @@ collections:
           - { label: "Atas / Wajah (Cocok untuk Foto Orang)", value: "top" }
           - { label: "Tengah (Standar)", value: "center" }
           - { label: "Bawah", value: "bottom" }
-        default: "top"
+        default: "center"
         required: false
-      - { label: "Ringkasan Singkat", name: "description", widget: "text" }
-      - { label: "Isi Berita", name: "body", widget: "markdown" }
+
+      - label: "Ringkasan Singkat (Lead Paragraph)"
+        name: "description"
+        widget: "text"
+        hint: "1–2 kalimat rangkuman pembuka untuk pengantar berita di kartu beranda"
+
+      # ==================== 4. EDITOR KONTEN LENGKAP (ALA WORDPRESS) ====================
+      - label: "Isi Berita / Naskah Artikel"
+        name: "body"
+        widget: "markdown"
+        hint: "Gunakan toolbar di atas untuk menyusun subjudul, tabel pemenang, kutipan narasumber, atau daftar poin"
+        modes: ["rich_text", "raw"]
+        buttons:
+          - bold
+          - italic
+          - strike
+          - link
+          - heading-two
+          - heading-three
+          - heading-four
+          - block-quote
+          - code
+          - num-list
+          - bullet-list
+          - table
+          - image
+
+      # ==================== 5. LAMPIRAN DOKUMENTASI TAMBAHAN ====================
+      - label: "Foto Dokumentasi Tambahan (Opsional)"
+        name: "gallery"
+        widget: "list"
+        required: false
+        collapsed: true
+        summary: "{{fields.image}}"
+        fields:
+          - { label: "Foto", name: "image", widget: "image" }
+          - {
+              label: "Keterangan Foto (Caption)",
+              name: "caption",
+              widget: "string",
+              required: false,
+            }
