@@ -2,7 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Galeri Dokumentasi Kegiatan - SMA Negeri Alor Kecil">
+<Layout 
+  title="Galeri Dokumentasi Kegiatan - SMA Negeri Alor Kecil"
+  description="Kumpulan arsip visual kegiatan pembelajaran, ekstrakurikuler, dan peristiwa penting di SMA Negeri Alor Kecil."
+>
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
     <div class="text-center max-w-2xl mx-auto mb-10">
@@ -32,14 +35,32 @@ import Layout from '../../layouts/Layout.astro';
       <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl">
         
         <!-- Header Modal -->
-        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
-          <div>
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between gap-4">
+          <div class="min-w-0 flex-1">
             <span id="modalKategori" class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block"></span>
-            <h3 id="modalJudul" class="text-base sm:text-lg font-black text-slate-900 leading-snug"></h3>
+            <h3 id="modalJudul" class="text-base sm:text-lg font-black text-slate-900 leading-snug truncate"></h3>
           </div>
-          <button id="modalClose" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition text-2xl font-bold leading-none">
-            &times;
-          </button>
+          
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Tombol Salin Tautan Album -->
+            <button 
+              id="btnShareAlbum" 
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 text-xs font-bold transition"
+              title="Salin Tautan Album"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+              <span id="shareText" class="hidden sm:inline">Salin Link</span>
+            </button>
+
+            <!-- Tombol Tutup -->
+            <button 
+              id="modalClose" 
+              class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition text-2xl font-bold leading-none"
+              aria-label="Tutup"
+            >
+              &times;
+            </button>
+          </div>
         </div>
 
         <!-- Kontainer Grid Foto 1:1 Presisi -->
@@ -61,10 +82,21 @@ import Layout from '../../layouts/Layout.astro';
     const modalKategori = document.getElementById('modalKategori')!;
     const modalFotoList = document.getElementById('modalFotoList')!;
     const modalClose = document.getElementById('modalClose')!;
+    const btnShareAlbum = document.getElementById('btnShareAlbum')!;
+    const shareText = document.getElementById('shareText')!;
 
     let dataAlbum: any[] = [];
+    let activeSlug: string = '';
 
-    // Format tanggal Indonesia
+    // Fungsi konversi judul menjadi slug URL
+    function buatSlug(teks: string) {
+      return teks
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    // Fungsi format tanggal Indonesia
     function formatTgl(tglStr: string) {
       if (!tglStr) return '-';
       const date = new Date(tglStr);
@@ -76,15 +108,14 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
+    // Ambil data Drive
     fetch(SCRIPT_URL + '?tab=galeri')
       .then((res) => res.json())
       .then((data) => {
         galeriLoading.classList.add('hidden');
 
         if (Array.isArray(data) && data.length > 0) {
-          // Pengaman ekstra: pastikan selalu urut dari yang paling baru
           data.sort((a, b) => new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime());
-          
           dataAlbum = data;
           galeriGrid.classList.remove('hidden');
           galeriGrid.innerHTML = '';
@@ -128,11 +159,15 @@ import Layout from '../../layouts/Layout.astro';
             `;
 
             card.addEventListener('click', () => {
-              bukaModalAlbum(idx);
+              bukaModalAlbum(idx, true);
             });
 
             galeriGrid.appendChild(card);
           });
+
+          // Pengecekan apakah halaman dibuka dengan parameter khusus (?album=slug)
+          periksaParameterUrl();
+
         } else {
           galeriEmpty.classList.remove('hidden');
         }
@@ -141,11 +176,12 @@ import Layout from '../../layouts/Layout.astro';
         galeriLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal memuat album galeri dari Google Drive.</p>';
       });
 
-    // FUNGSI BUKA MODAL DENGAN FORMAT FOTO 1:1 & CENTER
-    function bukaModalAlbum(index: number) {
+    // FUNGSI BUKA MODAL
+    function bukaModalAlbum(index: number, updateUrl = true) {
       const album = dataAlbum[index];
       if (!album) return;
 
+      activeSlug = buatSlug(album.judul);
       modalJudul.innerText = album.judul;
       modalKategori.innerText = `${album.kategori || 'Kegiatan'} • ${formatTgl(album.tanggal)}`;
       modalFotoList.innerHTML = '';
@@ -159,11 +195,8 @@ import Layout from '../../layouts/Layout.astro';
           item.href = fullUrl;
           item.target = '_blank';
           item.rel = 'noopener noreferrer';
+          item.className = 'aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 block shadow-xs hover:shadow-md transition group relative';
           
-          // aspect-square = Rasio 1:1 sempurna
-          item.className = 'aspect-square w-full rounded-2xl overflow-hidden bg-slate-100 block shadow-xs hover:shadow-md transition group relative';
-          
-          // object-cover object-center = Mengisi kotak 1:1 dengan fokus tepat di tengah
           item.innerHTML = `
             <img 
               src="${thumbUrl}" 
@@ -178,14 +211,66 @@ import Layout from '../../layouts/Layout.astro';
       }
 
       modalAlbum.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      // Perbarui URL browser tanpa memuat ulang halaman
+      if (updateUrl) {
+        const urlBaru = new URL(window.location.href);
+        urlBaru.searchParams.set('album', activeSlug);
+        window.history.pushState({ modalOpen: true, slug: activeSlug }, '', urlBaru.toString());
+      }
     }
 
-    modalClose.addEventListener('click', () => {
+    // FUNGSI TUTUP MODAL
+    function tutupModalAlbum(updateUrl = true) {
       modalAlbum.classList.add('hidden');
+      document.body.style.overflow = '';
+
+      if (updateUrl) {
+        const urlBersih = new URL(window.location.href);
+        urlBersih.searchParams.delete('album');
+        window.history.pushState({}, '', urlBersih.pathname);
+      }
+    }
+
+    // CEK PARAMETER URL SAAT PERTAMA KALI MEMBUKA HALAMAN
+    function periksaParameterUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetAlbum = urlParams.get('album');
+
+      if (targetAlbum) {
+        const indexKetemu = dataAlbum.findIndex((alb) => buatSlug(alb.judul) === targetAlbum);
+        if (indexKetemu !== -1) {
+          bukaModalAlbum(indexKetemu, false);
+        }
+      }
+    }
+
+    // LISTENER TOMBOL TUTUP
+    modalClose.addEventListener('click', () => tutupModalAlbum(true));
+    modalAlbum.addEventListener('click', (e) => {
+      if (e.target === modalAlbum) tutupModalAlbum(true);
     });
 
-    modalAlbum.addEventListener('click', (e) => {
-      if (e.target === modalAlbum) modalAlbum.classList.add('hidden');
+    // MENDUKUNG TOMBOL BACK PADA PERAMBAN / HP
+    window.addEventListener('popstate', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (!urlParams.get('album')) {
+        tutupModalAlbum(false);
+      } else {
+        periksaParameterUrl();
+      }
+    });
+
+    // FITUR SALIN LINK KE WHATSAPP
+    btnShareAlbum?.addEventListener('click', () => {
+      const linkLengkap = `${window.location.origin}${window.location.pathname}?album=${activeSlug}`;
+      navigator.clipboard.writeText(linkLengkap).then(() => {
+        if (shareText) shareText.textContent = 'Tersalin!';
+        setTimeout(() => {
+          if (shareText) shareText.textContent = 'Salin Link';
+        }, 2000);
+      });
     });
   </script>
 </Layout>
