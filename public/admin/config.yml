@@ -24,12 +24,7 @@ collections:
     fields:
       # ==================== 1. INFORMASI UTAMA ====================
       - { label: "Judul Berita / Tulisan", name: "title", widget: "string" }
-      - {
-          label: "Tanggal Terbit",
-          name: "date",
-          widget: "datetime",
-          format: "YYYY-MM-DD HH:mm",
-        }
+      - { label: "Tanggal Terbit", name: "date", widget: "datetime" }
 
       - label: "Kategori Rubrik"
         name: "category"
@@ -78,26 +73,23 @@ collections:
         widget: "text"
         hint: "1–2 kalimat rangkuman pembuka untuk pengantar berita di kartu beranda"
 
-      # ==================== 4. EDITOR KONTEN LENGKAP (ALA WORDPRESS) ====================
+      # ==================== 4. EDITOR KONTEN LENGKAP ====================
       - label: "Isi Berita / Naskah Artikel"
         name: "body"
         widget: "markdown"
-        hint: "Gunakan toolbar di atas untuk menyusun subjudul, tabel pemenang, kutipan narasumber, atau daftar poin"
         modes: ["rich_text", "raw"]
         buttons:
           - bold
           - italic
-          - strike
+          - strikethrough
           - link
           - heading-two
           - heading-three
           - heading-four
-          - block-quote
+          - quote
           - code
-          - num-list
-          - bullet-list
-          - table
-          - image
+          - bulleted-list
+          - numbered-list
 
       # ==================== 5. LAMPIRAN DOKUMENTASI TAMBAHAN ====================
       - label: "Foto Dokumentasi Tambahan (Opsional)"
