@@ -30,8 +30,8 @@ import Layout from '../../layouts/Layout.astro';
       <p class="text-slate-400 text-sm font-medium">Belum ada folder dokumentasi kegiatan di Google Drive.</p>
     </div>
 
-    <!-- Modal Popup Tampilan Seluruh Foto -->
-    <div id="modalAlbum" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs hidden flex items-center justify-center p-4 sm:p-6">
+    <!-- ==================== 1. MODAL ALBUM (DAFTAR GRID FOTO 1:1) ==================== -->
+    <div id="modalAlbum" class="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-xs hidden flex items-center justify-center p-4 sm:p-6">
       <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl">
         
         <!-- Header Modal -->
@@ -52,7 +52,7 @@ import Layout from '../../layouts/Layout.astro';
               <span id="shareText" class="hidden sm:inline">Salin Link</span>
             </button>
 
-            <!-- Tombol Tutup -->
+            <!-- Tombol Tutup Album -->
             <button 
               id="modalClose" 
               class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition text-2xl font-bold leading-none"
@@ -69,14 +69,66 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- ==================== 2. LIGHTBOX VIEWER ALA INSTAGRAM ==================== -->
+    <div 
+      id="photoLightbox" 
+      class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden select-none touch-pan-y"
+      role="dialog"
+      aria-modal="true"
+    >
+      <!-- Bar Atas: Counter Foto & Tombol Tutup -->
+      <div class="absolute top-0 inset-x-0 p-4 sm:p-6 flex items-center justify-between text-white z-20 bg-gradient-to-b from-black/60 to-transparent">
+        <span id="lightboxCounter" class="text-xs sm:text-sm font-mono tracking-wider font-semibold text-slate-200"></span>
+        <button 
+          id="closeLightbox" 
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition text-2xl font-bold"
+          aria-label="Tutup Tampilan Penuh"
+        >
+          &times;
+        </button>
+      </div>
+
+      <!-- Tombol Prev (Kiri) -->
+      <button 
+        id="btnPrevPhoto" 
+        class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm cursor-pointer shadow-lg"
+        aria-label="Foto Sebelumnya"
+      >
+        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <!-- Tombol Next (Kanan) -->
+      <button 
+        id="btnNextPhoto" 
+        class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm cursor-pointer shadow-lg"
+        aria-label="Foto Berikutnya"
+      >
+        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </button>
+
+      <!-- Area Tampilan Foto Tengah -->
+      <div id="lightboxArea" class="w-full h-full flex items-center justify-center p-4 sm:p-12">
+        <img 
+          id="lightboxImage" 
+          src="" 
+          alt="Dokumentasi Kegiatan" 
+          referrerpolicy="no-referrer"
+          class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl transition-opacity duration-200" 
+        />
+      </div>
+    </div>
+
   </main>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
+    
+    // Elemen DOM Halaman
     const galeriLoading = document.getElementById('galeriLoading')!;
     const galeriGrid = document.getElementById('galeriGrid')!;
     const galeriEmpty = document.getElementById('galeriEmpty')!;
 
+    // Elemen DOM Modal Album
     const modalAlbum = document.getElementById('modalAlbum')!;
     const modalJudul = document.getElementById('modalJudul')!;
     const modalKategori = document.getElementById('modalKategori')!;
@@ -85,10 +137,20 @@ import Layout from '../../layouts/Layout.astro';
     const btnShareAlbum = document.getElementById('btnShareAlbum')!;
     const shareText = document.getElementById('shareText')!;
 
+    // Elemen DOM Lightbox Viewer
+    const photoLightbox = document.getElementById('photoLightbox')!;
+    const lightboxImage = document.getElementById('lightboxImage') as HTMLImageElement;
+    const lightboxCounter = document.getElementById('lightboxCounter')!;
+    const closeLightbox = document.getElementById('closeLightbox')!;
+    const btnPrevPhoto = document.getElementById('btnPrevPhoto')!;
+    const btnNextPhoto = document.getElementById('btnNextPhoto')!;
+    const lightboxArea = document.getElementById('lightboxArea')!;
+
     let dataAlbum: any[] = [];
+    let currentAlbumIndex: number = -1;
+    let currentPhotoIndex: number = 0;
     let activeSlug: string = '';
 
-    // Fungsi konversi judul menjadi slug URL
     function buatSlug(teks: string) {
       return teks
         .toLowerCase()
@@ -96,7 +158,6 @@ import Layout from '../../layouts/Layout.astro';
         .replace(/(^-|-$)/g, '');
     }
 
-    // Fungsi format tanggal Indonesia
     function formatTgl(tglStr: string) {
       if (!tglStr) return '-';
       const date = new Date(tglStr);
@@ -108,7 +169,7 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
-    // Ambil data Drive
+    // Ambil Data Album dari Google Apps Script
     fetch(SCRIPT_URL + '?tab=galeri')
       .then((res) => res.json())
       .then((data) => {
@@ -165,9 +226,7 @@ import Layout from '../../layouts/Layout.astro';
             galeriGrid.appendChild(card);
           });
 
-          // Pengecekan apakah halaman dibuka dengan parameter khusus (?album=slug)
           periksaParameterUrl();
-
         } else {
           galeriEmpty.classList.remove('hidden');
         }
@@ -176,8 +235,9 @@ import Layout from '../../layouts/Layout.astro';
         galeriLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal memuat album galeri dari Google Drive.</p>';
       });
 
-    // FUNGSI BUKA MODAL
+    // BUKA MODAL ALBUM (Menampilkan semua foto 1:1)
     function bukaModalAlbum(index: number, updateUrl = true) {
+      currentAlbumIndex = index;
       const album = dataAlbum[index];
       if (!album) return;
 
@@ -187,15 +247,12 @@ import Layout from '../../layouts/Layout.astro';
       modalFotoList.innerHTML = '';
 
       if (Array.isArray(album.foto)) {
-        album.foto.forEach((itemFoto: any) => {
-          const fullUrl = typeof itemFoto === 'string' ? itemFoto : itemFoto.url;
+        album.foto.forEach((itemFoto: any, fotoIdx: number) => {
           const thumbUrl = typeof itemFoto === 'string' ? itemFoto : (itemFoto.thumbnail || itemFoto.url);
 
-          const item = document.createElement('a');
-          item.href = fullUrl;
-          item.target = '_blank';
-          item.rel = 'noopener noreferrer';
-          item.className = 'aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 block shadow-xs hover:shadow-md transition group relative';
+          // Gunakan tag DIV/BUTTON yang memicu Lightbox (bukan tag <a> open tab baru)
+          const item = document.createElement('div');
+          item.className = 'aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 block shadow-xs hover:shadow-md transition group relative cursor-pointer';
           
           item.innerHTML = `
             <img 
@@ -205,7 +262,16 @@ import Layout from '../../layouts/Layout.astro';
               loading="lazy" 
               referrerpolicy="no-referrer"
             />
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+              <svg class="w-6 h-6 text-white drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
           `;
+
+          // Ketuk foto untuk membuka Lightbox viewer
+          item.addEventListener('click', () => {
+            bukaLightbox(fotoIdx);
+          });
+
           modalFotoList.appendChild(item);
         });
       }
@@ -213,7 +279,6 @@ import Layout from '../../layouts/Layout.astro';
       modalAlbum.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
 
-      // Perbarui URL browser tanpa memuat ulang halaman
       if (updateUrl) {
         const urlBaru = new URL(window.location.href);
         urlBaru.searchParams.set('album', activeSlug);
@@ -221,7 +286,6 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    // FUNGSI TUTUP MODAL
     function tutupModalAlbum(updateUrl = true) {
       modalAlbum.classList.add('hidden');
       document.body.style.overflow = '';
@@ -233,7 +297,111 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    // CEK PARAMETER URL SAAT PERTAMA KALI MEMBUKA HALAMAN
+    // ==================== LOGIKA LIGHTBOX ALA INSTAGRAM ====================
+    function bukaLightbox(fotoIdx: number) {
+      currentPhotoIndex = fotoIdx;
+      tampilkanFotoLightbox();
+      photoLightbox.classList.remove('hidden');
+      photoLightbox.classList.add('flex');
+    }
+
+    function tutupLightboxModal() {
+      photoLightbox.classList.add('hidden');
+      photoLightbox.classList.remove('flex');
+    }
+
+    function tampilkanFotoLightbox() {
+      const album = dataAlbum[currentAlbumIndex];
+      if (!album || !Array.isArray(album.foto) || album.foto.length === 0) return;
+
+      const foto = album.foto[currentPhotoIndex];
+      const fullUrl = typeof foto === 'string' ? foto : foto.url;
+
+      lightboxImage.style.opacity = '0.3';
+      lightboxImage.src = fullUrl;
+      lightboxImage.onload = () => {
+        lightboxImage.style.opacity = '1';
+      };
+
+      lightboxCounter.innerText = `Foto ${currentPhotoIndex + 1} dari ${album.foto.length}`;
+    }
+
+    function fotoSebelumnya() {
+      const album = dataAlbum[currentAlbumIndex];
+      if (!album || !album.foto) return;
+      currentPhotoIndex = (currentPhotoIndex - 1 + album.foto.length) % album.foto.length;
+      tampilkanFotoLightbox();
+    }
+
+    function fotoBerikutnya() {
+      const album = dataAlbum[currentAlbumIndex];
+      if (!album || !album.foto) return;
+      currentPhotoIndex = (currentPhotoIndex + 1) % album.foto.length;
+      tampilkanFotoLightbox();
+    }
+
+    // Tombol Navigasi Lightbox
+    btnPrevPhoto.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fotoSebelumnya();
+    });
+
+    btnNextPhoto.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fotoBerikutnya();
+    });
+
+    closeLightbox.addEventListener('click', tutupLightboxModal);
+
+    // Ketuk area kosong di luar foto untuk menutup lightbox
+    photoLightbox.addEventListener('click', (e) => {
+      if (e.target === photoLightbox || e.target === lightboxArea) {
+        tutupLightboxModal();
+      }
+    });
+
+    // FITUR GESER (SWIPE GESTURE) DI LAYAR PONSEL / HP
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    photoLightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    photoLightbox.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const ambangBatas = 45; // Jarak minimal sapuan jari (pixel)
+      if (touchEndX < touchStartX - ambangBatas) {
+        // Geser ke kiri -> Foto berikutnya
+        fotoBerikutnya();
+      }
+      if (touchEndX > touchStartX + ambangBatas) {
+        // Geser ke kanan -> Foto sebelumnya
+        fotoSebelumnya();
+      }
+    }
+
+    // DUKUNGAN KEYBOARD (Panah Kiri, Kanan, Escape)
+    window.addEventListener('keydown', (e) => {
+      // Jika Lightbox sedang terbuka
+      if (!photoLightbox.classList.contains('hidden')) {
+        if (e.key === 'Escape') tutupLightboxModal();
+        if (e.key === 'ArrowLeft') fotoSebelumnya();
+        if (e.key === 'ArrowRight') fotoBerikutnya();
+        return;
+      }
+
+      // Jika hanya Modal Album yang terbuka
+      if (!modalAlbum.classList.contains('hidden')) {
+        if (e.key === 'Escape') tutupModalAlbum(true);
+      }
+    });
+
+    // Pengecekan URL Parameter awal
     function periksaParameterUrl() {
       const urlParams = new URLSearchParams(window.location.search);
       const targetAlbum = urlParams.get('album');
@@ -246,23 +414,23 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    // LISTENER TOMBOL TUTUP
+    // Modal Album Event Listeners
     modalClose.addEventListener('click', () => tutupModalAlbum(true));
     modalAlbum.addEventListener('click', (e) => {
       if (e.target === modalAlbum) tutupModalAlbum(true);
     });
 
-    // MENDUKUNG TOMBOL BACK PADA PERAMBAN / HP
     window.addEventListener('popstate', () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (!urlParams.get('album')) {
+        tutupLightboxModal();
         tutupModalAlbum(false);
       } else {
         periksaParameterUrl();
       }
     });
 
-    // FITUR SALIN LINK KE WHATSAPP
+    // Salin Link Album
     btnShareAlbum?.addEventListener('click', () => {
       const linkLengkap = `${window.location.origin}${window.location.pathname}?album=${activeSlug}`;
       navigator.clipboard.writeText(linkLengkap).then(() => {
