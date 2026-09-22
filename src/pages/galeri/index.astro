@@ -24,7 +24,7 @@ import Layout from '../../layouts/Layout.astro';
 
     <!-- State Kosong -->
     <div id="galeriEmpty" class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200 hidden">
-      <p class="text-slate-400 text-sm font-medium">Belum ada album foto yang diterbitkan di Spreadsheet.</p>
+      <p class="text-slate-400 text-sm font-medium">Belum ada folder dokumentasi kegiatan di Google Drive.</p>
     </div>
 
     <!-- Modal Popup Tampilan Seluruh Foto -->
@@ -59,7 +59,19 @@ import Layout from '../../layouts/Layout.astro';
 
     let dataAlbum: any[] = [];
 
-    fetch(SCRIPT_URL + '?tab=Galeri')
+    // Fungsi format tanggal Indonesia
+    function formatTgl(tglStr: string) {
+      if (!tglStr) return '-';
+      const date = new Date(tglStr);
+      if (isNaN(date.getTime())) return tglStr;
+      return date.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    }
+
+    fetch(SCRIPT_URL + '?tab=galeri')
       .then((res) => res.json())
       .then((data) => {
         galeriLoading.classList.add('hidden');
@@ -73,24 +85,27 @@ import Layout from '../../layouts/Layout.astro';
             const card = document.createElement('div');
             card.className = 'bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer';
             
+            const coverUrl = album.fotoSampul || album.cover || (album.foto && album.foto[0]?.thumbnail) || '/logo.png';
+            const jumlah = album.totalFoto || album.jumlahFoto || (album.foto ? album.foto.length : 0);
+            const tanggalFormatted = formatTgl(album.tanggal);
+
             card.innerHTML = `
               <div class="relative aspect-[4/3] overflow-hidden bg-slate-900">
-                <img src="${album.cover}" alt="${album.judul}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                <img src="${coverUrl}" alt="${album.judul}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                 <span class="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-lg">
-                  📷 ${album.jumlahFoto} Foto
+                  📷 ${jumlah} Foto
                 </span>
                 <span class="absolute bottom-3 left-3 bg-emerald-700/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase">
-                  ${album.kategori}
+                  ${album.kategori || 'Kegiatan'}
                 </span>
               </div>
-              <div class="p-5 flex flex-col flex-1">
-                <span class="text-[11px] text-slate-400 font-medium mb-1.5">📅 ${album.tanggal}</span>
-                <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition line-clamp-2">
-                  ${album.judul}
-                </h3>
-                <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
-                  ${album.deskripsi}
-                </p>
+              <div class="p-5 flex flex-col flex-1 justify-between">
+                <div>
+                  <span class="text-[11px] text-slate-400 font-medium mb-1.5 block">📅 ${tanggalFormatted}</span>
+                  <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition line-clamp-2">
+                    ${album.judul}
+                  </h3>
+                </div>
                 <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700">
                   <span>Buka Seluruh Album</span>
                   <span>&rarr;</span>
@@ -108,7 +123,7 @@ import Layout from '../../layouts/Layout.astro';
           galeriEmpty.classList.remove('hidden');
         }
       })
-      .catch((err) => {
+      .catch(() => {
         galeriLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal memuat album galeri dari Google Drive.</p>';
       });
 
@@ -117,17 +132,25 @@ import Layout from '../../layouts/Layout.astro';
       if (!album) return;
 
       modalJudul.innerText = album.judul;
-      modalKategori.innerText = album.kategori + ' • ' + album.tanggal;
+      modalKategori.innerText = `${album.kategori || 'Kegiatan'} • ${formatTgl(album.tanggal)}`;
       modalFotoList.innerHTML = '';
 
-      album.foto.forEach((fotoUrl: string) => {
-        const item = document.createElement('a');
-        item.href = fotoUrl;
-        item.target = '_blank';
-        item.className = 'aspect-square rounded-2xl overflow-hidden bg-slate-100 block shadow-xs hover:opacity-90 transition';
-        item.innerHTML = `<img src="${fotoUrl}" class="w-full h-full object-cover" loading="lazy" />`;
-        modalFotoList.appendChild(item);
-      });
+      if (Array.isArray(album.foto)) {
+        album.foto.forEach((itemFoto: any) => {
+          const fullUrl = typeof itemFoto === 'string' ? itemFoto : itemFoto.url;
+          const thumbUrl = typeof itemFoto === 'string' ? itemFoto : (itemFoto.thumbnail || itemFoto.url);
+
+          const item = document.createElement('a');
+          item.href = fullUrl;
+          item.target = '_blank';
+          item.rel = 'noopener noreferrer';
+          item.className = 'aspect-square rounded-2xl overflow-hidden bg-slate-100 block shadow-xs hover:opacity-90 transition group relative';
+          item.innerHTML = `
+            <img src="${thumbUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy" />
+          `;
+          modalFotoList.appendChild(item);
+        });
+      }
 
       modalAlbum.classList.remove('hidden');
     }

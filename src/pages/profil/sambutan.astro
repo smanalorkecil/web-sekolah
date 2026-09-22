@@ -7,16 +7,17 @@ const kepalaSekolah = {
   nip: "19770310 200212 1 011",
   pangkatGolongan: "Pembina Tk. I / IV/a",
   jabatan: "Kepala SMA Negeri Alor Kecil",
-  foto: "https://media.discordapp.net/attachments/381265047957012484/1551432779537977405/9510047C-9FCD-427A-AC5E-AC78F6C21D76.png?ex=6ab1f3de&is=6ab0a25e&hm=809e1121eabd202ba8d181bfe6a8fd645ad6bf83b2c197f9eb0a9d18a3cce66c&=&format=webp&quality=lossless", // Ganti dengan path foto resmi di /public
+  foto: "/admin/kepala-sekolah.jpg", // Jalur resmi gambar di folder public/admin/
   periode: "2013 - Sekarang"
 };
 ---
 
 <Layout 
   title="Sambutan Kepala Sekolah - SMA Negeri Alor Kecil" 
-  description="Prakata dan sambutan resmi Kepala SMA Negeri Alor Kecil mengenai visi, misi, dan arah transformasi pendidikan sekolah."
+  description="Prakata dan sambutan resmi Kepala SMA Negeri Alor Kecil mengenai visi, arah transformasi, dan penguatan mutu pendidikan sekolah."
+  image={kepalaSekolah.foto}
 >
-  <!-- Breadcrumb -->
+  <!-- 1. BREADCRUMB NAVIGASI -->
   <div class="bg-slate-50 border-b border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
       <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
@@ -36,21 +37,22 @@ const kepalaSekolah = {
       <aside class="lg:col-span-4 lg:sticky lg:top-24">
         <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs text-center">
           
-          <!-- Frame Foto Formal -->
-          <div class="relative w-48 h-60 sm:w-56 sm:h-72 mx-auto rounded-2xl overflow-hidden shadow-md border-4 border-white ring-1 ring-slate-200 mb-6 bg-slate-100">
+          <!-- Frame Foto Rasio 3:4 Presisi -->
+          <div class="relative w-52 sm:w-60 aspect-[3/4] mx-auto rounded-2xl overflow-hidden shadow-md border-4 border-emerald-50 ring-1 ring-slate-200 mb-6 bg-emerald-950 group">
             <img 
               src={kepalaSekolah.foto} 
               alt={kepalaSekolah.nama} 
-              class="w-full h-full object-cover object-top"
+              class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500"
+              loading="eager"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/60 via-transparent to-transparent"></div>
-            <span class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap shadow-xs">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+            <span class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap shadow-xs">
               Kepala Sekolah
             </span>
           </div>
 
           <!-- Keterangan Identitas -->
-          <h2 class="text-lg font-black text-slate-900 leading-snug">
+          <h2 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">
             {kepalaSekolah.nama}
           </h2>
           <p class="text-xs font-mono text-slate-500 mt-1">
@@ -60,19 +62,33 @@ const kepalaSekolah = {
             {kepalaSekolah.pangkatGolongan}
           </div>
 
-          <div class="mt-6 pt-6 border-t border-slate-100 text-left space-y-2.5 text-xs text-slate-600">
-            <div class="flex justify-between">
+          <!-- Detail Penugasan -->
+          <div class="mt-6 pt-6 border-t border-slate-100 text-left space-y-3 text-xs text-slate-600">
+            <div class="flex justify-between items-center">
               <span class="text-slate-400">Instansi:</span>
               <span class="font-bold text-slate-800">SMAN Alor Kecil</span>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between items-center">
               <span class="text-slate-400">Wilayah:</span>
               <span class="font-semibold text-slate-700">Kabupaten Alor, NTT</span>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between items-center">
               <span class="text-slate-400">Masa Tugas:</span>
               <span class="font-semibold text-slate-700">{kepalaSekolah.periode}</span>
             </div>
+          </div>
+
+          <!-- Tombol Cepat Menghubungi Sekolah -->
+          <div class="mt-6 pt-4 border-t border-slate-100">
+            <a 
+              href="https://wa.me/6281234567890" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 text-xs font-bold transition border border-slate-200"
+            >
+              <span>Hubungi Layanan Sekolah</span>
+              <span>&rarr;</span>
+            </a>
           </div>
 
         </div>
@@ -84,56 +100,66 @@ const kepalaSekolah = {
           
           <!-- Judul Header -->
           <header class="border-b border-slate-100 pb-6 mb-6">
-            <span class="text-xs font-black text-emerald-700 uppercase tracking-widest block mb-1">Prakata Pimpinan</span>
+            <span class="inline-block bg-emerald-100 text-emerald-800 text-[11px] font-black px-3 py-1 rounded-md uppercase tracking-wider mb-2">
+              Prakata Pimpinan
+            </span>
             <h1 class="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
               Membangun Generasi Cerdas Berkarakter Berakar pada Kearifan Lokal
             </h1>
           </header>
 
           <!-- Salam Pembuka -->
-          <p class="text-base sm:text-lg font-semibold text-slate-900 italic font-serif">
-            "Salam sejahtera bagi kita semua, Tabea, Salve, Om Swastyastu, Namo Buddhaya, Salam Kebajikan."
+          <p class="text-base sm:text-lg font-semibold text-slate-900 italic font-serif leading-relaxed">
+            "Assalamu’alaikum Warahmatullahi Wabarakatuh, Salam Sejahtera, Salve, Om Swastiastu, Namo Buddhaya, Salam Kebajikan bagi kita semua."
           </p>
 
           <!-- Paragraf Isi Sambutan -->
           <p class="text-sm sm:text-base leading-relaxed text-justify">
-            Puji dan syukur kita panjatkan ke hadirat Tuhan Yang Maha Esa atas limpahan rahmat dan karunia-Nya, sehingga portal digital resmi <strong>SMA Negeri Alor Kecil</strong> ini dapat hadir sebagai wadah representasi sekolah, media transparansi informasi, serta sarana komunikasi edukatif antara sekolah, orang tua, peserta didik, dan masyarakat luas.
+            Puji dan syukur kita panjatkan ke hadirat Tuhan Yang Maha Esa atas limpahan rahmat dan karunia-Nya, sehingga portal digital resmi <strong>SMA Negeri Alor Kecil</strong> ini dapat hadir sebagai representasi sekolah, media transparansi publik, serta sarana komunikasi edukatif antara sekolah, orang tua, peserta didik, dan masyarakat luas.
           </p>
 
           <p class="text-sm sm:text-base leading-relaxed text-justify">
-            Dunia pendidikan saat ini melaju pesat seiring akselerasi teknologi dan implementasi <strong>Kurikulum Merdeka</strong>. Kami di SMA Negeri Alor Kecil berkomitmen penuh untuk menghadirkan ruang belajar yang humanis, transformatif, dan berdaya saing, tanpa menanggalkan nilai-nilai luhur kearifan budaya daerah Alor serta semangat <em>Profil Pelajar Pancasila</em>.
+            Dunia pendidikan saat ini melaju sangat dinamis seiring akselerasi teknologi dan implementasi <strong>Kurikulum Merdeka</strong>. Kami di SMA Negeri Alor Kecil berkomitmen penuh menghadirkan ruang belajar yang humanis, transformatif, dan berdaya saing, tanpa menanggalkan nilai-nilai luhur kearifan budaya daerah Alor serta penguatan karakter <em>Profil Pelajar Pancasila</em>.
           </p>
 
-          <!-- Kotak Kutipan / Visi -->
+          <!-- Kotak Kutipan / Filosofi -->
           <div class="bg-emerald-50/70 border-l-4 border-emerald-700 rounded-r-2xl p-5 my-6">
-            <p class="text-sm font-semibold text-emerald-950 italic">
-              "Setiap peserta didik memiliki potensi istimewa. Tugas kami bersama dewan guru adalah menuntun potensi kodrat tersebut agar mereka mampu mandiri, berbudi pekerti luhur, dan siap menghadapi tantangan masa depan."
+            <p class="text-sm sm:text-base font-semibold text-emerald-950 italic">
+              “Setiap peserta didik memiliki potensi istimewa. Tugas kami bersama seluruh dewan guru adalah menuntun potensi kodrat tersebut agar mereka mampu mandiri, berbudi pekerti luhur, dan siap menjawab tantangan masa depan.”
             </p>
           </div>
 
           <p class="text-sm sm:text-base leading-relaxed text-justify">
-            Digitalisasi layanan sekolah—mulai dari sistem presensi digital, direktori civitas, pelaporan capaian kompetensi, hingga keterbukaan warta kegiatan—merupakan wujud kesungguhan kami dalam menghadirkan tata kelola sekolah yang akuntabel, adaptif, dan transparan.
+            Digitalisasi layanan sekolah—mulai dari integrasi basis data sarana prasarana, transparansi pelaporan capaian kompetensi, hingga keterbukaan warta kegiatan—merupakan wujud kesungguhan kami dalam mewujudkan tata kelola satuan pendidikan yang akuntabel, adaptif, dan modern.
           </p>
 
           <p class="text-sm sm:text-base leading-relaxed text-justify">
-            Akhir kata, kami menyampaikan penghargaan setinggi-tingginya kepada seluruh dewan guru, tenaga kependidikan, komite sekolah, dan orang tua wali atas sinergi yang terus terbangun. Mari bersama-sama melangkah membawa SMA Negeri Alor Kecil menjadi sekolah yang unggul dalam prestasi dan kokoh dalam budi pekerti.
+            Akhir kata, kami menyampaikan penghargaan setinggi-tingginya kepada dewan guru, tenaga kependidikan, komite sekolah, dan orang tua wali murid atas sinergi yang terus terjaga kokoh. Mari bersama-sama bergandengan tangan membawa SMA Negeri Alor Kecil semakin berprestasi dan bermartabat.
           </p>
 
           <!-- Tanda Tangan & Penutup Resmi -->
           <div class="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
             <div class="text-xs text-slate-500">
               <span class="block font-semibold text-slate-700">Dikeluarkan di: Alor Kecil</span>
-              <span>Kecamatan Alor Barat Laut, Kab. Alor</span>
+              <span>Kecamatan Alor Barat Laut, Kab. Alor, NTT</span>
             </div>
             
             <div class="text-left sm:text-right">
               <p class="text-xs text-slate-500">Kepala Sekolah,</p>
+              
+              <!-- Ruang Tanda Tangan -->
               <div class="h-16 flex items-center justify-start sm:justify-end py-2">
-                <!-- Ruang tanda tangan atau stempel digital jika ada -->
-                <span class="text-xs font-mono text-slate-300 italic">[ Tanda Tangan Digital ]</span>
+                <span class="text-xs font-mono text-slate-300 italic tracking-wider">
+                  [ Tanda Tangan Resmi ]
+                </span>
               </div>
-              <p class="text-sm font-black text-slate-900 underline underline-offset-4">{kepalaSekolah.nama}</p>
-              <p class="text-xs font-mono text-slate-500 mt-0.5">NIP. {kepalaSekolah.nip}</p>
+              
+              <p class="text-sm font-black text-slate-900 underline underline-offset-4">
+                {kepalaSekolah.nama}
+              </p>
+              <p class="text-xs font-mono text-slate-500 mt-0.5">
+                NIP. {kepalaSekolah.nip}
+              </p>
             </div>
           </div>
 
