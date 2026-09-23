@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// 1. Mengimpor data Galeri dari src/data/galeri.ts (Mendukung named maupun default export)
+// 1. Mengimpor data Galeri dari src/data/galeri.ts
 import * as galeriModule from '../data/galeri';
 const semuaGaleri = (galeriModule.daftarGaleri || galeriModule.galeri || galeriModule.galeriData || galeriModule.default || []) as any[];
 const galeriPreview = semuaGaleri.slice(0, 4);
@@ -46,8 +46,6 @@ const bannerSlides = [
   }
 ];
 
-
-
 // 5. Data Program Unggulan
 const programUnggulan = [
   { ikon: "💡", nama: "Program Riset & Sains", desc: "Pembinaan karya ilmiah remaja, olimpiade sains nasional, dan penguasaan teknologi dasar." },
@@ -72,17 +70,17 @@ const ekskulList = [
 
 <Layout title="SMA Negeri Alor Kecil - Berkarakter, Unggul, Berdaya Saing">
 
-  <!-- ==================== 1. SLIDER HERO BANNER ==================== -->
-  <section class="relative bg-slate-950 h-[560px] sm:h-[600px] lg:h-[660px] overflow-hidden">
+  <!-- ==================== 1. SLIDER HERO BANNER (DENGAN ZOOM SLOW-MOTION) ==================== -->
+  <section class="relative bg-slate-950 h-[560px] sm:h-[600px] lg:h-[660px] overflow-hidden select-none">
     <div id="hero-slider" class="relative w-full h-full">
       {bannerSlides.map((slide, index) => (
         <div 
-          class={`slide-banner absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+          class={`slide-banner absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100 z-10 is-active' : 'opacity-0 z-0 pointer-events-none'}`}
         >
           <img 
             src={slide.image} 
             alt={slide.title} 
-            class="w-full h-full object-cover object-center"
+            class="slide-img w-full h-full object-cover object-center transform transition-transform duration-[8000ms] ease-out"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/95 via-slate-950/80 to-slate-950/35"></div>
 
@@ -104,7 +102,7 @@ const ekskulList = [
                 <div class="mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
                   <a 
                     href={slide.btnLink} 
-                    class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition shadow-lg shadow-amber-500/20 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2"
+                    class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/20 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 hover:scale-105 active:scale-95"
                   >
                     <span>{slide.btnText}</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
@@ -112,7 +110,7 @@ const ekskulList = [
                   
                   <a 
                     href="/profil/sambutan" 
-                    class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition text-xs sm:text-sm uppercase tracking-wider"
+                    class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition-all duration-300 text-xs sm:text-sm uppercase tracking-wider hover:scale-105 active:scale-95"
                   >
                     Profil Sekolah
                   </a>
@@ -124,24 +122,24 @@ const ekskulList = [
       ))}
     </div>
 
-    <!-- Tombol Panah Kiri (Tablet & Desktop) -->
+    <!-- Tombol Panah Kiri -->
     <button 
       id="btnPrevSlide"
       type="button"
       aria-label="Slide Sebelumnya"
-      class="hidden sm:flex absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950/60 hover:bg-slate-900/90 text-white backdrop-blur-md border border-white/20 items-center justify-center transition shadow-lg hover:scale-105 active:scale-95"
+      class="hidden sm:flex absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950/60 hover:bg-slate-900/90 text-white backdrop-blur-md border border-white/20 items-center justify-center transition-all duration-300 shadow-lg hover:scale-110 active:scale-95 cursor-pointer"
     >
       <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
       </svg>
     </button>
 
-    <!-- Tombol Panah Kanan (Tablet & Desktop) -->
+    <!-- Tombol Panah Kanan -->
     <button 
       id="btnNextSlide"
       type="button"
       aria-label="Slide Berikutnya"
-      class="hidden sm:flex absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950/60 hover:bg-slate-900/90 text-white backdrop-blur-md border border-white/20 items-center justify-center transition shadow-lg hover:scale-105 active:scale-95"
+      class="hidden sm:flex absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950/60 hover:bg-slate-900/90 text-white backdrop-blur-md border border-white/20 items-center justify-center transition-all duration-300 shadow-lg hover:scale-110 active:scale-95 cursor-pointer"
     >
       <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
@@ -153,7 +151,7 @@ const ekskulList = [
       {bannerSlides.map((_, index) => (
         <button 
           type="button"
-          class={`dot-slider h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-amber-400 w-8' : 'bg-white/40 w-2'}`} 
+          class={`dot-slider h-2 rounded-full transition-all duration-500 cursor-pointer ${index === 0 ? 'bg-amber-400 w-8' : 'bg-white/40 w-2 hover:bg-white/70'}`} 
           data-slide={index}
           aria-label={`Pindah ke slide ${index + 1}`}
         ></button>
@@ -161,76 +159,74 @@ const ekskulList = [
     </div>
   </section>
 
-<!-- ==================== 2. SAMBUTAN KEPALA SEKOLAH ==================== -->
-<section id="sambutan" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-  <div class="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/80 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-    
-    <!-- FOTO / AVATAR KEPALA SEKOLAH (Rasio 3:4) -->
-    <div class="lg:col-span-4 flex justify-center">
-      <div class="relative w-56 sm:w-64 aspect-[3/4] rounded-3xl overflow-hidden shadow-lg border-4 border-emerald-50 bg-emerald-950 group">
-        <!-- Simpan avatar 3:4 tadi di public/kepala-sekolah.jpg atau public/admin/kepala-sekolah.jpg -->
-        <img 
-          src="/admin/kepala-sekolah.jpg" 
-          alt="Rahmad Kapitan, S.Pd - Kepala SMA Negeri Alor Kecil" 
-          class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500"
-          loading="lazy"
-        />
-        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-center">
-          <span class="text-xs sm:text-sm font-black text-amber-300 block tracking-wide">
-            Rahmad Kapitan, S.Pd
-          </span>
-          <span class="text-[10px] text-slate-300 font-medium block mt-0.5">
-            Kepala Sekolah
-          </span>
+  <!-- ==================== 2. SAMBUTAN KEPALA SEKOLAH (SCROLL REVEAL) ==================== -->
+  <section id="sambutan" class="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+    <div class="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200/80 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-10 items-center hover:shadow-xl transition-shadow duration-500">
+      
+      <!-- FOTO KEPALA SEKOLAH -->
+      <div class="lg:col-span-4 flex justify-center">
+        <div class="relative w-56 sm:w-64 aspect-[3/4] rounded-3xl overflow-hidden shadow-lg border-4 border-emerald-50 bg-emerald-950 group">
+          <img 
+            src="/admin/kepala-sekolah.jpg" 
+            alt="Rahmad Kapitan, S.Pd - Kepala SMA Negeri Alor Kecil" 
+            class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700 ease-out"
+            loading="lazy"
+          />
+          <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-center">
+            <span class="text-xs sm:text-sm font-black text-amber-300 block tracking-wide">
+              Rahmad Kapitan, S.Pd
+            </span>
+            <span class="text-[10px] text-slate-300 font-medium block mt-0.5">
+              Kepala Sekolah
+            </span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- NARASI SAMBUTAN OPSI 1 -->
-    <div class="lg:col-span-8">
-      <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full mb-3">
-        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-        <span class="text-[11px] font-black text-emerald-800 uppercase tracking-wider">Sambutan Pimpinan</span>
-      </div>
-
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-        “Membina Generasi Berkarakter Luhur, Cerdas Nalar, dan Adaptif Zaman”
-      </h2>
-
-      <div class="mt-4 space-y-3 text-slate-600 leading-relaxed text-xs sm:text-base">
-        <p class="font-medium text-slate-700 italic">
-          Assalamu’alaikum Warahmatullahi Wabarakatuh, Salam Sejahtera bagi Kita Semua.
-        </p>
-        <p>
-          Selamat datang di portal resmi SMA Negeri Alor Kecil. Di era keterbukaan informasi dan percepatan teknologi saat ini, website ini dihadirkan sebagai jembatan komunikasi, transparansi, serta jendela kreasi bagi seluruh keluarga besar sekolah, orang tua, alumni, dan masyarakat luas.
-        </p>
-        <p>
-          Kami berkomitmen mewujudkan lingkungan belajar yang berakar pada kearifan lokal, berkarakter luhur, dan adaptif terhadap kemajuan zaman. Bersama-sama, mari kita kawal langkah generasi muda Alor Kecil untuk bertumbuh menjadi insan yang berintegritas dan siap berkontribusi bagi kemajuan bangsa.
-        </p>
-      </div>
-
-      <!-- FOOTER KARTU -->
-      <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <div>
-          <p class="font-black text-slate-900 text-sm sm:text-base">Rahmad Kapitan, S.Pd</p>
-          <p class="text-xs text-slate-400 font-medium">Kepala SMA Negeri Alor Kecil</p>
+      <!-- NARASI SAMBUTAN -->
+      <div class="lg:col-span-8">
+        <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full mb-3">
+          <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+          <span class="text-[11px] font-black text-emerald-800 uppercase tracking-wider">Sambutan Pimpinan</span>
         </div>
-        
-        <a 
-          href="/profil/sambutan" 
-          class="inline-flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm hover:shadow self-start sm:self-auto"
-        >
-          <span>Baca Selengkapnya</span>
-          <span>&rarr;</span>
-        </a>
+
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          “Membina Generasi Berkarakter Luhur, Cerdas Nalar, dan Adaptif Zaman”
+        </h2>
+
+        <div class="mt-4 space-y-3 text-slate-600 leading-relaxed text-xs sm:text-base">
+          <p class="font-medium text-slate-700 italic">
+            Assalamu’alaikum Warahmatullahi Wabarakatuh, Salam Sejahtera bagi Kita Semua.
+          </p>
+          <p>
+            Selamat datang di portal resmi SMA Negeri Alor Kecil. Di era keterbukaan informasi dan percepatan teknologi saat ini, website ini dihadirkan sebagai jembatan komunikasi, transparansi, serta jendela kreasi bagi seluruh keluarga besar sekolah, orang tua, alumni, dan masyarakat luas.
+          </p>
+          <p>
+            Kami berkomitmen mewujudkan lingkungan belajar yang berakar pada kearifan lokal, berkarakter luhur, dan adaptif terhadap kemajuan zaman. Bersama-sama, mari kita kawal langkah generasi muda Alor Kecil untuk bertumbuh menjadi insan yang berintegritas dan siap berkontribusi bagi kemajuan bangsa.
+          </p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <p class="font-black text-slate-900 text-sm sm:text-base">Rahmad Kapitan, S.Pd</p>
+            <p class="text-xs text-slate-400 font-medium">Kepala SMA Negeri Alor Kecil</p>
+          </div>
+          
+          <a 
+            href="/profil/sambutan" 
+            class="inline-flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm hover:shadow hover:-translate-y-0.5 self-start sm:self-auto"
+          >
+            <span>Baca Selengkapnya</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
       </div>
+
     </div>
+  </section>
 
-  </div>
-</section>
-
-<!-- ==================== 3. BERITA & AGENDA ==================== -->
-  <section id="berita" class="bg-white py-14 sm:py-20 border-y border-slate-200/80">
+  <!-- ==================== 3. BERITA & AGENDA (SCROLL REVEAL) ==================== -->
+  <section id="berita" class="reveal-section bg-white py-14 sm:py-20 border-y border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col sm:flex-row justify-between sm:items-end mb-8 sm:mb-10 pb-4 border-b border-slate-100">
@@ -238,8 +234,9 @@ const ekskulList = [
           <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Publikasi Sekolah</span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Berita & Agenda Terkini</h2>
         </div>
-        <a href="/berita" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 uppercase tracking-wider flex items-center gap-1 mt-2 sm:mt-0">
-          Lihat Semua Berita &rarr;
+        <a href="/berita" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 uppercase tracking-wider flex items-center gap-1 mt-2 sm:mt-0 group">
+          <span>Lihat Semua Berita</span>
+          <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
       </div>
 
@@ -260,13 +257,13 @@ const ekskulList = [
                   : '-';
                 
                 return (
-                  <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-md transition flex flex-col group">
-                    <div class="h-44 overflow-hidden bg-emerald-50">
+                  <article class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+                    <div class="h-44 overflow-hidden bg-emerald-50 relative">
                       {item.data?.thumbnail ? (
                         <img 
                           src={item.data.thumbnail} 
                           alt={item.data.title} 
-                          class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-300" 
+                          class="w-full h-full object-cover object-top group-hover:scale-108 transition duration-500 ease-out" 
                         />
                       ) : (
                         <div class="w-full h-full flex items-center justify-center text-emerald-700/60 font-bold text-xs bg-emerald-50">
@@ -285,8 +282,9 @@ const ekskulList = [
                       <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed flex-1">
                         {item.data?.description}
                       </p>
-                      <a href={`/berita/${linkSlug}`} class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-block">
-                        Baca Selengkapnya &rarr;
+                      <a href={`/berita/${linkSlug}`} class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        <span>Baca Selengkapnya</span>
+                        <span>&rarr;</span>
                       </a>
                     </div>
                   </article>
@@ -296,12 +294,11 @@ const ekskulList = [
           )}
         </div>
 
-        <!-- KOLOM KANAN: WIDGET AGENDA & PENGUMUMAN (4 KOLOM) -->
+        <!-- KOLOM KANAN: AGENDA & PENGUMUMAN (4 KOLOM) -->
         <div class="lg:col-span-4 bg-emerald-50/60 rounded-3xl p-6 border border-emerald-100/80 flex flex-col justify-between">
           <div>
-            <!-- Header Widget -->
             <div class="flex items-center gap-2 mb-5">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
               <h3 class="font-black text-xs sm:text-sm uppercase tracking-wider text-slate-900">
                 Agenda Kegiatan & Pengumuman
               </h3>
@@ -323,10 +320,9 @@ const ekskulList = [
             </div>
           </div>
 
-          <!-- Tombol Tautan (Tersimpan di dalam kotak hijau) -->
           <a 
             href="/pengumuman" 
-            class="mt-6 block text-center py-2.5 px-4 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs rounded-xl transition duration-200"
+            class="mt-6 block text-center py-2.5 px-4 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs rounded-xl transition duration-200 hover:scale-[1.02] active:scale-95"
           >
             Lihat Papan Pengumuman &rarr;
           </a>
@@ -336,8 +332,8 @@ const ekskulList = [
     </div>
   </section>
 
-  <!-- ==================== 4. PROGRAM UNGGULAN SEKOLAH ==================== -->
-  <section id="program" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+  <!-- ==================== 4. PROGRAM UNGGULAN SEKOLAH (SCROLL REVEAL) ==================== -->
+  <section id="program" class="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
     <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
       <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Pilar Pendidikan</span>
       <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Program Unggulan</h2>
@@ -346,85 +342,118 @@ const ekskulList = [
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {programUnggulan.map((prog) => (
-        <div class="bg-white rounded-3xl p-7 border border-slate-200/80 shadow-xs hover:-translate-y-1 hover:border-emerald-300 transition duration-300">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-2xl flex items-center justify-center mb-5">
+        <div class="group bg-white rounded-3xl p-7 border border-slate-200/80 shadow-xs hover:-translate-y-2 hover:border-emerald-300 hover:shadow-xl transition-all duration-300">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-2xl flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-emerald-100 group-hover:rotate-6 transition-all duration-300">
             {prog.ikon}
           </div>
-          <h3 class="font-bold text-base sm:text-lg text-slate-900">{prog.nama}</h3>
+          <h3 class="font-bold text-base sm:text-lg text-slate-900 group-hover:text-emerald-800 transition">{prog.nama}</h3>
           <p class="text-slate-600 text-xs sm:text-sm mt-2.5 leading-relaxed">{prog.desc}</p>
         </div>
       ))}
     </div>
   </section>
 
-  <!-- ==================== 5. PITA STATISTIK HIJAU TUA ==================== -->
-  <section class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-12 sm:py-14">
+  <!-- ==================== 5. PITA STATISTIK HIJAU TUA (COUNTING UP ANIMATION) ==================== -->
+  <section id="counterSection" class="reveal-section bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-12 sm:py-16 shadow-inner">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y sm:divide-y-0 sm:divide-x divide-emerald-800">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y sm:divide-y-0 sm:divide-x divide-emerald-800/80">
+        
+        <!-- Counter 1: Peserta Didik -->
         <div class="pt-3 sm:pt-0">
-          <span class="block text-3xl sm:text-4xl lg:text-5xl font-black text-amber-400">90+</span>
+          <span 
+            class="stat-counter block text-3xl sm:text-4xl lg:text-5xl font-black text-amber-400 font-mono tracking-tight"
+            data-target="90" 
+            data-suffix="+"
+          >
+            0
+          </span>
           <span class="text-[11px] sm:text-xs font-bold text-emerald-200 uppercase tracking-widest mt-1.5 block">Peserta Didik</span>
         </div>
+
+        <!-- Counter 2: Guru & Tendik -->
         <div class="pt-3 sm:pt-0 sm:pl-6">
-          <span class="block text-3xl sm:text-4xl lg:text-5xl font-black text-white">22+</span>
+          <span 
+            class="stat-counter block text-3xl sm:text-4xl lg:text-5xl font-black text-white font-mono tracking-tight"
+            data-target="22" 
+            data-suffix="+"
+          >
+            0
+          </span>
           <span class="text-[11px] sm:text-xs font-bold text-emerald-200 uppercase tracking-widest mt-1.5 block">Pendidik & Tendik</span>
         </div>
+
+        <!-- Counter 3: Tahun Berdiri -->
         <div class="pt-3 sm:pt-0 sm:pl-6">
-          <span class="block text-3xl sm:text-4xl lg:text-5xl font-black text-amber-400">2013</span>
+          <span 
+            class="stat-counter block text-3xl sm:text-4xl lg:text-5xl font-black text-amber-400 font-mono tracking-tight"
+            data-target="2013" 
+            data-suffix=""
+            data-is-year="true"
+          >
+            0
+          </span>
           <span class="text-[11px] sm:text-xs font-bold text-emerald-200 uppercase tracking-widest mt-1.5 block">Tahun Berdiri</span>
         </div>
+
+        <!-- Counter 4: Prestasi Terukir -->
         <div class="pt-3 sm:pt-0 sm:pl-6">
-          <span class="block text-3xl sm:text-4xl lg:text-5xl font-black text-white">36+</span>
+          <span 
+            class="stat-counter block text-3xl sm:text-4xl lg:text-5xl font-black text-white font-mono tracking-tight"
+            data-target="36" 
+            data-suffix="+"
+          >
+            0
+          </span>
           <span class="text-[11px] sm:text-xs font-bold text-emerald-200 uppercase tracking-widest mt-1.5 block">Prestasi Terukir</span>
         </div>
+
       </div>
     </div>
   </section>
 
-<!-- ==================== 6. DAFTAR GURU (SLIDER POTRET ELEGAN) ==================== -->
-  <section id="guru" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+  <!-- ==================== 6. DAFTAR GURU (SLIDER OTOMATIS BERJALAN) ==================== -->
+  <section id="guru" class="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
     
-    <!-- Judul dengan Garis Aksen Emas Sesuai Gambar -->
     <div class="text-center mb-10">
       <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-        Daftar Guru
+        Daftar Guru & Pendidik
       </h2>
       <div class="w-12 h-1 bg-amber-400 mx-auto mt-2.5 rounded-full"></div>
+      <p class="text-xs text-slate-400 mt-2">Geser atau tunggu untuk melihat profil tenaga pengajar SMA Negeri Alor Kecil</p>
     </div>
 
     <!-- Kontainer Slider Guru -->
     <div class="relative group max-w-6xl mx-auto">
       
-      <!-- Tombol Panah Kiri Bulat Gelap -->
+      <!-- Tombol Panah Kiri -->
       <button 
         id="btnSliderGuruPrev"
         type="button"
         aria-label="Geser Guru Sebelumnya"
-        class="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/85 hover:bg-slate-950 text-white flex items-center justify-center shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
+        class="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/85 hover:bg-slate-950 text-white flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer opacity-80 group-hover:opacity-100"
       >
         <svg class="w-5 h-5 text-slate-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
         </svg>
       </button>
 
-      <!-- Track Slider (Dapat digeser horizontal atau dengan tombol) -->
+      <!-- Track Slider (Otomatis Meluncur / Auto-Glide) -->
       <div 
         id="homeGuruTrack" 
-        class="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 px-1 no-scrollbar"
-        style="scrollbar-width: none; -ms-overflow-style: none;"
+        class="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3 px-1 no-scrollbar cursor-grab active:cursor-grabbing"
       >
-        <!-- Skeleton Loading Sementara Saat Mengambil dari Google Sheets -->
+        <!-- Skeleton Loading -->
         {[1, 2, 3, 4, 5].map(() => (
           <div class="w-52 sm:w-60 flex-shrink-0 aspect-[3/4] rounded-2xl bg-slate-200 animate-pulse snap-start"></div>
         ))}
       </div>
 
-      <!-- Tombol Panah Kanan Bulat Gelap -->
+      <!-- Tombol Panah Kanan -->
       <button 
         id="btnSliderGuruNext"
         type="button"
         aria-label="Geser Guru Berikutnya"
-        class="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/85 hover:bg-slate-950 text-white flex items-center justify-center shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
+        class="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/85 hover:bg-slate-950 text-white flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer opacity-80 group-hover:opacity-100"
       >
         <svg class="w-5 h-5 text-slate-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
@@ -433,21 +462,20 @@ const ekskulList = [
 
     </div>
 
-    <!-- Tautan di Bawah Kanan Sesuai Gambar -->
     <div class="text-right max-w-6xl mx-auto mt-6 pr-2">
       <a 
         href="/guru" 
-        class="text-xs sm:text-sm font-bold text-slate-600 hover:text-emerald-700 inline-flex items-center gap-1 transition"
+        class="text-xs sm:text-sm font-bold text-slate-600 hover:text-emerald-700 inline-flex items-center gap-1 transition group"
       >
         <span>Daftar Guru Selengkapnya</span>
-        <span>&raquo;</span>
+        <span class="group-hover:translate-x-1 transition-transform">&raquo;</span>
       </a>
     </div>
 
   </section>
 
-  <!-- ==================== 7. EKSTRAKURIKULER ==================== -->
-  <section id="ekskul" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 border-t border-slate-200/80">
+  <!-- ==================== 7. EKSTRAKURIKULER (SCROLL REVEAL & HOVER POP) ==================== -->
+  <section id="ekskul" class="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 border-t border-slate-200/80">
     <div class="text-center max-w-2xl mx-auto mb-10">
       <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Kreativitas & Minat</span>
       <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1">Ekstrakurikuler</h2>
@@ -456,41 +484,41 @@ const ekskulList = [
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
       {ekskulList.map((ekskul) => (
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs text-center flex flex-col items-center hover:border-emerald-400 hover:shadow-xs transition">
-          <span class="text-2xl sm:text-3xl mb-2">{ekskul.ikon}</span>
-          <span class="font-bold text-slate-800 text-xs">{ekskul.nama}</span>
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs text-center flex flex-col items-center hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 group cursor-default">
+          <span class="text-2xl sm:text-3xl mb-2 group-hover:scale-125 transition-transform duration-300">{ekskul.ikon}</span>
+          <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700 transition">{ekskul.nama}</span>
         </div>
       ))}
     </div>
   </section>
 
-<!-- ==================== 8. PREVIEW GALERI KEGIATAN (REALTIME DRIVE) ==================== -->
-<section class="bg-white py-14 sm:py-20 border-t border-slate-200/80">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi</span>
-    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1 mb-8">
-      Galeri Kegiatan Sekolah
-    </h2>
-    
-    <!-- Kontainer Grid Foto Beranda -->
-    <div id="homeGaleriGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
-      {[1, 2, 3, 4].map(() => (
-        <div class="rounded-2xl aspect-square bg-slate-100 animate-pulse"></div>
-      ))}
-    </div>
+  <!-- ==================== 8. PREVIEW GALERI KEGIATAN (REALTIME DRIVE) ==================== -->
+  <section class="reveal-section bg-white py-14 sm:py-20 border-t border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">Dokumentasi</span>
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mt-1 mb-8">
+        Galeri Kegiatan Sekolah
+      </h2>
+      
+      <!-- Kontainer Grid Foto Beranda -->
+      <div id="homeGaleriGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 mb-8">
+        {[1, 2, 3, 4].map(() => (
+          <div class="rounded-2xl aspect-square bg-slate-100 animate-pulse"></div>
+        ))}
+      </div>
 
-    <a 
-      href="/galeri" 
-      class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-sm"
-    >
-      Buka Seluruh Album Galeri &rarr;
-    </a>
-  </div>
-</section>
+      <a 
+        href="/galeri" 
+        class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95"
+      >
+        Buka Seluruh Album Galeri &rarr;
+      </a>
+    </div>
+  </section>
 
   <!-- ==================== 9. CTA BANNER SPMB ==================== -->
-  <section id="ppdb" class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-16 sm:py-20">
-    <div class="max-w-4xl mx-auto px-4 text-center">
+  <section id="ppdb" class="reveal-section bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-white py-16 sm:py-20 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
       <span class="inline-block px-3.5 py-1 bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider rounded-md mb-3">
         Tahun Ajaran 2026/2027
       </span>
@@ -502,10 +530,10 @@ const ekskulList = [
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3.5 justify-center">
-        <a href="#" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition shadow-lg text-xs sm:text-sm uppercase tracking-wider">
+        <a href="#" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition-all duration-300 shadow-lg text-xs sm:text-sm uppercase tracking-wider hover:scale-105 active:scale-95">
           Petunjuk Teknis PPDB
         </a>
-        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="bg-emerald-800 hover:bg-emerald-700 text-white font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition border border-emerald-600 text-xs sm:text-sm uppercase tracking-wider">
+        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="bg-emerald-800 hover:bg-emerald-700 text-white font-bold px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl transition-all duration-300 border border-emerald-600 text-xs sm:text-sm uppercase tracking-wider hover:scale-105 active:scale-95">
           Hubungi Panitia SPMB
         </a>
       </div>
@@ -514,13 +542,38 @@ const ekskulList = [
 
 </Layout>
 
-<!-- Script Bersatu: Slider Banner & Slider Guru Realtime -->
-<!-- Script Bersatu: Slider Banner, Guru, Galeri, & Agenda Realtime -->
+<style>
+  /* Efek Scroll Reveal untuk Setiap Section */
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-section.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Efek Ken Burns Zoom pada Slide Banner Aktif */
+  .slide-banner.is-active .slide-img {
+    transform: scale(1.08);
+  }
+
+  /* Sembunyikan scrollbar tapi tetap bisa digulir */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+
+<!-- Script Bersatu: Animasi Counter Up, Slider Guru Auto-Glide, Scroll Reveal, Banner, Galeri, & Agenda -->
 <script>
-  // URL TUNGGAL GOOGLE APPS SCRIPT
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
 
-  // FUNGSI UMUM PEMBACA NILAI OBJECT SPREADSHEET (CUKUP 1 KALI)
   function ambilNilai(obj: any, daftarNamaKunci: string[]) {
     if (!obj || typeof obj !== 'object') return '';
     const keys = Object.keys(obj);
@@ -538,17 +591,79 @@ const ekskulList = [
   }
 
   // ==========================================
-  // 1. KONTROL SLIDER BANNER ATAS
+  // 1. ANIMASI SCROLL REVEAL (EFEK MUNCUL HALUS)
+  // ==========================================
+  const revealSections = document.querySelectorAll('.reveal-section');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed');
+        // Jika section yang muncul adalah counter statistik, jalankan animasi angka bertambah!
+        if (entry.target.id === 'counterSection') {
+          jalankanAnimasiCounter();
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealSections.forEach((section) => revealObserver.observe(section));
+
+  // ==========================================
+  // 2. ANIMASI COUNTING UP STATISTIK (DARI 0 KE TARGET)
+  // ==========================================
+  let counterStarted = false;
+  function jalankanAnimasiCounter() {
+    if (counterStarted) return;
+    counterStarted = true;
+
+    const counters = document.querySelectorAll<HTMLElement>('.stat-counter');
+    const durasi = 2000; // 2 detik durasi animasi
+
+    counters.forEach((counter) => {
+      const target = parseInt(counter.getAttribute('data-target') || '0', 10);
+      const suffix = counter.getAttribute('data-suffix') || '';
+      const isYear = counter.getAttribute('data-is-year') === 'true';
+      const startTime = performance.now();
+
+      function updateNumber(now: number) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / durasi, 1);
+        
+        // Easing cubic-out agar pelan di akhir
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(easeOut * target);
+
+        if (isYear) {
+          // Tahun tidak pakai pemisah ribuan
+          counter.textContent = current.toString() + suffix;
+        } else {
+          counter.textContent = current.toLocaleString('id-ID') + suffix;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(updateNumber);
+        } else {
+          counter.textContent = (isYear ? target.toString() : target.toLocaleString('id-ID')) + suffix;
+        }
+      }
+
+      requestAnimationFrame(updateNumber);
+    });
+  }
+
+  // ==========================================
+  // 3. KONTROL SLIDER BANNER DENGAN ZOOM OTOMATIS
   // ==========================================
   let currentIndex = 0;
   const slides = document.querySelectorAll<HTMLElement>('.slide-banner');
   const dots = document.querySelectorAll<HTMLElement>('.dot-slider');
   const totalSlides = slides.length;
-  let timer: any;
+  let bannerTimer: any;
 
   function goToSlide(targetIndex: number) {
     if (slides.length === 0) return;
-    slides[currentIndex]?.classList.remove('opacity-100', 'z-10');
+    
+    slides[currentIndex]?.classList.remove('opacity-100', 'z-10', 'is-active');
     slides[currentIndex]?.classList.add('opacity-0', 'z-0', 'pointer-events-none');
     dots[currentIndex]?.classList.remove('bg-amber-400', 'w-8');
     dots[currentIndex]?.classList.add('bg-white/40', 'w-2');
@@ -556,30 +671,30 @@ const ekskulList = [
     currentIndex = (targetIndex + totalSlides) % totalSlides;
 
     slides[currentIndex]?.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
-    slides[currentIndex]?.classList.add('opacity-100', 'z-10');
+    slides[currentIndex]?.classList.add('opacity-100', 'z-10', 'is-active');
     dots[currentIndex]?.classList.remove('bg-white/40', 'w-2');
     dots[currentIndex]?.classList.add('bg-amber-400', 'w-8');
   }
 
-  function startTimer() {
-    timer = setInterval(() => {
+  function startBannerTimer() {
+    bannerTimer = setInterval(() => {
       goToSlide(currentIndex + 1);
-    }, 6000);
+    }, 6500);
   }
 
-  function resetTimer() {
-    clearInterval(timer);
-    startTimer();
+  function resetBannerTimer() {
+    clearInterval(bannerTimer);
+    startBannerTimer();
   }
 
   document.getElementById('btnNextSlide')?.addEventListener('click', () => {
     goToSlide(currentIndex + 1);
-    resetTimer();
+    resetBannerTimer();
   });
 
   document.getElementById('btnPrevSlide')?.addEventListener('click', () => {
     goToSlide(currentIndex - 1);
-    resetTimer();
+    resetBannerTimer();
   });
 
   dots.forEach((dot) => {
@@ -587,27 +702,60 @@ const ekskulList = [
       const target = e.currentTarget as HTMLElement;
       const idx = parseInt(target.getAttribute('data-slide') || '0', 10);
       goToSlide(idx);
-      resetTimer();
+      resetBannerTimer();
     });
   });
 
-  startTimer();
+  startBannerTimer();
 
   // ==========================================
-  // 2. SLIDER DAFTAR GURU
+  // 4. SLIDER DAFTAR GURU: AUTO-GLIDE (GESER OTOMATIS)
   // ==========================================
   const homeGuruTrack = document.getElementById('homeGuruTrack');
   const btnGuruPrev = document.getElementById('btnSliderGuruPrev');
   const btnGuruNext = document.getElementById('btnSliderGuruNext');
+  let autoScrollGuruTimer: any = null;
+
+  function geserGuruOtomatis() {
+    if (!homeGuruTrack) return;
+    const maxScroll = homeGuruTrack.scrollWidth - homeGuruTrack.clientWidth;
+    // Jika sudah di ujung kanan, balik ke awal dengan mulus
+    if (homeGuruTrack.scrollLeft >= maxScroll - 15) {
+      homeGuruTrack.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      homeGuruTrack.scrollBy({ left: 260, behavior: 'smooth' });
+    }
+  }
+
+  function mulaiAutoScrollGuru() {
+    hentikanAutoScrollGuru();
+    autoScrollGuruTimer = setInterval(geserGuruOtomatis, 3500);
+  }
+
+  function hentikanAutoScrollGuru() {
+    if (autoScrollGuruTimer) clearInterval(autoScrollGuruTimer);
+  }
+
+  if (homeGuruTrack) {
+    // Berhenti geser otomatis saat pointer mouse atau sentuhan berada di atas slider
+    homeGuruTrack.addEventListener('mouseenter', hentikanAutoScrollGuru);
+    homeGuruTrack.addEventListener('mouseleave', mulaiAutoScrollGuru);
+    homeGuruTrack.addEventListener('touchstart', hentikanAutoScrollGuru, { passive: true });
+    homeGuruTrack.addEventListener('touchend', mulaiAutoScrollGuru, { passive: true });
+  }
 
   if (btnGuruPrev && homeGuruTrack) {
     btnGuruPrev.addEventListener('click', () => {
       homeGuruTrack.scrollBy({ left: -260, behavior: 'smooth' });
+      hentikanAutoScrollGuru();
+      mulaiAutoScrollGuru();
     });
   }
   if (btnGuruNext && homeGuruTrack) {
     btnGuruNext.addEventListener('click', () => {
       homeGuruTrack.scrollBy({ left: 260, behavior: 'smooth' });
+      hentikanAutoScrollGuru();
+      mulaiAutoScrollGuru();
     });
   }
 
@@ -620,7 +768,7 @@ const ekskulList = [
 
           data.forEach((guru) => {
             const card = document.createElement('div');
-            card.className = 'w-52 sm:w-60 flex-shrink-0 aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 snap-start group select-none';
+            card.className = 'w-52 sm:w-60 flex-shrink-0 aspect-[3/4] rounded-2xl overflow-hidden relative shadow-md bg-slate-900 snap-start group select-none hover:shadow-2xl transition duration-500';
 
             const nama = ambilNilai(guru, ['NamaLengkap', 'Nama Lengkap', 'namalengkap', 'Nama', 'nama']) || 'Nama Guru';
             const tugas = ambilNilai(guru, ['TugasTambaha', 'TugasTambahan', 'Tugas Tambahan', 'tugastambahan', 'tugas']);
@@ -651,13 +799,13 @@ const ekskulList = [
 
             const inisial = nama !== 'Nama Guru' ? nama.charAt(0) : 'G';
             const imageHtml = foto 
-              ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 hidden items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`
+              ? `<img src="${foto}" alt="${nama}" class="w-full h-full object-cover object-top group-hover:scale-108 transition duration-700 ease-out" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 hidden items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`
               : `<div class="w-full h-full bg-gradient-to-b from-slate-800 to-slate-950 flex items-center justify-center text-slate-600 font-black text-6xl">${inisial}</div>`;
 
             card.innerHTML = `
               ${imageHtml}
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent flex flex-col justify-end p-4 text-left">
-                <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2">
+                <h4 class="font-bold text-amber-400 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-amber-300 transition">
                   ${nama}
                 </h4>
                 <p class="text-xs text-white mt-1.5 line-clamp-1 font-semibold">
@@ -671,6 +819,9 @@ const ekskulList = [
 
             homeGuruTrack.appendChild(card);
           });
+
+          // Mulai geser otomatis setelah kartu selesai di-render
+          mulaiAutoScrollGuru();
         }
       })
       .catch((err) => {
@@ -678,8 +829,8 @@ const ekskulList = [
       });
   }
 
-// ==========================================
-  // 3. PREVIEW GALERI KEGIATAN
+  // ==========================================
+  // 5. PREVIEW GALERI KEGIATAN (REALTIME DRIVE)
   // ==========================================
   const homeGaleriGrid = document.getElementById('homeGaleriGrid');
   if (homeGaleriGrid) {
@@ -691,26 +842,24 @@ const ekskulList = [
           const previewAlbum = data.slice(0, 4);
 
           previewAlbum.forEach((album) => {
-            // Deteksi cerdas: ambil fotoSampul (baru) atau cover (lama)
             let imgCover = album.fotoSampul || album.cover || '';
             if (!imgCover && Array.isArray(album.foto) && album.foto.length > 0) {
               imgCover = typeof album.foto[0] === 'string' ? album.foto[0] : (album.foto[0].thumbnail || album.foto[0].url);
             }
             if (!imgCover) imgCover = '/logo.png';
 
-            // Deteksi jumlah foto: totalFoto (baru) atau jumlahFoto (lama)
             const jumlah = album.totalFoto || album.jumlahFoto || (album.foto ? album.foto.length : 0);
 
             const item = document.createElement('a');
             item.href = '/galeri';
-            item.className = 'group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 block shadow-xs hover:shadow-lg transition';
+            item.className = 'group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 block shadow-xs hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
             
             item.innerHTML = `
               <img 
                 src="${imgCover}" 
                 alt="${album.judul}" 
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
-                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out" 
+                loading="lazy" 
                 referrerpolicy="no-referrer"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-3.5 text-left">
@@ -730,28 +879,20 @@ const ekskulList = [
         console.error('Gagal memuat galeri beranda:', err);
       });
   }
+
   // ==========================================
-  // 4. AGENDA & PENGUMUMAN DARI SPREADSHEET
+  // 6. AGENDA & PENGUMUMAN DARI SPREADSHEET
   // ==========================================
   const agendaLoading = document.getElementById('berandaAgendaLoading')!;
   const agendaList = document.getElementById('berandaAgendaList')!;
   const agendaEmpty = document.getElementById('berandaAgendaEmpty')!;
 
   const bulanIndo: { [key: string]: number } = {
-    jan: 0, januari: 0,
-    feb: 1, februari: 1,
-    mar: 2, maret: 2,
-    apr: 3, april: 3,
-    mei: 4,
-    jun: 5, juni: 5,
-    jul: 6, juli: 6,
-    agu: 7, ags: 7, agustus: 7,
-    sep: 8, september: 8,
-    okt: 9, oktober: 9,
-    nov: 10, november: 10,
-    des: 11, desember: 11
+    jan: 0, januari: 0, feb: 1, februari: 1, mar: 2, maret: 2,
+    apr: 3, april: 3, mei: 4, jun: 5, juni: 5, jul: 6, juli: 6,
+    agu: 7, ags: 7, agustus: 7, sep: 8, september: 8, okt: 9, oktober: 9,
+    nov: 10, november: 10, des: 11, desember: 11
   };
-
   const namaBulanSingkat = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
 
   function parseTanggalInfo(teksTgl: string) {
@@ -824,7 +965,7 @@ const ekskulList = [
             card.target = '_blank';
             card.rel = 'noopener noreferrer';
           }
-          card.className = 'bg-white rounded-2xl p-3 border border-slate-100 shadow-2xs hover:shadow-md hover:border-emerald-200 transition duration-200 flex items-center gap-3.5 group';
+          card.className = 'bg-white rounded-2xl p-3 border border-slate-100 shadow-2xs hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex items-center gap-3.5 group hover:-translate-y-0.5';
 
           card.innerHTML = `
             <div class="w-12 h-12 rounded-xl bg-emerald-800 text-white flex flex-col items-center justify-center flex-shrink-0 group-hover:bg-emerald-700 transition">
