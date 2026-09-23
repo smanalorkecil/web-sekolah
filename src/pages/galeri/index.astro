@@ -69,56 +69,98 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </div>
 
-    <!-- ==================== 2. LIGHTBOX VIEWER ALA INSTAGRAM ==================== -->
+    <!-- ==================== 2. LIGHTBOX VIEWER ALA TELEGRAM (DENGAN FILMSTRIP THUMBNAIL) ==================== -->
     <div 
       id="photoLightbox" 
-      class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden select-none touch-pan-y"
+      class="fixed inset-0 z-50 bg-[#121316]/95 backdrop-blur-md hidden flex-col select-none touch-pan-y"
       role="dialog"
       aria-modal="true"
     >
-      <!-- Bar Atas: Counter Foto & Tombol Tutup -->
-      <div class="absolute top-0 inset-x-0 p-4 sm:p-6 flex items-center justify-between text-white z-20 bg-gradient-to-b from-black/60 to-transparent">
-        <span id="lightboxCounter" class="text-xs sm:text-sm font-mono tracking-wider font-semibold text-slate-200"></span>
+      <!-- BAR ATAS: HANYA TANGGAL FOLDER (KIRI) & TOMBOL TUTUP (KANAN) -->
+      <div class="w-full p-4 sm:px-6 py-3 flex items-center justify-between text-white z-20 bg-gradient-to-b from-black/80 to-transparent">
+        
+        <!-- POJOK KIRI: HANYA TANGGAL FOLDER KEGIATAN -->
+        <div class="flex items-center gap-2 text-slate-200">
+          <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span id="lightboxTanggal" class="text-xs sm:text-sm font-semibold tracking-wide text-slate-300"></span>
+        </div>
+
+        <!-- POJOK KANAN: TOMBOL TUTUP (X) -->
         <button 
           id="closeLightbox" 
-          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition text-2xl font-bold"
+          class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-rose-600 text-white flex items-center justify-center transition text-xl font-bold"
           aria-label="Tutup Tampilan Penuh"
         >
           &times;
         </button>
       </div>
 
-      <!-- Tombol Prev (Kiri) -->
-      <button 
-        id="btnPrevPhoto" 
-        class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm cursor-pointer shadow-lg"
-        aria-label="Foto Sebelumnya"
-      >
-        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-      </button>
+      <!-- AREA FOTO TENGAH & PANAH NAVIGASI -->
+      <div id="lightboxArea" class="relative flex-1 w-full flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+        
+        <!-- Tombol Prev (Kiri) -->
+        <button 
+          id="btnPrevPhoto" 
+          class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-xs cursor-pointer shadow-lg border border-white/10"
+          aria-label="Foto Sebelumnya"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
 
-      <!-- Tombol Next (Kanan) -->
-      <button 
-        id="btnNextPhoto" 
-        class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-sm cursor-pointer shadow-lg"
-        aria-label="Foto Berikutnya"
-      >
-        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-      </button>
+        <!-- Tombol Next (Kanan) -->
+        <button 
+          id="btnNextPhoto" 
+          class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-emerald-600 text-white flex items-center justify-center transition backdrop-blur-xs cursor-pointer shadow-lg border border-white/10"
+          aria-label="Foto Berikutnya"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
 
-      <!-- Area Tampilan Foto Tengah -->
-      <div id="lightboxArea" class="w-full h-full flex items-center justify-center p-4 sm:p-12">
+        <!-- Foto Utama di Tengah -->
         <img 
           id="lightboxImage" 
           src="" 
           alt="Dokumentasi Kegiatan" 
           referrerpolicy="no-referrer"
-          class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl transition-opacity duration-200" 
+          class="max-w-full max-h-[66vh] sm:max-h-[70vh] object-contain rounded-lg shadow-2xl transition-opacity duration-200" 
         />
+      </div>
+
+      <!-- AREA BAWAH: INDIKATOR COUNTER "1 OF 8" & FILMSTRIP THUMBNAIL -->
+      <div class="w-full bg-black/80 backdrop-blur-md pt-2 pb-3 px-4 flex flex-col items-center border-t border-white/10">
+        
+        <!-- Indikator Posisi Foto (Contoh: "1 of 8") -->
+        <div id="lightboxCounter" class="text-xs font-mono font-medium text-slate-300 mb-2 tracking-wider">
+          1 of 1
+        </div>
+
+        <!-- Wadah Thumbnail Horizontal (Filmstrip) -->
+        <div 
+          id="lightboxThumbnailStrip" 
+          class="flex items-center gap-2 max-w-full overflow-x-auto scroll-smooth py-1 px-2 no-scrollbar"
+        ></div>
+
       </div>
     </div>
 
   </main>
+
+  <style>
+    /* Hilangkan scrollbar di strip thumbnail agar mulus */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyznE6zNM03r4D0GVTQ1AixI2DhOlodr6pvW2hTyX4xUi476zuZQvpnNTeQPb81Q8lTNw/exec';
@@ -137,10 +179,12 @@ import Layout from '../../layouts/Layout.astro';
     const btnShareAlbum = document.getElementById('btnShareAlbum')!;
     const shareText = document.getElementById('shareText')!;
 
-    // Elemen DOM Lightbox Viewer
+    // Elemen DOM Lightbox Viewer ala Telegram
     const photoLightbox = document.getElementById('photoLightbox')!;
     const lightboxImage = document.getElementById('lightboxImage') as HTMLImageElement;
+    const lightboxTanggal = document.getElementById('lightboxTanggal')!;
     const lightboxCounter = document.getElementById('lightboxCounter')!;
+    const lightboxThumbnailStrip = document.getElementById('lightboxThumbnailStrip')!;
     const closeLightbox = document.getElementById('closeLightbox')!;
     const btnPrevPhoto = document.getElementById('btnPrevPhoto')!;
     const btnNextPhoto = document.getElementById('btnNextPhoto')!;
@@ -164,7 +208,7 @@ import Layout from '../../layouts/Layout.astro';
       if (isNaN(date.getTime())) return tglStr;
       return date.toLocaleDateString('id-ID', {
         day: 'numeric',
-        month: 'short',
+        month: 'long',
         year: 'numeric',
       });
     }
@@ -235,7 +279,7 @@ import Layout from '../../layouts/Layout.astro';
         galeriLoading.innerHTML = '<p class="text-rose-600 text-xs font-bold">Gagal memuat album galeri dari Google Drive.</p>';
       });
 
-    // BUKA MODAL ALBUM (Menampilkan semua foto 1:1)
+    // ==================== 1. MODAL ALBUM (GRID 1:1) ====================
     function bukaModalAlbum(index: number, updateUrl = true) {
       currentAlbumIndex = index;
       const album = dataAlbum[index];
@@ -250,7 +294,6 @@ import Layout from '../../layouts/Layout.astro';
         album.foto.forEach((itemFoto: any, fotoIdx: number) => {
           const thumbUrl = typeof itemFoto === 'string' ? itemFoto : (itemFoto.thumbnail || itemFoto.url);
 
-          // Gunakan tag DIV/BUTTON yang memicu Lightbox (bukan tag <a> open tab baru)
           const item = document.createElement('div');
           item.className = 'aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 block shadow-xs hover:shadow-md transition group relative cursor-pointer';
           
@@ -267,7 +310,7 @@ import Layout from '../../layouts/Layout.astro';
             </div>
           `;
 
-          // Ketuk foto untuk membuka Lightbox viewer
+          // Saat foto diklik di dalam modal, buka Lightbox ala Telegram
           item.addEventListener('click', () => {
             bukaLightbox(fotoIdx);
           });
@@ -297,12 +340,56 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    // ==================== LOGIKA LIGHTBOX ALA INSTAGRAM ====================
+    // ==================== 2. LIGHTBOX VIEWER ALA TELEGRAM ====================
     function bukaLightbox(fotoIdx: number) {
       currentPhotoIndex = fotoIdx;
+      const album = dataAlbum[currentAlbumIndex];
+      if (!album || !Array.isArray(album.foto) || album.foto.length === 0) return;
+
+      // 1. Tampilkan HANYA TANGGAL FOLDER di pojok kiri atas
+      lightboxTanggal.textContent = formatTgl(album.tanggal);
+
+      // 2. Buat strip thumbnail di bagian bawah
+      lightboxThumbnailStrip.innerHTML = '';
+      album.foto.forEach((itemFoto: any, idx: number) => {
+        const thumbUrl = typeof itemFoto === 'string' ? itemFoto : (itemFoto.thumbnail || itemFoto.url);
+
+        const thumbBtn = document.createElement('button');
+        thumbBtn.className = `thumb-box relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 rounded-lg overflow-hidden border-2 transition-all cursor-pointer opacity-40 hover:opacity-100 ${
+          idx === currentPhotoIndex 
+            ? 'opacity-100 border-emerald-500 ring-2 ring-emerald-500/50 scale-105 z-10' 
+            : 'border-transparent'
+        }`;
+        thumbBtn.dataset.index = idx.toString();
+        
+        thumbBtn.innerHTML = `
+          <img 
+            src="${thumbUrl}" 
+            alt="Thumbnail ${idx + 1}" 
+            class="w-full h-full object-cover object-center" 
+            loading="lazy" 
+            referrerpolicy="no-referrer"
+          />
+        `;
+
+        thumbBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          pindahKeFoto(idx);
+        });
+
+        lightboxThumbnailStrip.appendChild(thumbBtn);
+      });
+
+      // 3. Tampilkan foto aktif
       tampilkanFotoLightbox();
+
       photoLightbox.classList.remove('hidden');
       photoLightbox.classList.add('flex');
+    }
+
+    function pindahKeFoto(idx: number) {
+      currentPhotoIndex = idx;
+      tampilkanFotoLightbox();
     }
 
     function tutupLightboxModal() {
@@ -323,7 +410,19 @@ import Layout from '../../layouts/Layout.astro';
         lightboxImage.style.opacity = '1';
       };
 
-      lightboxCounter.innerText = `Foto ${currentPhotoIndex + 1} dari ${album.foto.length}`;
+      // Tampilkan teks counter ala Telegram: "1 of 8"
+      lightboxCounter.innerText = `${currentPhotoIndex + 1} of ${album.foto.length}`;
+
+      // Update Highlight Bingkai Hijau pada Thumbnail Bawah
+      const allThumbs = lightboxThumbnailStrip.querySelectorAll('.thumb-box');
+      allThumbs.forEach((thumb, idx) => {
+        if (idx === currentPhotoIndex) {
+          thumb.className = 'thumb-box relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 rounded-lg overflow-hidden border-2 border-emerald-500 ring-2 ring-emerald-500/50 scale-105 z-10 opacity-100 transition-all cursor-pointer';
+          thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } else {
+          thumb.className = 'thumb-box relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 rounded-lg overflow-hidden border-2 border-transparent opacity-40 hover:opacity-100 transition-all cursor-pointer';
+        }
+      });
     }
 
     function fotoSebelumnya() {
@@ -353,41 +452,34 @@ import Layout from '../../layouts/Layout.astro';
 
     closeLightbox.addEventListener('click', tutupLightboxModal);
 
-    // Ketuk area kosong di luar foto untuk menutup lightbox
-    photoLightbox.addEventListener('click', (e) => {
-      if (e.target === photoLightbox || e.target === lightboxArea) {
+    // Ketuk area kosong di luar foto untuk menutup viewer
+    lightboxArea.addEventListener('click', (e) => {
+      if (e.target === lightboxArea) {
         tutupLightboxModal();
       }
     });
 
-    // FITUR GESER (SWIPE GESTURE) DI LAYAR PONSEL / HP
+    // Gesture Sapuan Jari (Swipe) di HP
     let touchStartX = 0;
     let touchEndX = 0;
 
-    photoLightbox.addEventListener('touchstart', (e) => {
+    lightboxArea.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
 
-    photoLightbox.addEventListener('touchend', (e) => {
+    lightboxArea.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].screenX;
       handleSwipe();
     }, { passive: true });
 
     function handleSwipe() {
-      const ambangBatas = 45; // Jarak minimal sapuan jari (pixel)
-      if (touchEndX < touchStartX - ambangBatas) {
-        // Geser ke kiri -> Foto berikutnya
-        fotoBerikutnya();
-      }
-      if (touchEndX > touchStartX + ambangBatas) {
-        // Geser ke kanan -> Foto sebelumnya
-        fotoSebelumnya();
-      }
+      const ambangBatas = 45;
+      if (touchEndX < touchStartX - ambangBatas) fotoBerikutnya();
+      if (touchEndX > touchStartX + ambangBatas) fotoSebelumnya();
     }
 
-    // DUKUNGAN KEYBOARD (Panah Kiri, Kanan, Escape)
+    // Navigasi Keyboard (Esc, Panah Kiri, Kanan)
     window.addEventListener('keydown', (e) => {
-      // Jika Lightbox sedang terbuka
       if (!photoLightbox.classList.contains('hidden')) {
         if (e.key === 'Escape') tutupLightboxModal();
         if (e.key === 'ArrowLeft') fotoSebelumnya();
@@ -395,13 +487,12 @@ import Layout from '../../layouts/Layout.astro';
         return;
       }
 
-      // Jika hanya Modal Album yang terbuka
       if (!modalAlbum.classList.contains('hidden')) {
         if (e.key === 'Escape') tutupModalAlbum(true);
       }
     });
 
-    // Pengecekan URL Parameter awal
+    // Pengecekan URL Parameter Awal
     function periksaParameterUrl() {
       const urlParams = new URLSearchParams(window.location.search);
       const targetAlbum = urlParams.get('album');
@@ -414,7 +505,6 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
 
-    // Modal Album Event Listeners
     modalClose.addEventListener('click', () => tutupModalAlbum(true));
     modalAlbum.addEventListener('click', (e) => {
       if (e.target === modalAlbum) tutupModalAlbum(true);
